@@ -40,6 +40,7 @@
 			</action>
 			<notification>
 				<name>Creator Modification Notification</name>
+				<description>Your work need an improvement.</description>
 				<template>Your submission was rejected by a reviewer, please modify and resubmit.</template>
 				<template-language>text</template-language>
 				<notification-type>email</notification-type>
@@ -64,21 +65,11 @@
 		<actions>
 			<notification>
 				<name>Review Notification</name>
+				<description>New Submission Is Ready For Review</description>
 				<template>You have a new submission waiting for your review in the workflow.</template>
 				<template-language>text</template-language>
 				<notification-type>email</notification-type>
 				<execution-type>onAssignment</execution-type>
-			</notification>
-			<notification>
-				<name>Review Completion Notification</name>
-				<template>
-					Your submission has been reviewed and the reviewer has applied the following ${taskComments}.</template>
-				<template-language>freemarker</template-language>
-				<notification-type>email</notification-type>
-				<recipients>
-					<user />
-				</recipients>
-				<execution-type>onExit</execution-type>
 			</notification>
 		</actions>
 		<assignments>
@@ -145,6 +136,18 @@
 				<script-language>javascript</script-language>
 				<execution-type>onEntry</execution-type>
 			</action>
+			<notification>
+				<name>Review Completion Notification</name>
+				<description>Your Work Is Approved.</description>
+				<template>
+					Your submission has been reviewed and the reviewer has applied the following ${taskComments}.</template>
+				<template-language>freemarker</template-language>
+				<notification-type>email</notification-type>
+				<recipients>
+					<user />
+				</recipients>
+				<execution-type>onEntry</execution-type>
+			</notification>
 		</actions>
 	</state>
 </workflow-definition>
