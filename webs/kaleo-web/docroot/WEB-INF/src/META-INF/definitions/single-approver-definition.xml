@@ -40,9 +40,44 @@
 			</action>
 			<notification>
 				<name>Creator Modification Notification</name>
-				<description>Your work need an improvement.</description>
-				<template>Your submission was rejected by a reviewer, please modify and resubmit.</template>
-				<template-language>text</template-language>
+				<description>Your work need an improvement</description>
+				<template>
+				<![CDATA[
+				<#assign refererPlid = serviceContext.getAttribute("refererPlid")!"">
+				<#assign doAsGroupId = serviceContext.getAttribute("doAsGroupId")!"">
+				<#assign comments    = taskComments!"">
+				<#assign comments    = taskComments!"">
+				<#assign portalURL   = serviceContext.portalURL!"">
+				<#assign pathCtx     = portalUtil.pathContext!"NO_PATH_CTX">
+				<#assign wTasksURL   = "">
+				
+				<#if (portalURL?last_index_of("/") > 6)>
+					<#assign portalURL  = portalURL?substring(0,portalURL?index_of("/", 7))>
+				</#if>
+				<#if (portalURL?length > 0) && (refererPlid != "") && (doAsGroupId != "")>
+					<#if (pathCtx?length > 0)>
+						<#assign portalURL  = portalURL+pathCtx>
+					</#if>
+					<#assign wTasksURL  = portalURL+"/group/control_panel/manage?p_p_id=153&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view&doAsGroupId="+doAsGroupId+"&refererPlid="+refererPlid>
+				</#if>
+					<!-- email body -->
+					<p>
+					Your ${entryType} submission was rejected by a reviewer.
+					<#if comments != "" >
+						Rejection comment says: <strong>"${comments}"</strong>
+					</#if>
+					<br />Please do necessary modifications to your ${entryType} and <strong>resubmit</strong> your work.
+					</p>
+					<#if (wTasksURL?length > 0)>
+						<p>
+						<a href="${wTasksURL}">Click here</a> to see workflow tasks assigned to you.
+						</p>
+					</#if>
+					<!-- Signature -->
+					<p>Sincerely,<br /><strong>Liferay Portal Workflow</strong></p>
+				]]>
+				</template>
+				<template-language>freemarker</template-language>
 				<notification-type>email</notification-type>
 				<execution-type>onAssignment</execution-type>
 			</notification>
@@ -66,8 +101,47 @@
 			<notification>
 				<name>Review Notification</name>
 				<description>New Submission Is Ready For Review</description>
-				<template>You have a new submission waiting for your review in the workflow.</template>
-				<template-language>text</template-language>
+				<template>
+				<![CDATA[
+				<#assign refererPlid = serviceContext.getAttribute("refererPlid")!"">
+				<#assign doAsGroupId = serviceContext.getAttribute("doAsGroupId")!"">
+				<#assign comments    = taskComments!"">
+				<#assign portalURL   = serviceContext.portalURL!"">
+				<#assign pathCtx     = portalUtil.pathContext!"NO_PATH_CTX">
+				<#assign wTasksURL   = "">
+				
+				<#if (portalURL?last_index_of("/") > 6)>
+					<#assign portalURL  = portalURL?substring(0,portalURL?index_of("/", 7))>
+				</#if>
+				<#if (portalURL?length > 0) && (refererPlid != "") && (doAsGroupId != "")>
+					<#if (pathCtx?length > 0)>
+						<#assign portalURL  = portalURL+pathCtx>
+					</#if>
+					<#assign wTasksURL  = portalURL+"/group/control_panel/manage?p_p_id=153&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view&doAsGroupId="+doAsGroupId+"&refererPlid="+refererPlid>
+				</#if>
+					<!-- email body -->
+					<#if (wTasksURL?length > 0)>
+						<!-- personal message to assignee -->
+						<p>
+						Please review the ${entryType} waiting for you in your workflow tasks.
+						<#if comments != "" >
+							<br />Assignment comment says: <strong>${comments}</strong>
+						</#if>
+						</p>
+						<p>
+						<a href="${wTasksURL}">Click here</a> to see workflow tasks assigned to you.
+						</p>
+					<#else>
+						<!-- general message for all involved -->
+						<p>
+						There is a new submission of ${entryType} waiting for review in the workflow.
+						</p>
+					</#if>
+					<!-- signature -->
+					<p>Sincerely,<br /><strong>Liferay Portal Workflow</strong></p>
+				]]>
+				</template>
+				<template-language>freemarker</template-language>
 				<notification-type>email</notification-type>
 				<execution-type>onAssignment</execution-type>
 			</notification>
@@ -138,9 +212,20 @@
 			</action>
 			<notification>
 				<name>Review Completion Notification</name>
-				<description>Your Work Is Approved.</description>
+				<description>Your Submission Is Approved.</description>
 				<template>
-					Your submission has been reviewed and the reviewer has applied the following ${taskComments}.</template>
+				<![CDATA[
+				<#assign comments    = taskComments!"">
+				<!-- email body -->
+				<p>Your ${entryType} has been reviewed and approved.
+				<#if comments != "" >
+					The reviewer has applied the following: <strong>${comments}</strong>
+				</#if>
+				</p>
+				<!-- Signature -->
+				<p>Sincerely,<br /><strong>Liferay Portal Workflow</strong></p>
+				]]>
+                </template>
 				<template-language>freemarker</template-language>
 				<notification-type>email</notification-type>
 				<recipients>
