@@ -11,14 +11,14 @@
 	<bean class="com.liferay.portal.spring.context.PortletBeanFactoryPostProcessor" />
 
 	<!-- Mongo DB -->
-    <bean id="com.liferay.mongodb.util.MongDB" class="com.liferay.mongodb.util.MongoDBImplFixture" />
+	<bean id="com.liferay.mongodb.util.MongoDB" class="com.liferay.mongodb.util.MongoDBImpl" />
 
-    <bean id="com.liferay.mongodb.util.MongoDBUtil" class="com.liferay.mongodb.util.MongoDBUtil">
-        <property name="mongDB" ref="com.liferay.mongodb.util.MongDB" />
-    </bean>
+	<bean id="com.liferay.mongodb.util.MongoDBUtil" class="com.liferay.mongodb.util.MongoDBUtil">
+		<property name="mongoDB" ref="com.liferay.mongodb.util.MongoDB" />
+	</bean>
 
-    <bean id="com.liferay.mongodb.util.MongoDBExpandoUtil" class="com.liferay.mongodb.util.MongoDBExpandoUtil">
-        <property name="mongDB" ref="com.liferay.mongodb.util.MongDB" />
-    </bean>
+	<bean id="com.liferay.mongodb.util.MongoDBExpandoUtil" class="com.liferay.mongodb.util.MongoDBExpandoUtil">
+		<property name="mongoDB" ref="com.liferay.mongodb.util.MongoDB" />
+	</bean>
 
 </beans>
