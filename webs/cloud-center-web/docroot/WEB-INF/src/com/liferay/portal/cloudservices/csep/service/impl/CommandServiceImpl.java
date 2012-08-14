@@ -7,7 +7,7 @@ import com.liferay.portal.cloudservices.messaging.CommandResponseMessage;
  * @author Ivica Cardic
  */
 public class CommandServiceImpl implements CommandService {
-	@Override
+
 	public void processCommandResponse(CommandResponseMessage message) {
 		System.out.println(
 			"Processing command response: " + message.getCorrelationId());

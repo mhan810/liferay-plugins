@@ -23,7 +23,6 @@ public class HandShakeServiceImpl implements HandShakeService {
 	@Autowired
 	ActorRef handShakeProducerActor;
 
-	@Override
 	public void init() {
 		_doInitialHandshake();
 	}
@@ -47,7 +46,7 @@ public class HandShakeServiceImpl implements HandShakeService {
 			// TODO Error in handshaking?? What to do?? Retry?? Exit??
 			System.out.println("Error while handshaking!!!");
 			ate.printStackTrace();
-			System.exit(-1);
+			//System.exit(-1);
 		}
 
 	}

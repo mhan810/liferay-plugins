@@ -1,8 +1,7 @@
 package com.liferay.portal.cloudservices.messaging;
 
 
-import com.liferay.portal.json.JSONFactoryImpl;
-import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import org.apache.camel.Exchange;
 import org.apache.camel.TypeConversionException;
 import org.apache.camel.support.TypeConverterSupport;
@@ -17,12 +16,10 @@ public class MessageConverter extends TypeConverterSupport{
 		throws TypeConversionException {
 
 		if(tClass.equals(String.class)){
-			return (T)_jsonFactory.serialize(o);
+			return (T)JSONFactoryUtil.serialize(o);
 		}else{
-			return (T)_jsonFactory.deserialize((String) o);
+			return (T)JSONFactoryUtil.deserialize((String) o);
 		}
 	}
 
-	
-	private static final JSONFactory _jsonFactory = new JSONFactoryImpl();
 }

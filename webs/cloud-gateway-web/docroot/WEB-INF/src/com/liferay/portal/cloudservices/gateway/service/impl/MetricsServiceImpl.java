@@ -11,7 +11,6 @@ import java.util.List;
  * @author Ivica Cardic
  */
 public class MetricsServiceImpl implements MessageService {
-	@Override
 	public List<MetricsMessage> collectMessages() {
 		List<MetricsMessage> list = new ArrayList<MetricsMessage>();
 

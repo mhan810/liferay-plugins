@@ -8,7 +8,6 @@ import com.liferay.portal.cloudservices.messaging.CommandResponseMessage;
  * @author Ivica Cardic
  */
 public class CommandServiceImpl implements CommandService{
-	@Override
 	public CommandResponseMessage processCommandRequest(
 		CommandRequestMessage requestMessage) {
 

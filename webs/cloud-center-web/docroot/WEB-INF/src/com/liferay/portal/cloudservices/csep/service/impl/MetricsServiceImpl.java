@@ -8,7 +8,7 @@ import com.liferay.portal.cloudservices.messaging.MetricsMessage;
  * @author Ivica Cardic
  */
 public class MetricsServiceImpl implements MetricsService{
-	@Override
+
 	public void saveMessage(MetricsMessage message) {
 		System.out.println(
 			"Saving message: " + message.getName() + ", " +

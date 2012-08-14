@@ -1,6 +1,24 @@
 <?xml version="1.0"?>
 <!DOCTYPE project>
 
-<project name="cloud-gateway-web" basedir="." default="deploy">
-	<import file="../build-common-web.xml" />
+<project name="cloud-center-web" basedir="." default="deploy">
+    <import file="../build-common-web.xml" />
+    <import file="../cloud-common/build-cloud-common.xml" />
+
+    <target name="all">
+        <antcall target="clean" />
+        <antcall target="deploy" />
+    </target>
+
+    <target name="compile" depends="build-cloud-common.compile, build-common-plugin.compile">
+
+    </target>
+
+    <target name="deploy" depends="war, build-common-plugin.deploy">
+
+    </target>
+
+    <target name="war" depends="compile, build-common-plugin.war">
+
+    </target>
 </project>
