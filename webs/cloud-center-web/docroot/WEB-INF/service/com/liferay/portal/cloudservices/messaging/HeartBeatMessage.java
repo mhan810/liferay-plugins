@@ -8,8 +8,22 @@ import java.io.Serializable;
  *
  * @author Miguel Pastor
  * @author Ivica Cardic
+ * @author Igor Beslic
  */
 public class HeartBeatMessage extends BaseMessage implements Serializable{
 
+    public HeartBeatMessage() {
+        super();
+        setType(HEARTBEAT_MESSAGE);
+    }
 
+    public String getVersion() {
+        return _version;
+    }
+
+    public void setVersion(String version) {
+        this._version = version;
+    }
+
+    private String _version;
 }

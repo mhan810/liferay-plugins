@@ -27,7 +27,7 @@ public class MetricsActor extends CamelActor {
             System.out.println(
 				"I am " + getSelf() +
 				": Persist message in the datastore: " +
-					metricsMessage.getName());
+					metricsMessage.getType());
 			
 			metricsService.saveMessage(metricsMessage);
         }else {

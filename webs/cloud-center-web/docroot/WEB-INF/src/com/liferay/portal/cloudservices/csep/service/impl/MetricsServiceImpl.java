@@ -11,8 +11,8 @@ public class MetricsServiceImpl implements MetricsService{
 
 	public void saveMessage(MetricsMessage message) {
 		System.out.println(
-			"Saving message: " + message.getName() + ", " +
-				message.getTimestamp());
+			"Saving message: " + message.getType() + ", " +
+				message.getCreated());
 	}
 
 	// TODO reference to the datastore service.

@@ -20,7 +20,7 @@ public class HeartBeatActor extends CamelActor {
 			// 1. track the gateway
 			System.out.println(
 				"Received a heartbeat message from the system " +
-					getSender() + " at " + m.getTimestamp());
+					getSender() + " at " + m.getCreated());
 
 			// 2. do we need to ack the heartbeat request??
 		} else {

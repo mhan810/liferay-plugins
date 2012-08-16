@@ -9,6 +9,8 @@ public interface Message {
 	public static final String SCHEDULER_HEARTBEAT_MESSAGE = "scheduler_tick";
 	public static final String SCHEDULER_METRICS_MESSAGE = "scheduler_metrics";
 
-	public long getTimestamp();
+    public static final String HEARTBEAT_MESSAGE = "heartbeat";
+
+	public long getCreated();
 
 }
