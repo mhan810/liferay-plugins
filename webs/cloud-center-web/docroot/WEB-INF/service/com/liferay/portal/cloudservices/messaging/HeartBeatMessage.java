@@ -14,7 +14,7 @@ public class HeartBeatMessage extends BaseMessage implements Serializable{
 
     public HeartBeatMessage() {
         super();
-        setType(HEARTBEAT_MESSAGE);
+        setType(MessageDefinition.HEARTBEAT_MESSAGE);
     }
 
     public String getVersion() {

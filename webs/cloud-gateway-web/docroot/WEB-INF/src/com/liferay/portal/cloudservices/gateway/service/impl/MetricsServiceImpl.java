@@ -9,18 +9,19 @@ import java.util.List;
 
 /**
  * @author Ivica Cardic
+ * @author Igor Beslic
  */
 public class MetricsServiceImpl implements MessageService {
 	public List<MetricsMessage> collectMessages() {
 		List<MetricsMessage> list = new ArrayList<MetricsMessage>();
 
 		MetricsMessage portalMetricsMessage = new MetricsMessage();
-		portalMetricsMessage.setName("portal");
+        portalMetricsMessage.setTarget("portal");
 
 		list.add(portalMetricsMessage);
 
 		MetricsMessage jvmMetricsMessage = new MetricsMessage();
-		jvmMetricsMessage.setName("jvm");
+		jvmMetricsMessage.setTarget("jvm");
 
 		list.add(jvmMetricsMessage);
 

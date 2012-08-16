@@ -2,10 +2,20 @@ package com.liferay.portal.cloudservices.messaging;
 
 /**
  * @author Ivica Cardic
+ * @author Igor Beslic
  */
 public class CommandMessage extends BaseMessage{
 
-	public String getCorrelationId() {
+    public CommandMessage() {
+        super();
+    }
+
+    public  CommandMessage(String command) {
+        super();
+        setType(command);
+    }
+
+    public String getCorrelationId() {
 		return _correlationId;
 	}
 

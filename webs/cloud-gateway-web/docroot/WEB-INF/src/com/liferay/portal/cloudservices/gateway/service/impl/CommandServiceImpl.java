@@ -16,7 +16,7 @@ public class CommandServiceImpl implements CommandService{
 
 		CommandResponseMessage responseMessage = new CommandResponseMessage();
 		responseMessage.setCorrelationId(requestMessage.getCorrelationId());
-		responseMessage.setName("message response");
+        responseMessage.setType("message response");
 
 		return responseMessage;
 	}
