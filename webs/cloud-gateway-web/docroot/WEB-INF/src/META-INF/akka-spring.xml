@@ -45,7 +45,7 @@
         <property name="endpointUri" value="activemq:queue:cloud.handshake"/>
     </bean>
 
-    <bean id="handShakeProcess" class="com.liferay.portal.cloudservices.gateway.service.impl.HandShakeServiceImpl" init-method="init" depends-on="handShakeProducerActor"/>
+    <bean id="handShakeService" class="com.liferay.portal.cloudservices.gateway.service.impl.HandShakeServiceImpl" init-method="init" depends-on="handShakeProducerActor"/>
 
     <!-- HeartBeat message -->
 
