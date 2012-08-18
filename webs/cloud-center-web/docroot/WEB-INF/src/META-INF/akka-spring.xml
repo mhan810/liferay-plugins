@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-destroy-method="destroy"
+       default-init-method="afterPropertiesSet"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+       xmlns:context="http://www.springframework.org/schema/context">
+
+    <context:annotation-config/>
+
+    <!-- ActiveMQ component -->
+
+    <bean id="activeMQComponent" class="com.liferay.portal.cloudservices.akka.spring.ActiveMQComponentFactoryBean">
+        <property name="brokerURL" value="tcp://localhost:61616"/>
+    </bean>
+
+    <!-- Cloud Service Center system -->
+
+    <bean id="cloudServiceSystem" class="com.liferay.portal.cloudservices.akka.spring.ActorSystemFactoryBean">
+        <property name="name" value="cloudServiceSystem"/>
+        <property name="camelComponents">
+            <map>
+               <entry key="activeMQ" value-ref="activeMQComponent"/>
+            </map>
+        </property>
+        <property name="typeConverters">
+            <map>
+                <entry key="com.liferay.portal.cloudservices.messaging.HandShakeMessage" value-ref="messageConverter"/>
+                <entry key="com.liferay.portal.cloudservices.messaging.HeartBeatMessage" value-ref="messageConverter"/>
+                <entry key="com.liferay.portal.cloudservices.messaging.MetricsMessage" value-ref="messageConverter"/>
+                <entry key="com.liferay.portal.cloudservices.messaging.CommandRequestMessage" value-ref="messageConverter"/>
+                <entry key="com.liferay.portal.cloudservices.messaging.CommandResponseMessage" value-ref="messageConverter"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="messageConverter" class="com.liferay.portal.cloudservices.messaging.MessageConverter"/>
+
+    <!-- Handshake message -->
+
+    <bean id="handShakeActor" class="com.liferay.portal.cloudservices.akka.spring.ActorFactoryBean">
+        <property name="actorClassName" value="com.liferay.portal.cloudservices.csep.actor.HandshakeActor"/>
+        <property name="actorName" value="handShakeActor"/>
+        <property name="actorSystem" ref="cloudServiceSystem"/>
+    </bean>
+
+    <bean id="handShakeConsumerActor" class="com.liferay.portal.cloudservices.akka.spring.CamelActorFactoryBean">
+        <property name="actor" ref="handShakeActor"/>
+        <property name="actorClassName" value="com.liferay.portal.cloudservices.akka.actor.CamelConsumerActor"/>
+        <property name="actorName" value="handShakeConsumerActor"/>
+        <property name="actorSystem" ref="cloudServiceSystem"/>
+        <property name="endpointUri" value="activemq:queue:cloud.handshake"/>
+    </bean>
+
+    <!-- HeartBeat message -->
+
+    <bean id="heartBeatActor" class="com.liferay.portal.cloudservices.akka.spring.ActorFactoryBean">
+        <property name="actorClassName" value="com.liferay.portal.cloudservices.csep.actor.HeartBeatActor"/>
+        <property name="actorName" value="heartBeatActor"/>
+        <property name="actorSystem" ref="cloudServiceSystem"/>
+    </bean>
+
+    <bean id="heartBeatConsumerActor" class="com.liferay.portal.cloudservices.akka.spring.CamelActorFactoryBean">
+        <property name="actor" ref="heartBeatActor"/>
+        <property name="actorClassName" value="com.liferay.portal.cloudservices.akka.actor.CamelConsumerActor"/>
+        <property name="actorName" value="heartBeatConsumerActor"/>
+        <property name="actorSystem" ref="cloudServiceSystem"/>
+        <property name="endpointUri" value="activemq:queue:cloud.heartbeat"/>
+    </bean>
+
+    <!-- Metrics message -->
+
+    <bean id="metricsActor" class="com.liferay.portal.cloudservices.akka.spring.ActorFactoryBean">
+        <property name="actorClassName" value="com.liferay.portal.cloudservices.csep.actor.MetricsActor"/>
+        <property name="actorName" value="metricsActor"/>
+        <property name="actorSystem" ref="cloudServiceSystem"/>
+        <property name="routerConfig" ref="metricsRouterConfig"/>
+    </bean>
+
+    <bean id="metricsConsumerActor" class="com.liferay.portal.cloudservices.akka.spring.CamelActorFactoryBean">
+        <property name="actor" ref="metricsActor"/>
+        <property name="actorClassName" value="com.liferay.portal.cloudservices.akka.actor.CamelConsumerActor"/>
+        <property name="actorName" value="metricsConsumerActor"/>
+        <property name="actorSystem" ref="cloudServiceSystem"/>
+        <property name="endpointUri" value="activemq:queue:cloud.metrics"/>
+   </bean>
+
+    <bean id="metricsSupervisorStrategy" class="com.liferay.portal.cloudservices.akka.spring.SupervisorStrategyFactoryBean">
+        <property name="maxNrOfRetries" value="3"/>
+        <property name="withinTimeRange" value="1" />
+        <property name="withinTimeRangeUnit" value="#{T(java.util.concurrent.TimeUnit).MINUTES}"/>
+        <property name="trapExit">
+            <array>
+                <value>#{T(java.lang.Exception)}</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="metricsRouterConfig" class="com.liferay.portal.cloudservices.akka.spring.RouterConfigFactoryBean">
+        <property name="nrOfInstance" value="100"/>
+        <property name="supervisorStrategy" ref="metricsSupervisorStrategy"/>
+    </bean>
+
+    <bean id="metricsService" class="com.liferay.portal.cloudservices.csep.service.impl.MetricsServiceImpl"/>
+
+    <!-- Command message -->
+
+    <bean id="commandProducerActor" class="com.liferay.portal.cloudservices.akka.spring.CamelActorFactoryBean">
+        <property name="actorClassName" value="com.liferay.portal.cloudservices.akka.actor.CamelProducerActor"/>
+        <property name="actorName" value="commandProducerActor"/>
+        <property name="actorSystem" ref="cloudServiceSystem"/>
+        <property name="endpointUri" value="activemq:queue:cloud.command"/>
+    </bean>
+
+    <bean id="commandActor" class="com.liferay.portal.cloudservices.akka.spring.ActorFactoryBean">
+        <property name="actorClassName" value="com.liferay.portal.cloudservices.csep.actor.CommandActor"/>
+        <property name="actorName" value="commandActor"/>
+        <property name="actorSystem" ref="cloudServiceSystem"/>
+    </bean>
+
+    <!-- For test pourposes -->
+
+    <bean id="commandScheduler" class="com.liferay.portal.cloudservices.akka.spring.SchedulerFactoryBean">
+        <property name="actor" ref="commandActor"/>
+        <property name="actorSystem" ref="cloudServiceSystem"/>
+        <property name="delay" value="10"/>
+        <property name="delayUnit" value="#{T(java.util.concurrent.TimeUnit).SECONDS}"/>
+        <property name="frequency" value="10"/>
+        <property name="frequencyUnit" value="#{T(java.util.concurrent.TimeUnit).SECONDS}"/>
+        <property name="message" value="#{new com.liferay.portal.cloudservices.messaging.CommandRequestMessage()}"/>
+    </bean>
+
+    <bean id="comamndService" class="com.liferay.portal.cloudservices.csep.service.impl.CommandServiceImpl"/>
+
+</beans>
