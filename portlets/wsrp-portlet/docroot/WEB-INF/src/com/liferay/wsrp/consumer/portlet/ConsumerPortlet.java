@@ -1113,11 +1113,27 @@ public class ConsumerPortlet extends GenericPortlet {
 
 		mimeRequest.setLocales(localesArray);
 
+		String[] defaultMarkupCharacterSets = null;
 		String[] markupCharacterSets = null;
 
 		if (Validator.isNotNull(wsrpConsumer.getMarkupCharacterSets())) {
-			markupCharacterSets = StringUtil.split(
+			defaultMarkupCharacterSets = StringUtil.split(
 				wsrpConsumer.getMarkupCharacterSets());
+
+			if (defaultMarkupCharacterSets.length > 0) {
+				List<String> markupCharacterSetList = new ArrayList<String>();
+
+				for (String markupCharacterSet : defaultMarkupCharacterSets) {
+					markupCharacterSetList.add(markupCharacterSet);
+				}
+
+				if (!markupCharacterSetList.contains(StringPool.UTF8)) {
+					markupCharacterSetList.add(StringPool.UTF8);
+				}
+
+				markupCharacterSets = markupCharacterSetsList.toArray(
+					new String[markupCharacterSetList.size()]);
+			}
 		}
 		else {
 			markupCharacterSets = _CHAR_SETS;
