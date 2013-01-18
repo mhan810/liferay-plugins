@@ -16,6 +16,7 @@ package com.liferay.portal.search.solr;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.search.DelegatingSpellCheckIndexWriter;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.DocumentImpl;
 import com.liferay.portal.kernel.search.Field;
@@ -35,12 +36,12 @@ import java.util.Map;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.params.ModifiableSolrParams;
 
 /**
  * @author Bruno Farache
  */
-public class SolrIndexWriterImpl implements IndexWriter {
+public class SolrIndexWriterImpl
+	extends DelegatingSpellCheckIndexWriter implements IndexWriter {
 
 	public void addDocument(SearchContext searchContext, Document document)
 		throws SearchException {
@@ -146,43 +147,6 @@ public class SolrIndexWriterImpl implements IndexWriter {
 		}
 		catch (Exception e) {
 			_log.error(e, e);
-
-			throw new SearchException(e.getMessage());
-		}
-	}
-
-	public void indexDictionaries(long companyId) throws SearchException {
-
-		Locale[] locales = Locale.getAvailableLocales();
-
-		for (Locale locale : locales) {
-			indexDictionary(companyId, locale);
-		}
-	}
-
-	public void indexDictionary(long companyId, Locale locale)
-		throws SearchException {
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("/spell_");
-		sb.append(locale.getLanguage());
-		sb.append(StringPool.UNDERLINE);
-		sb.append(locale.getCountry());
-
-		String requestHandler = sb.toString();
-
-		ModifiableSolrParams params = new ModifiableSolrParams();
-
-		params.set("qt", requestHandler);
-		params.set("spellcheck.build", true);
-		params.set("spellcheck.reload", true);
-
-		try {
-			_solrServer.query(params);
-		}
-		catch (Exception e) {
-			_log.error(e);
 
 			throw new SearchException(e.getMessage());
 		}
