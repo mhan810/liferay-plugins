@@ -140,6 +140,12 @@ public class SolrQuerySuggesterImpl implements QuerySuggester {
 		solrQuery.setQuery(sb.toString());
 		solrQuery.setRows(max);
 
+		String companyIdFilterQuery = Field.COMPANY_ID.concat(
+			StringPool.COLON).concat(
+			Long.toString(searchContext.getCompanyId()));
+
+		solrQuery.setFilterQueries(companyIdFilterQuery);
+
 		try {
 			QueryResponse queryResponse = _solrServer.query(solrQuery);
 
