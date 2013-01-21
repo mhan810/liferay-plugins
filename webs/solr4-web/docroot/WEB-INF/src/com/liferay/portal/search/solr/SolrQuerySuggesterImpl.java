@@ -140,6 +140,12 @@ public class SolrQuerySuggesterImpl implements QuerySuggester {
 		solrQuery.setQuery(sb.toString());
 		solrQuery.setRows(max);
 
+		String companyIdFilterQuery = Field.COMPANY_ID.concat(
+			StringPool.COLON).concat(
+			Long.toString(searchContext.getCompanyId()));
+
+		solrQuery.setFilterQueries(companyIdFilterQuery);
+
 		try {
 			QueryResponse queryResponse = _solrServer.query(solrQuery);
 
@@ -192,7 +198,8 @@ public class SolrQuerySuggesterImpl implements QuerySuggester {
 		return solrQuery;
 	}
 
-	private static Log _log = LogFactoryUtil.getLog(SolrQuerySuggesterImpl.class);
+	private static Log _log =
+		LogFactoryUtil.getLog(SolrQuerySuggesterImpl.class);
 
 	private SolrServer _solrServer;
 	private String _spellCheckURLPrefix = "/liferay_spellCheck";

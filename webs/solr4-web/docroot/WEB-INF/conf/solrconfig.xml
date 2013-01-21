@@ -178,20 +178,15 @@
 		<lst name="spellchecker">
 			<str name="name">default</str>
 			<str name="field">spellChecker</str>
-			<str name="classname">solr.DirectSolrSpellChecker</str>
-			<str name="distanceMeasure">internal</str>
-			<float name="accuracy">0.5</float>
-			<int name="maxEdits">2</int>
-			<int name="minPrefix">1</int>
-			<int name="maxInspections">5</int>
-			<int name="minQueryLength">4</int>
-			<float name="maxQueryFrequency">0.01</float>
+			<str name="classname">solr.IndexBasedSpellChecker</str>
+			<str name="spellcheckIndexDir">./spellchecker_en_US</str>
 		</lst>
 		<lst name="spellchecker">
 			<str name="name">en_US</str>
 			<str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
 			<str name="lookupImpl">org.apache.solr.spelling.suggest.tst.TSTLookup</str>
 			<str name="field">spellChecker</str>
+			<str name="spellcheckIndexDir">./spellchecker_en_US</str>
 			<float name="threshold">0.005</float>
 			<str name="sourceLocation">en_US.txt</str>
 		</lst>
@@ -203,6 +198,7 @@
 			<str name="spellcheck.dictionary">default</str>
 			<str name="spellcheck.dictionary">en_US</str>
 			<str name="spellcheck">on</str>
+			<str name="spellcheck.count">5</str>
 			<str name="spellcheck.extendedResults">true</str>
 			<str name="spellcheck.alternativeTermCount">5</str>
 		</lst>
@@ -216,20 +212,15 @@
 		<lst name="spellchecker">
 			<str name="name">default</str>
 			<str name="field">spellChecker</str>
-			<str name="classname">solr.DirectSolrSpellChecker</str>
-			<str name="distanceMeasure">internal</str>
-			<float name="accuracy">0.5</float>
-			<int name="maxEdits">2</int>
-			<int name="minPrefix">1</int>
-			<int name="maxInspections">5</int>
-			<int name="minQueryLength">4</int>
-			<float name="maxQueryFrequency">0.01</float>
+			<str name="classname">solr.IndexBasedSpellChecker</str>
+			<str name="spellcheckIndexDir">./spellchecker_es_ES</str>
 		</lst>
 		<lst name="spellchecker">
 			<str name="name">es_ES</str>
 			<str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
 			<str name="lookupImpl">org.apache.solr.spelling.suggest.tst.TSTLookup</str>
 			<str name="field">spellChecker</str>
+			<str name="spellcheckIndexDir">./spellchecker_es_ES</str>
 			<float name="threshold">0.005</float>
 			<str name="sourceLocation">es_ES.txt</str>
 		</lst>
@@ -241,6 +232,7 @@
 					<str name="spellcheck.dictionary">default</str>
 					<str name="spellcheck.dictionary">es_ES</str>
 					<str name="spellcheck">on</str>
+					<str name="spellcheck.count">5</str>
 					<str name="spellcheck.extendedResults">true</str>
 					<str name="spellcheck.alternativeTermCount">5</str>
 				</lst>

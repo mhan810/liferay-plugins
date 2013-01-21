@@ -16,6 +16,7 @@ package com.liferay.portal.search.solr;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.search.SpellCheckIndexWriter;
@@ -53,6 +54,8 @@ public class SolrSpellCheckIndexWriterImpl implements SpellCheckIndexWriter {
 			StringPool.UNDERLINE).concat(locale.toString());
 
 		solrQuery.setRequestHandler(requestHandler);
+
+		solrQuery.setParam("spellcheck.build", true);
 
 		try {
 			_solrServer.query(solrQuery);
