@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.search.SpellCheckIndexWriter;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.search.solr.spell.ScopedIndexWriter;
 
 import java.util.Locale;
 import java.util.Set;
@@ -46,25 +47,7 @@ public class SolrSpellCheckIndexWriterImpl implements SpellCheckIndexWriter {
 	public void indexDictionary(SearchContext searchContext)
 		throws SearchException {
 
-		SolrQuery solrQuery = new SolrQuery();
-
-		Locale locale = searchContext.getLocale();
-
-		String requestHandler = _spellCheckURLPrefix.concat(
-			StringPool.UNDERLINE).concat(locale.toString());
-
-		solrQuery.setRequestHandler(requestHandler);
-
-		solrQuery.setParam("spellcheck.build", true);
-
-		try {
-			_solrServer.query(solrQuery);
-		}
-		catch (Exception e) {
-			_log.error(e);
-
-			throw new SearchException(e.getMessage());
-		}
+		_scopedIndexWriter.indexDictionary(searchContext);
 	}
 
 	public void setSolrServer(SolrServer solrServer) {
@@ -82,8 +65,13 @@ public class SolrSpellCheckIndexWriterImpl implements SpellCheckIndexWriter {
 	private static Log _log = LogFactoryUtil.getLog(
 		SolrSpellCheckIndexWriterImpl.class);
 
+	public void setScopedIndexWriter(ScopedIndexWriter scopedIndexWriter) {
+		this._scopedIndexWriter = scopedIndexWriter;
+	}
+
 	private SolrServer _solrServer;
 	private String _spellCheckURLPrefix = "/liferay_spellCheck";
 	private Set<String> _supportedLocales;
+	private ScopedIndexWriter _scopedIndexWriter;
 
 }

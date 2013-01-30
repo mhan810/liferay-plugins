@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.search.solr.spell.ScopedIndexReader;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,83 +45,41 @@ public class SolrQuerySuggesterImpl implements QuerySuggester {
 		_solrServer = solrServer;
 	}
 
-	public void setSpellCheckURLPrefix(String spellCheckURLPrefix) {
-		_spellCheckURLPrefix = spellCheckURLPrefix;
-	}
-
-	public void setSuggesterURL(String suggesterURL) {
-		_suggesterURL = suggesterURL;
-	}
-
 	public String spellCheckKeywords(SearchContext searchContext)
 		throws SearchException {
 
-		Map<String, String> additionalQueryParameters =
-			new HashMap<String, String>();
+		String luceneResult = null;
+		String collated = "";
 
-		additionalQueryParameters.put("spellcheck.collate", "true");
-		additionalQueryParameters.put("spellcheck.maxCollationTries", "0");
-		additionalQueryParameters.put("spellcheck.maxCollations", "1");
-
-		SolrQuery solrQuery = createSpellCheckQuery(
-			searchContext, additionalQueryParameters);
-
-		try {
-			QueryResponse queryResponse = _solrServer.query(solrQuery);
-
-			SpellCheckResponse spellCheckResponse =
-				queryResponse.getSpellCheckResponse();
-
-			return spellCheckResponse.getCollatedResult();
+		Map<String, List<String>> map = spellCheckKeywords(searchContext, 10);
+		for (String token : map.keySet()){
+			collated =
+				collated.concat(map.get(token).get(0))
+					.concat(StringPool.SPACE);
 		}
-		catch (Exception e) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Unable to execute Solr query", e);
-			}
-
-			throw new SearchException(e.getMessage());
+		if (!collated.equals("")){
+			luceneResult = collated.substring(0,collated.length()-1);
 		}
+
+		return luceneResult;
+
 	}
 
 	public Map<String, List<String>> spellCheckKeywords(
 			SearchContext searchContext, int max)
 		throws SearchException {
 
-		Map<String, String> additionalQueryParameters =
-					new HashMap<String, String>();
-
-		additionalQueryParameters.put(
-			"spellcheck.count", Integer.toString(max));
-
-		SolrQuery solrQuery = createSpellCheckQuery(
-			searchContext, additionalQueryParameters);
+		Map<String, List<String>> luceneResult = null;
 
 		try {
-			QueryResponse queryResponse = _solrServer.query(solrQuery);
-
-			SpellCheckResponse spellCheckResponse =
-				queryResponse.getSpellCheckResponse();
-
-			List<SpellCheckResponse.Suggestion> suggestions =
-				spellCheckResponse.getSuggestions();
-
-			Map<String, List<String>> spellCheckResults =
-				new HashMap<String, List<String>>();
-
-			for (SpellCheckResponse.Suggestion suggestion : suggestions) {
-				spellCheckResults.put(
-					suggestion.getToken(), suggestion.getAlternatives());
-			}
-
-			return spellCheckResults;
+			luceneResult =
+				_scopedIndexReader.suggestSimilar(searchContext,max);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		catch (Exception e) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Unable to execute Solr query", e);
-			}
 
-			throw new SearchException(e.getMessage());
-		}
+		return luceneResult;
+
 	}
 
 	public String[] suggestKeywordQueries(SearchContext searchContext, int max)
@@ -198,11 +157,16 @@ public class SolrQuerySuggesterImpl implements QuerySuggester {
 		return solrQuery;
 	}
 
+	public void setScopedIndexReader(ScopedIndexReader scopedIndexReader) {
+		this._scopedIndexReader = scopedIndexReader;
+	}
+
 	private static Log _log =
 		LogFactoryUtil.getLog(SolrQuerySuggesterImpl.class);
 
 	private SolrServer _solrServer;
 	private String _spellCheckURLPrefix = "/liferay_spellCheck";
 	private String _suggesterURL = "/select";
+	private ScopedIndexReader _scopedIndexReader;
 
 }

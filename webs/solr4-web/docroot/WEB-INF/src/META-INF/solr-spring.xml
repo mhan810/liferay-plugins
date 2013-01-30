@@ -38,17 +38,63 @@
 	<bean id="com.liferay.portal.search.solr.SolrIndexSearcher" class="com.liferay.portal.search.solr.SolrIndexSearcher">
 		<property name="solrServer" ref="com.liferay.portal.search.solr.server.BasicAuthSolrServer" />
 		<property name="swallowException" value="true" />
+		<property name="querySuggester" ref="com.liferay.portal.search.solr.SolrQuerySuggesterImpl" />
 	</bean>
+
 	<bean id="com.liferay.portal.search.solr.SolrIndexWriter" class="com.liferay.portal.search.solr.SolrIndexWriter">
 		<property name="commit" value="true" />
 		<property name="solrServer" ref="com.liferay.portal.search.solr.server.BasicAuthSolrServer" />
+		<property name="spellCheckIndexWriter" ref="com.liferay.portal.search.solr.SolrSpellCheckIndexWriterImpl" />
 	</bean>
+
 	<bean id="com.liferay.portal.search.solr.SolrSearchEngineImpl" class="com.liferay.portal.kernel.search.BaseSearchEngine">
 		<property name="clusteredWrite" value="false" />
 		<property name="indexSearcher" ref="com.liferay.portal.search.solr.SolrIndexSearcher" />
 		<property name="indexWriter" ref="com.liferay.portal.search.solr.SolrIndexWriter" />
 		<property name="luceneBased" value="true" />
 		<property name="vendor" value="SOLR" />
+	</bean>
+
+	<bean id="com.liferay.portal.search.solr.SolrSpellCheckIndexWriterImpl" class="com.liferay.portal.search.solr.SolrSpellCheckIndexWriterImpl">
+		<property name="solrServer" ref="com.liferay.portal.search.solr.server.BasicAuthSolrServer" />
+		<property name="supportedLocales">
+			<util:set>
+				<value>en_US</value>
+				<value>es_ES</value>
+			</util:set>
+		</property>
+		<property name="scopedIndexWriter" ref="com.liferay.portal.search.solr.spell.ScopedIndexWriter" />
+	</bean>
+
+	<bean id="com.liferay.portal.search.solr.SolrQuerySuggesterImpl" class="com.liferay.portal.search.solr.SolrQuerySuggesterImpl">
+		<property name="solrServer" ref="com.liferay.portal.search.solr.server.BasicAuthSolrServer" />
+		<property name="scopedIndexReader" ref="com.liferay.portal.search.solr.spell.ScopedIndexReader" />
+	</bean>
+	
+	<bean id="com.liferay.portal.search.solr.spell.ScopedIndexWriter" class="com.liferay.portal.search.solr.spell.ScopedIndexWriter">
+		<property name="spellFields">
+			<util:set>
+				<value>title</value>
+				<value>content</value>
+				<value>userName</value>
+			</util:set>
+		</property>
+		<property name="supportedLocales">
+			<util:map>
+				<entry key="en_US" value="D:/opt/solr/example/solr/conf/en_US.txt" />
+				<entry key="es_ES" value="D:/opt/solr/example/solr/conf/es_ES.txt" />
+			</util:map>
+		</property>
+		<property name="spellCheckerServer" ref="com.liferay.portal.search.solr.spell.SpellCheckerServer" />
+	</bean>
+
+	<bean id="com.liferay.portal.search.solr.spell.ScopedIndexReader" class="com.liferay.portal.search.solr.spell.ScopedIndexReader">
+		<property name="spellCheckerServer" ref="com.liferay.portal.search.solr.spell.SpellCheckerServer" />
+	</bean>
+
+	<bean id="com.liferay.portal.search.solr.spell.SpellCheckerServer" class="com.liferay.portal.search.solr.spell.SpellCheckerServer">
+		<property name="spellcheckDir" value="D:/opt/solr/example/solr/data/spellcheck" />
+		<property name="indexDir" value="D:/opt/solr/example/solr/data/index" />
 	</bean>
 
 	<!-- Configurator -->
