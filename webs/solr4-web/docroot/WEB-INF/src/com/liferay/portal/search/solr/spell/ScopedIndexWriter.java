@@ -18,7 +18,9 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchException;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.util.portlet.PortletProps;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,7 +33,6 @@ import java.util.Set;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
-import com.liferay.util.portlet.PortletProps;
 
 /**
  * @author Daniela Zapata
@@ -43,47 +44,31 @@ public class ScopedIndexWriter {
 		_spellCheckerServer.deleteDocuments();
 	}
 
-	public void indexDictionary(SearchContext searchContext)
-		throws SearchException{
-
-		Locale locale = searchContext.getLocale();
-
-		String propsKeyExternal = locale.toString().concat(EXTERNAL_DICTIONARY);
-		String dirExternal = PortletProps.get(propsKeyExternal);
-		File fileExternal = new File(dirExternal);
-		doIndexDictionary(fileExternal, locale);
-
-		String propsKeyCustom = locale.toString().concat(CUSTOM_DICTIONARY);
-		String dirCustom = PortletProps.get(propsKeyCustom);
-		File fileCustom = new File(dirCustom);
-		doIndexDictionary(fileCustom, locale);
-
-	}
-
 	public void doIndexDictionary(File file, Locale locale)
 		throws SearchException {
 
 		Set<Document> docs = new HashSet<Document>();
 
-		try{
-
+		try {
 			BufferedReader in = new BufferedReader(new FileReader(file));
 			String line;
 			int i = 0;
-			while((line = in.readLine()) != null){
+			while ((line = in.readLine()) != null) {
 				i++;
 				String[] term = line.split(StringPool.SPACE);
 				int weight = 0;
-				if (term.length > 1){
+				if (term.length > 1) {
 					weight = Integer.parseInt(term[1]);
 				}
-				addDocument(docs, term[0], locale, weight);
-				if(i == BATCH_NUM){
+
+				addDocument(docs, locale, term[0], weight);
+				if (i == _BATCH_NUM) {
 					_spellCheckerServer.addDocuments(docs);
 					docs.clear();
 					i = 0;
 				}
 			}
+
 			_spellCheckerServer.addDocuments(docs);
 			in.close();
 		}
@@ -94,22 +79,61 @@ public class ScopedIndexWriter {
 
 			throw new SearchException(e.getMessage());
 		}
+	}
 
+	public void indexDictionary(SearchContext searchContext)
+		throws SearchException {
+
+		Locale locale = searchContext.getLocale();
+		String strLocale = locale.toString();
+
+		String dictionaryDir = PortletProps.get(_DICTIONARY_DIRECTORY);
+		String dictionaryRelativePath = dictionaryDir.concat(
+			strLocale).concat(_DICTIONARY_EXTENSION_FILE);
+		String dictionaryCompletePath =
+			ScopedIndexWriter.class.getClassLoader()
+				.getResource(dictionaryRelativePath).getFile();
+
+		File fileExternal = new File(dictionaryCompletePath);
+
+		doIndexDictionary(fileExternal, locale);
+
+		String customDir = PortletProps.get(_DICTIONARY_DIRECTORY);
+
+		StringBundler customRelativePath = new StringBundler(5);
+
+		customRelativePath.append(customDir);
+		customRelativePath.append(_CUSTOM_PREFIX);
+		customRelativePath.append(StringPool.UNDERLINE);
+		customRelativePath.append(strLocale);
+		customRelativePath.append(_CUSTOM_EXTENSION_FILE);
+
+		String customCompletePath =
+			ScopedIndexWriter.class.getClassLoader()
+				.getResource(customRelativePath.toString()).getFile();
+
+		File fileCustom = new File(customCompletePath);
+
+		doIndexDictionary(fileCustom, locale);
+	}
+
+	public void setSpellCheckerServer(SpellCheckerServer spellCheckerServer) {
+		_spellCheckerServer = spellCheckerServer;
 	}
 
 	protected static Document addDocument(
-		Set<Document> docs,String token, Locale locale, int weight) {
+		Set<Document> docs, Locale locale, String token, int weight) {
 
 		int length = token.length();
 
 		Document doc = new Document();
 
 		Field wordField = new StringField("word", token, Field.Store.YES);
-		Field weightField =	new StringField(
+		Field weightField = new StringField(
 			"weight", String.valueOf(weight), Field.Store.YES);
 
-		if (locale != null){
-			Field localeField =	new StringField(
+		if (locale != null) {
+			Field localeField = new StringField(
 				"locale", locale.toString(), Field.Store.YES);
 
 			doc.add(localeField);
@@ -118,16 +142,14 @@ public class ScopedIndexWriter {
 		doc.add(wordField);
 		doc.add(weightField);
 
-		addGram(token, doc, getMin(length), getMax(length));
+		addGram(doc, token, getMin(length), getMax(length));
 
 		docs.add(doc);
 
 		return doc;
 	}
 
-	private static void addGram(
-		String text, Document doc, int ng1, int ng2) {
-
+	private static void addGram(Document doc, String text, int ng1, int ng2) {
 		int len = text.length();
 
 		for (int ng = ng1; ng <= ng2; ng++) {
@@ -138,7 +160,7 @@ public class ScopedIndexWriter {
 			for (int i = 0; i < len - ng + 1; i++) {
 
 				String gram = text.substring(i, i + ng);
-				Field ngramField = new StringField(key, gram, Field.Store.NO) ;
+				Field ngramField = new StringField(key, gram, Field.Store.NO);
 
 				doc.add(ngramField);
 				if (i == 0) {
@@ -147,6 +169,7 @@ public class ScopedIndexWriter {
 						new StringField("start" + ng, gram, Field.Store.NO);
 					doc.add(startField);
 				}
+
 				end = gram;
 			}
 
@@ -155,15 +178,6 @@ public class ScopedIndexWriter {
 					new StringField("end" + ng, end, Field.Store.NO);
 				doc.add(endField);
 			}
-		}
-	}
-
-	private static int getMin(int l) {
-		if (l > 5) {
-			return 3;
-		}
-		else {
-			return 2;
 		}
 	}
 
@@ -176,18 +190,23 @@ public class ScopedIndexWriter {
 		}
 	}
 
-	public void setSpellCheckerServer(SpellCheckerServer spellCheckerServer) {
-		_spellCheckerServer = spellCheckerServer;
+	private static int getMin(int l) {
+		if (l > 5) {
+			return 3;
+		}
+		else {
+			return 2;
+		}
 	}
 
-	private static Log _log =
-		LogFactoryUtil.getLog(ScopedIndexWriter.class);
+	private static final int _BATCH_NUM = 1000;
+	private static final String _CUSTOM_EXTENSION_FILE =".txt";
+	private static final String _CUSTOM_PREFIX ="custom";
+	private static final String _DICTIONARY_DIRECTORY = "dictionary.directory";
+	private static final String _DICTIONARY_EXTENSION_FILE =".txt";
+
+	private static Log _log = LogFactoryUtil.getLog(ScopedIndexWriter.class);
 
 	private SpellCheckerServer _spellCheckerServer;
 
-	private static final int BATCH_NUM = 1000;
-	private static final String EXTERNAL_DICTIONARY =
-		".external.dictionary.directory";
-	private static final String CUSTOM_DICTIONARY =
-		".custom.dictionary.directory";
 }

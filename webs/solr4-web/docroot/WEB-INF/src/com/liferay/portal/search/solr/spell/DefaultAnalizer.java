@@ -43,11 +43,10 @@ public class DefaultAnalizer {
 		TokenStream tokenStream =
 			new NGramTokenizer(new StringReader(input), 2, 4);
 
-		CharTermAttribute charTermAttribute =
-			tokenStream.getAttribute(CharTermAttribute.class);
+		CharTermAttribute charTermAttribute = tokenStream.getAttribute(
+			CharTermAttribute.class);
 
 		while (tokenStream.incrementToken()) {
-
 			String text = charTermAttribute.toString();
 
 			if (text.length() == 2) {
@@ -68,12 +67,12 @@ public class DefaultAnalizer {
 		result.start3 = input.substring(0, Math.min(input.length(), 3));
 		result.start4 = input.substring(0, Math.min(input.length(), 4));
 
-		result.end2 =
-			input.substring(Math.max(0, input.length() - 2), input.length());
-		result.end3 =
-			input.substring(Math.max(0, input.length() - 3), input.length());
-		result.end4 =
-			input.substring(Math.max(0, input.length() - 4), input.length());
+		result.end2 = input.substring(
+			Math.max(0, input.length() - 2), input.length());
+		result.end3 = input.substring(
+			Math.max(0, input.length() - 3), input.length());
+		result.end4 = input.substring(
+			Math.max(0, input.length() - 4), input.length());
 
 		return result;
 	}
@@ -85,12 +84,11 @@ public class DefaultAnalizer {
 		Analyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_40);
 
 		try {
+			TokenStream tokenStream = analyzer.tokenStream(
+				null, new StringReader(keyword));
 
-			TokenStream tokenStream =
-				analyzer.tokenStream(null, new StringReader(keyword));
-
-			CharTermAttribute charTermAttribute =
-				tokenStream.addAttribute(CharTermAttribute.class);
+			CharTermAttribute charTermAttribute = tokenStream.addAttribute(
+				CharTermAttribute.class);
 
 			tokenStream.reset();
 
@@ -102,8 +100,7 @@ public class DefaultAnalizer {
 
 			tokenStream.end();
 			tokenStream.close();
-
-	    }
+		}
 		catch (IOException e) {
 			if (_log.isDebugEnabled()) {
 				_log.debug("Unable to tokenize query", e);
@@ -113,20 +110,20 @@ public class DefaultAnalizer {
 		return result;
 	}
 
-	private static Log _log = LogFactoryUtil.getLog(DefaultAnalizer.class);
+	public String end2 = "";
 
-	public String input;
+	public String end3 = "";
+
+	public String end4 = "";
 
 	public List<String> gram2s = new ArrayList<String>();
 	public List<String> gram3s = new ArrayList<String>();
 	public List<String> gram4s = new ArrayList<String>();
-
+	public String input;
 	public String start2 = "";
 	public String start3 = "";
 	public String start4 = "";
 
-	public String end2 = "";
-	public String end3 = "";
-	public String end4 = "";
+	private static Log _log = LogFactoryUtil.getLog(DefaultAnalizer.class);
 
 }

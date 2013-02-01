@@ -39,6 +39,14 @@ import org.apache.solr.common.SolrDocumentList;
  */
 public class SolrQuerySuggesterImpl implements QuerySuggester {
 
+	public void setScopedIndexReader(ScopedIndexReader scopedIndexReader) {
+		_scopedIndexReader = scopedIndexReader;
+	}
+
+	public void setSolrServer(SolrServer solrServer) {
+		_solrServer = solrServer;
+	}
+
 	public String spellCheckKeywords(SearchContext searchContext)
 		throws SearchException {
 
@@ -61,19 +69,17 @@ public class SolrQuerySuggesterImpl implements QuerySuggester {
 
 				collated = collated.concat(suggestion)
 					.concat(StringPool.SPACE);
-
 			}
 			else {
-				collated =	collated.concat(token).concat(StringPool.SPACE);
+				collated = collated.concat(token).concat(StringPool.SPACE);
 			}
 		}
 
 		if (!collated.equals(StringPool.BLANK)) {
-			collated = collated.substring(0,collated.length()-1);
+			collated = collated.substring(0, collated.length()-1);
 		}
 
 		return collated;
-
 	}
 
 	public Map<String, List<String>> spellCheckKeywords(
@@ -83,8 +89,7 @@ public class SolrQuerySuggesterImpl implements QuerySuggester {
 		Map<String, List<String>> suggestions;
 
 		try {
-			suggestions =
-				_scopedIndexReader.suggestSimilar(searchContext,max);
+			suggestions = _scopedIndexReader.suggestSimilar(searchContext, max);
 		}
 		catch (Exception e) {
 			if (_log.isDebugEnabled()) {
@@ -95,7 +100,6 @@ public class SolrQuerySuggesterImpl implements QuerySuggester {
 		}
 
 		return suggestions;
-
 	}
 
 	public String[] suggestKeywordQueries(SearchContext searchContext, int max)
@@ -148,19 +152,12 @@ public class SolrQuerySuggesterImpl implements QuerySuggester {
 		}
 	}
 
-	public void setScopedIndexReader(ScopedIndexReader scopedIndexReader) {
-		this._scopedIndexReader = scopedIndexReader;
-	}
+	private static Log _log = LogFactoryUtil.getLog(
+		SolrQuerySuggesterImpl.class);
 
-	public void setSolrServer(SolrServer solrServer) {
-		_solrServer = solrServer;
-	}
-
-	private static Log _log =
-		LogFactoryUtil.getLog(SolrQuerySuggesterImpl.class);
+	private ScopedIndexReader _scopedIndexReader;
 
 	private SolrServer _solrServer;
 	private String _suggesterURL = "/select";
-	private ScopedIndexReader _scopedIndexReader;
 
 }

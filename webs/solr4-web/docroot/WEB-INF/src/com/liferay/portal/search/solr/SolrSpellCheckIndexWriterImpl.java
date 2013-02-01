@@ -14,8 +14,6 @@
 
 package com.liferay.portal.search.solr;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.search.SpellCheckIndexWriter;
@@ -47,18 +45,15 @@ public class SolrSpellCheckIndexWriterImpl implements SpellCheckIndexWriter {
 		_scopedIndexWriter.indexDictionary(searchContext);
 	}
 
+	public void setScopedIndexWriter(ScopedIndexWriter scopedIndexWriter) {
+		_scopedIndexWriter = scopedIndexWriter;
+	}
+
 	public void setSupportedLocales(Set<String> supportedLocales) {
 		_supportedLocales = supportedLocales;
 	}
 
-	private static Log _log = LogFactoryUtil.getLog(
-		SolrSpellCheckIndexWriterImpl.class);
-
-	public void setScopedIndexWriter(ScopedIndexWriter scopedIndexWriter) {
-		this._scopedIndexWriter = scopedIndexWriter;
-	}
-
-	private Set<String> _supportedLocales;
 	private ScopedIndexWriter _scopedIndexWriter;
+	private Set<String> _supportedLocales;
 
 }

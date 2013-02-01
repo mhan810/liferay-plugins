@@ -81,9 +81,7 @@
 		</property>
 	</bean>
 
-	<bean id="com.liferay.portal.search.solr.spell.SpellCheckerServer" class="com.liferay.portal.search.solr.spell.SpellCheckerServer">
-		<property name="spellcheckDir" value="D:/opt/solr/example/solr/data/spellcheck" />
-	</bean>
+	<bean id="com.liferay.portal.search.solr.spell.SpellCheckerServer" class="com.liferay.portal.search.solr.spell.SpellCheckerServer" />
 
 	<!-- Configurator -->
 

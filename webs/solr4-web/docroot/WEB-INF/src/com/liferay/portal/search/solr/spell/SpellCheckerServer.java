@@ -17,6 +17,7 @@ package com.liferay.portal.search.solr.spell;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.SearchException;
+import com.liferay.util.portlet.PortletProps;
 
 import java.io.File;
 
@@ -42,9 +43,8 @@ import org.apache.lucene.util.Version;
  */
 public class SpellCheckerServer {
 
-	public void addDocuments(Set<Document> documents)
-		throws SearchException {
-		try{
+	public void addDocuments(Set<Document> documents) throws SearchException {
+		try {
 			initSpellWriter();
 			spellIndexWriter.addDocuments(documents);
 			closeSpellWriter();
@@ -58,8 +58,21 @@ public class SpellCheckerServer {
 		}
 	}
 
+	public void closeSpellWriter() throws SearchException {
+		try {
+			spellIndexWriter.close();
+		}
+		catch (Exception e) {
+			if (_log.isDebugEnabled()) {
+				_log.debug("Unable to close the IndexWriter", e);
+			}
+
+			throw new SearchException(e.getMessage());
+		}
+	}
+
 	public void deleteDocuments() throws SearchException {
-		try{
+		try {
 			initSpellWriter();
 			spellIndexWriter.deleteAll();
 			closeSpellWriter();
@@ -76,7 +89,7 @@ public class SpellCheckerServer {
 	public Document getDocument(int docId) throws SearchException {
 
 		Document doc;
-		try{
+		try {
 			initSpellReader();
 			doc = spellIndexReader.document(docId);
 		}
@@ -87,15 +100,13 @@ public class SpellCheckerServer {
 
 			throw new SearchException(e.getMessage());
 		}
+
 		return doc;
 	}
 
-	public TopDocs getTopDocs(Query query, int results)
-		throws SearchException {
-
+	public TopDocs getTopDocs(Query query, int results) throws SearchException {
 		TopDocs topDocs = null;
 		try {
-
 			initSpellReader();
 			topDocs = spellIndexSearcher.search(query, results);
 
@@ -107,59 +118,40 @@ public class SpellCheckerServer {
 
 			throw new SearchException(e.getMessage());
 		}
+
 		return topDocs;
-
-	}
-
-	public void initSpellWriter() throws Exception {
-
-		File dirFile = new File(_spellcheckDir);
-
-		Directory companyDir = FSDirectory.open(dirFile, new NativeFSLockFactory());
-
-		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(
-			Version.LUCENE_40, new StandardAnalyzer(Version.LUCENE_40));
-
-		spellIndexWriter = new IndexWriter(companyDir, indexWriterConfig);
-
 	}
 
 	public void initSpellReader() throws Exception {
 
-		File dirFile = new File(_spellcheckDir);
+		String spellcheckDirectory = PortletProps.get("spellcheck.directory");
+		File dirFile = new File(spellcheckDirectory);
 
 		Directory companyDir = FSDirectory.open(dirFile);
 
 		spellIndexReader = DirectoryReader.open(companyDir);
 
 		spellIndexSearcher = new IndexSearcher(spellIndexReader);
-
 	}
 
-	public void closeSpellWriter() throws SearchException {
-		try{
-			spellIndexWriter.close();
-		}
-		catch (Exception e) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Unable to close the IndexWriter", e);
-			}
+	public void initSpellWriter() throws Exception {
 
-			throw new SearchException(e.getMessage());
-		}
+		String spellcheckDirectory = PortletProps.get("spellcheck.directory");
+		File dirFile = new File(spellcheckDirectory);
+
+		Directory companyDir = FSDirectory.open(
+			dirFile, new NativeFSLockFactory());
+
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(
+			Version.LUCENE_40, new StandardAnalyzer(Version.LUCENE_40));
+
+		spellIndexWriter = new IndexWriter(companyDir, indexWriterConfig);
 	}
 
-	public void setSpellcheckDir(String spellcheckDir) {
-		_spellcheckDir = spellcheckDir;
-	}
+	private static Log _log = LogFactoryUtil.getLog(SpellCheckerServer.class);
 
-	private static Log _log =
-		LogFactoryUtil.getLog(SpellCheckerServer.class);
-
-	private String _spellcheckDir;
-
-	private IndexWriter spellIndexWriter;
 	private IndexReader spellIndexReader;
 	private IndexSearcher spellIndexSearcher;
+	private IndexWriter spellIndexWriter;
 
 }

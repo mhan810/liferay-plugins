@@ -29,15 +29,14 @@ import java.util.TreeMap;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queries.TermsFilter;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.FilteredQuery;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.queries.TermsFilter;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.spell.StringDistance;
-
 
 /**
  * @author Daniela Zapata
@@ -45,34 +44,93 @@ import org.apache.lucene.search.spell.StringDistance;
  */
 public class ScopedIndexReader {
 
-	public Map<String, List<String>> suggestSimilar (
+	public void searchTokenSimilars(
+			Locale locale, String original, BooleanQuery query, String token,
+			Map<String, Float> words)
+		throws SearchException {
+
+		TermsFilter localeFilter = new TermsFilter();
+		Term localeTerm = new Term("locale", locale.toString());
+
+		localeFilter.addTerm(localeTerm);
+		FilteredQuery localeFilteredQuery = new FilteredQuery(
+			query, localeFilter);
+
+		TopDocs topDocs = _spellCheckerServer.getTopDocs(
+			localeFilteredQuery, 50);
+
+		Map<String, Float> tokenSuggestions = new HashMap<String, Float>();
+
+		boolean foundWord = false;
+
+		for (int i = 0; i < Math.min(topDocs.totalHits, 50); i++) {
+
+			ScoreDoc scoreDoc = topDocs.scoreDocs[i];
+
+			Document doc = _spellCheckerServer.getDocument(scoreDoc.doc);
+
+			String suggestion = doc.get("word");
+			float weight = Float.parseFloat(doc.get("weight"));
+
+			if (suggestion.equalsIgnoreCase(token)) {
+				words.put(original, weight);
+				foundWord = true;
+				break;
+			}
+
+			float distance = _stringDistance.getDistance(token, suggestion);
+
+			if (distance > _threshold) {
+				Float normalizedWeight = weight + distance;
+				tokenSuggestions.put(suggestion, normalizedWeight);
+			}
+		}
+
+		if (!foundWord) {
+			if (tokenSuggestions.isEmpty()) {
+				words.put(original, 0f);
+			}
+			else {
+				words.putAll(tokenSuggestions);
+			}
+		}
+	}
+
+	public void setSpellCheckerServer(SpellCheckerServer spellCheckerServer) {
+		_spellCheckerServer = spellCheckerServer;
+	}
+
+	public void setStringDistance(StringDistance stringDistance) {
+		_stringDistance = stringDistance;
+	}
+
+	public Map<String, List<String>> suggestSimilar(
 			SearchContext searchContext, int maxSuggestions)
 		throws IOException, SearchException {
 
-		Map<String,List<String>> suggestions =
-			new HashMap<String,List<String>>();
+		Map<String, List<String>> suggestions =
+			new HashMap<String, List<String>>();
 
 		Locale locale = searchContext.getLocale();
 
-		List<String> originals =
-			DefaultAnalizer.tokenize(searchContext.getKeywords());
+		List<String> originals = DefaultAnalizer.tokenize(
+			searchContext.getKeywords());
 
-		for (String original : originals){
-			
-			String token = original.toLowerCase();
+		for (String original : originals) {
+//			String token = original.toLowerCase();
+			String token = original;
 
 			List<String> similarTokens = suggestTokenSimilars(
-				original, token, locale, maxSuggestions);
+				locale, maxSuggestions, original, token);
 
 			suggestions.put(original, similarTokens);
 		}
 
 		return suggestions;
-
 	}
 
-	public List<String> suggestTokenSimilars (
-			String original, String token, Locale locale, int maxSuggestions)
+	public List<String> suggestTokenSimilars(
+			Locale locale, int maxSuggestions, String original, String token)
 		throws IOException, SearchException {
 
 		DefaultAnalizer result = DefaultAnalizer.analyze(token);
@@ -96,9 +154,9 @@ public class ScopedIndexReader {
 
 		Map<String, Float> words = new HashMap<String, Float>();
 
-		searchTokenSimilars(token, original, query, words, locale);
+		searchTokenSimilars(locale, original, query, token, words);
 
-		ValueComparator bvc =  new ValueComparator(words);
+		ValueComparator bvc = new ValueComparator(words);
 		TreeMap<String, Float> sortedWords = new TreeMap<String, Float>(bvc);
 
 		sortedWords.putAll(words);
@@ -106,87 +164,33 @@ public class ScopedIndexReader {
 		List<String> listWords = new ArrayList(sortedWords.keySet());
 
 		return listWords.subList(0, Math.min(maxSuggestions, listWords.size()));
-
 	}
 
-	public void searchTokenSimilars(String token, String original,
-	        BooleanQuery query,	Map<String, Float> words, Locale locale)
-		throws SearchException {
-
-		TermsFilter localeFilter = new TermsFilter();
-		Term localeTerm = new Term("locale", locale.toString());
-
-		localeFilter.addTerm(localeTerm);
-		FilteredQuery localeFilteredQuery =
-			new FilteredQuery(query, localeFilter);
-
-		TopDocs topDocs = 
-			_spellCheckerServer.getTopDocs(localeFilteredQuery, 50);
-
-		Map<String, Float> tokenSuggestions = new HashMap<String, Float>();
-
-		boolean foundWord = false;
-
-		for (int i = 0; i < Math.min(topDocs.totalHits, 50); i++) {
-
-			ScoreDoc scoreDoc = topDocs.scoreDocs[i];
-
-			Document doc = _spellCheckerServer.getDocument(scoreDoc.doc);
-
-			String suggestion = doc.get("word");                 
-			float weight = Float.parseFloat(doc.get("weight"));
-
-			if (suggestion.equalsIgnoreCase(token)) {
-				words.put(original, weight);
-				foundWord = true;
-				break;
-			}
-
-			float distance =
-				_stringDistance.getDistance(token, suggestion);
-
-			if (distance > threshold) {
-				Float normalizedWeight = weight + distance;
-				tokenSuggestions.put(suggestion, normalizedWeight);
-			}
+	private void addEdgeQuery(
+		BooleanQuery query, String fieldName, String fieldValue) {
+		TermQuery start3Query = new TermQuery(new Term(fieldName, fieldValue));
+		if (_boostEdges) {
+			start3Query.setBoost(2.0F);
 		}
 
-		if(!foundWord){
-			if(tokenSuggestions.isEmpty()){
-				words.put(original, 0f);
-			}
-		    else {
-				words.putAll(tokenSuggestions);
-			}
-		}
-
-	}
-
-	public void setStringDistance(StringDistance stringDistance) {
-		_stringDistance = stringDistance;
-	}
-
-	public void setSpellCheckerServer(
-		SpellCheckerServer spellCheckerServer) {
-		_spellCheckerServer = spellCheckerServer;
+		query.add(start3Query, BooleanClause.Occur.SHOULD);
 	}
 
 	private void addGramQuery(
 		BooleanQuery query, String fieldName, List<String> grams) {
 		for (String gram : grams) {
 			query.add(new TermQuery(new Term(fieldName, gram)),
-				BooleanClause.Occur.SHOULD);
+			BooleanClause.Occur.SHOULD);
 		}
 	}
 
-	private void addEdgeQuery(
-		BooleanQuery query, String fieldName, String fieldValue) {
-		TermQuery start3Query = new TermQuery(new Term(fieldName, fieldValue));
-		if (boostEdges) {
-			start3Query.setBoost(2.0F);
-		}
-		query.add(start3Query, BooleanClause.Occur.SHOULD);
-	}
+	private boolean _boostEdges = false;
+
+	private SpellCheckerServer _spellCheckerServer;
+
+	private StringDistance _stringDistance;
+
+	private float _threshold = 0.8f;
 
 	private class ValueComparator implements Comparator<String> {
 
@@ -198,15 +202,12 @@ public class ScopedIndexReader {
 		public int compare(String a, String b) {
 			if (base.get(a) >= base.get(b)) {
 				return -1;
-			} else {
+			}
+			else {
 				return 1;
 			}
 		}
-	}
 
-	private float threshold = 0.8f;
-	private boolean boostEdges = false;
-	private StringDistance _stringDistance;
-	private SpellCheckerServer _spellCheckerServer;
+	}
 
 }
