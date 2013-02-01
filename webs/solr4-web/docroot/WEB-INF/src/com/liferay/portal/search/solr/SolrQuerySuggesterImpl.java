@@ -22,17 +22,15 @@ import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.search.solr.spell.DefaultAnalizer;
 import com.liferay.portal.search.solr.spell.ScopedIndexReader;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.response.SpellCheckResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 
@@ -41,27 +39,40 @@ import org.apache.solr.common.SolrDocumentList;
  */
 public class SolrQuerySuggesterImpl implements QuerySuggester {
 
-	public void setSolrServer(SolrServer solrServer) {
-		_solrServer = solrServer;
-	}
-
 	public String spellCheckKeywords(SearchContext searchContext)
 		throws SearchException {
 
-		String luceneResult = null;
-		String collated = "";
+		String collated = StringPool.BLANK;
 
-		Map<String, List<String>> map = spellCheckKeywords(searchContext, 10);
-		for (String token : map.keySet()){
-			collated =
-				collated.concat(map.get(token).get(0))
+		Map<String, List<String>> map = spellCheckKeywords(searchContext, 1);
+
+		String keywords = searchContext.getKeywords();
+		List<String> tokens = DefaultAnalizer.tokenize(keywords);
+
+		for (String token : tokens) {
+			if (!map.get(token).isEmpty()) {
+
+				String suggestion = map.get(token).get(0);
+
+				if (Character.isUpperCase(token.charAt(0))) {
+					suggestion = suggestion.substring(0, 1).toUpperCase()
+						.concat(suggestion.substring(1));
+				}
+
+				collated = collated.concat(suggestion)
 					.concat(StringPool.SPACE);
-		}
-		if (!collated.equals("")){
-			luceneResult = collated.substring(0,collated.length()-1);
+
+			}
+			else {
+				collated =	collated.concat(token).concat(StringPool.SPACE);
+			}
 		}
 
-		return luceneResult;
+		if (!collated.equals(StringPool.BLANK)) {
+			collated = collated.substring(0,collated.length()-1);
+		}
+
+		return collated;
 
 	}
 
@@ -69,16 +80,21 @@ public class SolrQuerySuggesterImpl implements QuerySuggester {
 			SearchContext searchContext, int max)
 		throws SearchException {
 
-		Map<String, List<String>> luceneResult = null;
+		Map<String, List<String>> suggestions;
 
 		try {
-			luceneResult =
+			suggestions =
 				_scopedIndexReader.suggestSimilar(searchContext,max);
-		} catch (Exception e) {
-			e.printStackTrace();
+		}
+		catch (Exception e) {
+			if (_log.isDebugEnabled()) {
+				_log.debug("Unable to execute spellchecking", e);
+			}
+
+			throw new SearchException(e.getMessage());
 		}
 
-		return luceneResult;
+		return suggestions;
 
 	}
 
@@ -132,40 +148,18 @@ public class SolrQuerySuggesterImpl implements QuerySuggester {
 		}
 	}
 
-	protected SolrQuery createSpellCheckQuery(
-		SearchContext searchContext,
-		Map<String, String> additionalQueryParameters) {
-
-		SolrQuery solrQuery = new SolrQuery();
-
-		Locale locale = searchContext.getLocale();
-
-		String requestHandler = _spellCheckURLPrefix.concat(
-			StringPool.UNDERLINE).concat(locale.toString());
-
-		solrQuery.setRequestHandler(requestHandler);
-		solrQuery.setParam("spellcheck.q", searchContext.getKeywords());
-
-		for (Map.Entry<String, String> additionalQueryParameter :
-				additionalQueryParameters.entrySet()) {
-
-			solrQuery.setParam(
-				additionalQueryParameter.getKey(),
-				additionalQueryParameter.getValue());
-		}
-
-		return solrQuery;
-	}
-
 	public void setScopedIndexReader(ScopedIndexReader scopedIndexReader) {
 		this._scopedIndexReader = scopedIndexReader;
+	}
+
+	public void setSolrServer(SolrServer solrServer) {
+		_solrServer = solrServer;
 	}
 
 	private static Log _log =
 		LogFactoryUtil.getLog(SolrQuerySuggesterImpl.class);
 
 	private SolrServer _solrServer;
-	private String _spellCheckURLPrefix = "/liferay_spellCheck";
 	private String _suggesterURL = "/select";
 	private ScopedIndexReader _scopedIndexReader;
 
