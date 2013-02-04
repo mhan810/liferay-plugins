@@ -21,4 +21,7 @@ _sass_cache_*.css
 /*/*/docroot/WEB-INF/lib/portal-compat-shared.jar
 
 /build.*.properties
+/*/*/.classpath
+/*/*/.project
 /dist
+/portlets/oauth-portlet/docroot/WEB-INF/tld/c.tld
