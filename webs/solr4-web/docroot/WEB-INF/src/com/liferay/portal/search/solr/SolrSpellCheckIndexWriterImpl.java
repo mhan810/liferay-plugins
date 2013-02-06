@@ -42,13 +42,12 @@ public class SolrSpellCheckIndexWriterImpl implements SpellCheckIndexWriter {
 
 	public void deleteDocuments() throws SearchException {
 		try {
-
 			_solrServer.deleteByQuery("spellcheck:true");
-
 			if (_commit) {
 				_solrServer.commit();
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -245,7 +244,6 @@ public class SolrSpellCheckIndexWriterImpl implements SpellCheckIndexWriter {
 		SolrSpellCheckIndexWriterImpl.class);
 
 	private boolean _commit;
-
 	private SolrServer _solrServer;
 	private Set<String> _supportedLocales;
 

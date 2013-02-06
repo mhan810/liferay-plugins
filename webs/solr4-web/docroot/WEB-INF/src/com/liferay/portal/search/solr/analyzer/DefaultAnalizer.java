@@ -38,7 +38,6 @@ import org.apache.lucene.util.Version;
 public class DefaultAnalizer {
 
 	public static DefaultAnalizer analyze(String input) throws SearchException {
-
 		DefaultAnalizer result = new DefaultAnalizer();
 		result.input = input;
 		TokenStream tokenStream =
@@ -86,7 +85,6 @@ public class DefaultAnalizer {
 	}
 
 	public static List<String> tokenize(String keyword) throws SearchException {
-
 		List<String> result = new ArrayList<String>();
 
 		Analyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_40);
@@ -121,11 +119,8 @@ public class DefaultAnalizer {
 	}
 
 	public String end2 = "";
-
 	public String end3 = "";
-
 	public String end4 = "";
-
 	public List<String> gram2s = new ArrayList<String>();
 	public List<String> gram3s = new ArrayList<String>();
 	public List<String> gram4s = new ArrayList<String>();

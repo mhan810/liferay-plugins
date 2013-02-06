@@ -234,7 +234,7 @@ public class SolrQuerySuggesterImpl implements QuerySuggester {
 
 		SolrQuery solrQuery = new SolrQuery();
 
-		StringBundler sb =new StringBundler(10);
+		StringBundler sb = new StringBundler(10);
 
 		sb.append(addGramsQuery("gram2", result.gram2s));
 		sb.append(addGramsQuery("gram3", result.gram3s));
@@ -271,7 +271,7 @@ public class SolrQuerySuggesterImpl implements QuerySuggester {
 
 	private String addGramQuery(String fieldName, String fieldValue) {
 
-		StringBundler sb =new StringBundler(6);
+		StringBundler sb = new StringBundler(6);
 
 		sb.append(fieldName);
 		sb.append(StringPool.COLON);
@@ -320,7 +320,6 @@ public class SolrQuerySuggesterImpl implements QuerySuggester {
 				return 1;
 			}
 		}
-
 	}
 
 }
