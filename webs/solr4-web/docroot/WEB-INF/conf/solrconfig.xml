@@ -6,7 +6,7 @@
 	<lib dir="/total/crap/dir/ignored" />
 	<dataDir>${solr.data.dir:}</dataDir>
 	<directoryFactory name="DirectoryFactory" class="${solr.directoryFactory:solr.StandardDirectoryFactory}" />
-	<indexConfig></indexConfig>
+	<indexConfig />
 	<jmx/>
 	<updateHandler class="solr.DirectUpdateHandler2">
 		<autoCommit>
@@ -26,7 +26,7 @@
 		<queryResultWindowSize>20</queryResultWindowSize>
 		<queryResultMaxDocsCached>200</queryResultMaxDocsCached>
 		<listener event="newSearcher" class="solr.QuerySenderListener">
-			<arr name="queries"></arr>
+			<arr name="queries" />
 		</listener>
 		<listener event="firstSearcher" class="solr.QuerySenderListener">
 			<arr name="queries">
@@ -156,11 +156,12 @@
 		</shardHandler>
 	</requestHandler>
 	<requestHandler name="/replication" class="solr.ReplicationHandler" startup="lazy" />
+	<!-- Default spell checker component that must remain for the Browse Handler Request -->
 	<searchComponent name="spellcheck" class="solr.SpellCheckComponent">
 		<str name="queryAnalyzerFieldType">textSpell</str>
 		<lst name="spellchecker">
 			<str name="name">default</str>
-			<str name="field">name</str>
+			<str name="field">spellChecker</str>
 			<str name="classname">solr.DirectSolrSpellChecker</str>
 			<str name="distanceMeasure">internal</str>
 			<float name="accuracy">0.5</float>
@@ -170,34 +171,8 @@
 			<int name="minQueryLength">4</int>
 			<float name="maxQueryFrequency">0.01</float>
 		</lst>
-		<lst name="spellchecker">
-			<str name="name">wordbreak</str>
-			<str name="classname">solr.WordBreakSolrSpellChecker</str>
-			<str name="field">name</str>
-			<str name="combineWords">true</str>
-			<str name="breakWords">true</str>
-			<int name="maxChanges">10</int>
-		</lst>
 	</searchComponent>
-	<requestHandler name="/spell" class="solr.SearchHandler" startup="lazy">
-		<lst name="defaults">
-			<str name="df">text</str>
-			<str name="spellcheck.dictionary">default</str>
-			<str name="spellcheck.dictionary">wordbreak</str>
-			<str name="spellcheck">on</str>
-			<str name="spellcheck.extendedResults">true</str>
-			<str name="spellcheck.count">10</str>
-			<str name="spellcheck.alternativeTermCount">5</str>
-			<str name="spellcheck.maxResultsForSuggest">5</str>
-			<str name="spellcheck.collate">true</str>
-			<str name="spellcheck.collateExtendedResults">true</str>
-			<str name="spellcheck.maxCollationTries">10</str>
-			<str name="spellcheck.maxCollations">5</str>
-		</lst>
-		<arr name="last-components">
-			<str>spellcheck</str>
-		</arr>
-	</requestHandler>
+	
 	<searchComponent name="tvComponent" class="solr.TermVectorComponent" />
 	<requestHandler name="/tvrh" class="solr.SearchHandler" startup="lazy">
 		<lst name="defaults">
@@ -287,7 +262,7 @@
 			<fragListBuilder name="simple" class="solr.highlight.SimpleFragListBuilder" />
 			<fragListBuilder name="single" class="solr.highlight.SingleFragListBuilder" />
 			<fragListBuilder name="weighted" default="true" class="solr.highlight.WeightedFragListBuilder" />
-			<fragmentsBuilder name="default" default="true" class="solr.highlight.ScoreOrderFragmentsBuilder"></fragmentsBuilder>
+			<fragmentsBuilder name="default" default="true" class="solr.highlight.ScoreOrderFragmentsBuilder" />
 			<fragmentsBuilder name="colored" class="solr.highlight.ScoreOrderFragmentsBuilder">
 				<lst name="defaults">
 					<str name="hl.tag.pre"><![CDATA[
