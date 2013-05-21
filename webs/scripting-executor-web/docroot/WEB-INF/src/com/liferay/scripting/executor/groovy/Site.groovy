@@ -29,120 +29,122 @@ import com.liferay.portal.service.UserLocalServiceUtil
  */
 class Site {
 
-	static Site openSite(String name, String description) {
-		def site = new Site();
+    static Site openSite(String name, String description) {
+        def site = new Site();
 
-		site.name = name;
-		site.description = description;
-		site.type = GroupConstants.TYPE_SITE_OPEN;
+        site.name = name;
+        site.description = description;
+        site.type = GroupConstants.TYPE_SITE_OPEN;
 
-		return site;
-	}
+        return site;
+    }
 
-	static Site privateSite(String name, String description) {
-		def site = new Site();
+    static Site privateSite(String name, String description) {
+        def site = new Site();
 
-		site.name = name;
-		site.description = description;
-		site.type = GroupConstants.TYPE_SITE_PRIVATE;
+        site.name = name;
+        site.description = description;
+        site.type = GroupConstants.TYPE_SITE_PRIVATE;
 
-		return site;
-	}
+        return site;
+    }
 
-	static Site restrictedSite(String name, String description) {
-		def site = new Site();
+    static Site restrictedSite(String name, String description) {
+        def site = new Site();
 
-		site.name = name;
-		site.description = description;
-		site.type = GroupConstants.TYPE_SITE_RESTRICTED;
+        site.name = name;
+        site.description = description;
+        site.type = GroupConstants.TYPE_SITE_RESTRICTED;
 
-		return site;
-	}
+        return site;
+    }
 
-	void addOrganizations(
-		ScriptingContext scriptingContext, String... organizationNames) {
+    void addOrganizations(
+            ScriptingContext scriptingContext, String... organizationNames) {
 
-		for (String organizationName : organizationNames) {
-			def organization =
-				OrganizationLocalServiceUtil.fetchOrganization(
-					scriptingContext.companyId, organizationName);
+        for (String organizationName : organizationNames) {
+            try {
+                def organization =
+                    OrganizationLocalServiceUtil.getOrganization(
+                            scriptingContext.companyId, organizationName);
+                OrganizationLocalServiceUtil.addGroupOrganizations(
+                        liferaySite.getGroupId(),
+                        organization.getOrganizationId());
+            } catch (e) {
+            }
+        }
+    }
 
-			if (organization != null) {
-				GroupLocalServiceUtil.addOrganizationGroup(
-					organization.getOrganizationId(), liferaySite);
-			}
-		}
-	}
+    void addTeamUserGroupMembers(
+            ScriptingContext scriptingContext, String teamName,
+            String... userGroupNames) {
 
-	void addTeamUserGroupMembers(
-		ScriptingContext scriptingContext, String teamName,
-		String... userGroupNames) {
+        def team = null;
+        try {
+            team = TeamLocalServiceUtil.getTeam(
+                    liferaySite.getGroupId(), teamName);
+        }
+        catch (NoSuchTeamException nste) {
+            team = TeamLocalServiceUtil.addTeam(
+                    scriptingContext.defaultUserId, liferaySite.getGroupId(),
+                    teamName, null);
+        }
 
-		def team =  null;
-		try {
-			team = TeamLocalServiceUtil.getTeam(
-				liferaySite.getGroupId(), teamName);
-		}
-		catch (NoSuchTeamException nste) {
-			team = TeamLocalServiceUtil.addTeam(
-				scriptingContext.defaultUserId, liferaySite.getGroupId(),
-				teamName, null);
-		}
+        for (String userGroupName : userGroupNames) {
+            def userGroup = UserGroupLocalServiceUtil.fetchUserGroup(
+                    scriptingContext.companyId, userGroupName);
 
-		for (String userGroupName : userGroupNames) {
-			def userGroup = UserGroupLocalServiceUtil.fetchUserGroup(
-				scriptingContext.companyId, userGroupName);
+            if (userGroup != null) {
+                TeamLocalServiceUtil.addUserGroupTeam(
+                        userGroup.getUserGroupId(), team);
+            }
+        }
+    }
 
-			if (userGroup != null) {
-				TeamLocalServiceUtil.addUserGroupTeam(
-					userGroup.getUserGroupId(), team);
-			}
-		}
-	}
+    void addTeamUserMembers(
+            ScriptingContext scriptingContext, String teamName,
+            String... screenNames) {
 
-	void addTeamUserMembers(
-		ScriptingContext scriptingContext, String teamName,
-		String... screenNames) {
+        def team = null;
 
-		def team =  null;
+        try {
+            team = TeamLocalServiceUtil.getTeam(
+                    liferaySite.getGroupId(), teamName);
+        }
+        catch (NoSuchTeamException nste) {
+            team = TeamLocalServiceUtil.addTeam(
+                    scriptingContext.defaultUserId, liferaySite.getGroupId(),
+                    teamName, null);
+        }
 
-		try {
-			team = TeamLocalServiceUtil.getTeam(
-				liferaySite.getGroupId(), teamName);
-		}
-		catch (NoSuchTeamException nste) {
-			team = TeamLocalServiceUtil.addTeam(
-				scriptingContext.defaultUserId, liferaySite.getGroupId(),
-				teamName, null);
-		}
+        for (String screenName : screenNames) {
+            def user = UserLocalServiceUtil.fetchUserByScreenName(screenName);
 
-		for (String screenName : screenNames) {
-			def user = UserLocalServiceUtil.fetchUserByScreenName(screenName);
+            if (user != null) {
+                TeamLocalServiceUtil.addUserTeam(user.getUserId(), team);
+            }
+        }
+    }
 
-			if (user != null) {
-				TeamLocalServiceUtil.addUserTeam(user.getUserId(), team);
-			}
-		}
-	}
+    void create(ScriptingContext scriptingContext) {
+        liferaySite = GroupLocalServiceUtil.fetchGroup(
+                scriptingContext.companyId, name);
 
-	void create(ScriptingContext scriptingContext) {
-		liferaySite = GroupLocalServiceUtil.fetchGroup(
-			scriptingContext.companyId, name);
+        if (liferaySite != null) {
+            return;
+        }
 
-		if (liferaySite != null) {
-			return;
-		}
+        liferaySite = GroupLocalServiceUtil.addGroup(
+                scriptingContext.defaultUserId,
+                null, 0,
+                name, description, type,
+                null, true, true,
+                scriptingContext.serviceContext)
+    }
 
-		GroupLocalServiceUtil.addGroup(
-			scriptingContext.defaultUserId,
-			GroupConstants.DEFAULT_PARENT_GROUP_ID, null, 0, 0, name,
-			description, type, null, true, true,
-			scriptingContext.serviceContext);
-	}
-
-	String description;
-	Group liferaySite;
-	String name;
-	int type;
+    String description;
+    Group liferaySite;
+    String name;
+    int type;
 
 }

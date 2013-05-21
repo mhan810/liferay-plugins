@@ -14,53 +14,63 @@
 
 package com.liferay.scripting.executor.groovy
 
+import com.liferay.portal.kernel.util.StringPool
 import com.liferay.portal.kernel.util.Validator
+import com.liferay.portal.model.ListTypeConstants
 import com.liferay.portal.model.OrganizationConstants
 import com.liferay.portal.service.OrganizationLocalServiceUtil
+import com.liferay.portal.service.ServiceContext
 
 /**
  * @author Michael C. Han
  */
 class Organization {
 
-	Organization(String organizationName) {
-		name = organizationName;
-	}
+    Organization(String organizationName) {
+        name = organizationName;
+    }
 
-	Organization(String organizationName, String parentOrgName) {
-		name = organizationName;
-		parentOrganizationName = parentOrgName;
-	}
+    Organization(String organizationName, String parentOrgName) {
+        name = organizationName;
+        parentOrganizationName = parentOrgName;
+    }
 
-	void create(ScriptingContext scriptingContext) {
+    void create(ScriptingContext scriptingContext) {
 
-		liferayOrganization = OrganizationLocalServiceUtil.fetchOrganization(
-			scriptingContext.companyId, name);
+        try {
+            liferayOrganization = OrganizationLocalServiceUtil.getOrganization(
+                    scriptingContext.companyId, name);
+        } catch (e) {
+            liferayOrganization = null;
+        }
 
-		if (liferayOrganization != null) {
-			return;
-		}
+        if (liferayOrganization != null) {
+            return;
+        }
 
-		def parentOrganizationId =
-			OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID;
+        def parentOrganizationId =
+            OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID;
 
-		if (Validator.isNotNull(parentOrganizationName)) {
-			def parentOrganization =
-				OrganizationLocalServiceUtil.fetchOrganization(
-					scriptingContext.companyId, parentOrganizationName);
+        if (Validator.isNotNull(parentOrganizationName)) {
+            def parentOrganization =
+                OrganizationLocalServiceUtil.getOrganization(
+                        scriptingContext.companyId, parentOrganizationName);
 
-			if (parentOrganization != null) {
-				parentOrganizationId = parentOrganization.getOrganizationId();
-			}
-		}
+            if (parentOrganization != null) {
+                parentOrganizationId = parentOrganization.getOrganizationId();
+            }
+        }
 
-		liferayOrganization = OrganizationLocalServiceUtil.addOrganization(
-			scriptingContext.defaultUserId, parentOrganizationId, name,
-			false);
-	}
+        liferayOrganization = OrganizationLocalServiceUtil.addOrganization(
+                scriptingContext.defaultUserId, (long) parentOrganizationId,
+                name,
+                OrganizationConstants.TYPE_REGULAR_ORGANIZATION, false, 0, 0,
+                ListTypeConstants.ORGANIZATION_STATUS_DEFAULT, StringPool.BLANK,
+                false, scriptingContext.serviceContext);
+    }
 
-	com.liferay.portal.model.Organization liferayOrganization;
-	String name;
-	String parentOrganizationName;
+    com.liferay.portal.model.Organization liferayOrganization;
+    String name;
+    String parentOrganizationName;
 
 }
