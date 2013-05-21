@@ -28,6 +28,7 @@ import com.liferay.portal.workflow.kaleo.definition.Condition;
 import com.liferay.portal.workflow.kaleo.definition.Definition;
 import com.liferay.portal.workflow.kaleo.definition.DelayDuration;
 import com.liferay.portal.workflow.kaleo.definition.DurationScale;
+import com.liferay.portal.workflow.kaleo.definition.ExecutionType;
 import com.liferay.portal.workflow.kaleo.definition.Fork;
 import com.liferay.portal.workflow.kaleo.definition.Join;
 import com.liferay.portal.workflow.kaleo.definition.Node;
@@ -396,7 +397,11 @@ public class XMLWorkflowModelParser implements WorkflowModelParser {
 	protected void parseRecipients(
 		Element recipientsElement, Notification notification) {
 
-		if (recipientsElement == null) {
+		ExecutionType executionType = notification.getExecutionType();
+
+		if ((recipientsElement == null) || 
+				(executionType == ExecutionType.ON_ASSIGNMENT)) {
+
 			return;
 		}
 
