@@ -1,3 +1,4 @@
+import com.liferay.scripting.executor.groovy.Organization
 import com.liferay.scripting.executor.groovy.Role
 import com.liferay.scripting.executor.groovy.ScriptingContext
 import com.liferay.scripting.executor.groovy.Site
@@ -6,6 +7,11 @@ import com.liferay.scripting.executor.groovy.User
 
 def scriptingContext = new ScriptingContext();
 
+def bankOrganizationName = "banking.liferay.com";
+
+def organization = new Organization(bankOrganizationName);
+organization.create(scriptingContext);
+
 def commoditiesSite = Site.privateSite("Commodities", "");
 def alternativeAssetsSite = Site.privateSite("Alternative Assets", "");
 def fixedIncomeSite = Site.privateSite("Fixed Income", "");
@@ -13,6 +19,7 @@ def privateEquitySite = Site.privateSite("Private Equity", "");
 def equitiesSite = Site.privateSite("Equities", "");
 
 for(site in [commoditiesSite,alternativeAssetsSite,fixedIncomeSite,privateEquitySite,equitiesSite]){
+	site.addOrganizations(scriptingContext, bankOrganizationName);
 	site.create(scriptingContext);
 }
 
@@ -47,10 +54,10 @@ def usersToCreate = [
 for (userData in usersToCreate) {
 	def user = new User(userData[0],userData[1],userData[3],userData[2],"password");
 	user.create(scriptingContext);
+	user.joinOrganizations(scriptingContext, bankOrganizationName);
 	
 	def userSites = userData[4];
 	for(site in userSites) {
-		println("Adding "+user.getEmail()+" to "+site);
 		user.joinSites(scriptingContext, site);
 	}
 }

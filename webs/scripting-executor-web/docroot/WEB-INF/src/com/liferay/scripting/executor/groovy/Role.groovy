@@ -22,55 +22,57 @@ import com.liferay.portal.service.RoleLocalServiceUtil;
  */
 class Role {
 
-	static Role organizationRole(String roleName, String description) {
-		def role = new Role();
+    static Role organizationRole(String roleName, String description) {
+        def role = new Role();
 
-		role.name = roleName;
-		role.description = description;
-		role.type = RoleConstants.TYPE_ORGANIZATION;
+        role.name = roleName;
+        role.description = description;
+        role.type = RoleConstants.TYPE_ORGANIZATION;
 
-		return role;
-	}
+        return role;
+    }
 
-	static Role portalRole(String roleName, String description) {
-		def role = new Role();
+    static Role portalRole(String roleName, String description) {
+        def role = new Role();
 
-		role.name = roleName;
-		role.description = description;
-		role.type = RoleConstants.TYPE_REGULAR;
+        role.name = roleName;
+        role.description = description;
+        role.type = RoleConstants.TYPE_REGULAR;
 
-		return role;
-	}
+        return role;
+    }
 
-	static Role siteRole(String roleName, String description) {
-		def role = new Role();
+    static Role siteRole(String roleName, String description) {
+        def role = new Role();
 
-		role.name = roleName;
-		role.description = description;
-		role.type = RoleConstants.TYPE_SITE;
+        role.name = roleName;
+        role.description = description;
+        role.type = RoleConstants.TYPE_SITE;
 
-		return role;
-	}
+        return role;
+    }
 
-	public void create(ScriptingContext scriptingContext) {
+    public void create(ScriptingContext scriptingContext) {
 
-		liferayRole = RoleLocalServiceUtil.fetchRole(
-			scriptingContext.companyId, name);
+        liferayRole = RoleLocalServiceUtil.fetchRole(
+                scriptingContext.companyId, name);
 
-		if (liferayRole != null) {
-			return;
-		}
+        if (liferayRole != null) {
+            return;
+        }
 
-		liferayRole = RoleLocalServiceUtil.addRole(
-			scriptingContext.defaultUserId, null, 0, name,
-			ScriptingContext.getLocalizedMap(name),
-			ScriptingContext.getLocalizedMap(description), type,
-			null, scriptingContext.serviceContext);
-	}
+        liferayRole = RoleLocalServiceUtil.addRole(
+                scriptingContext.defaultUserId,
+                scriptingContext.companyId,
+                name,
+                ScriptingContext.getLocalizedMap(name),
+                ScriptingContext.getLocalizedMap(description),
+                type);
+    }
 
-	String description;
-	String name;
-	com.liferay.portal.model.Role liferayRole;
-	int type;
+    String description;
+    String name;
+    com.liferay.portal.model.Role liferayRole;
+    int type;
 
 }

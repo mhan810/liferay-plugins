@@ -6,10 +6,16 @@ import com.liferay.scripting.executor.groovy.Site
 
 def scriptingContext = new ScriptingContext();
 
+def parentOrganizationName = "demos.liferay.com"
+
+def parentOrganization = new Organization(parentOrganizationName);
+parentOrganization.create(scriptingContext);
+
 def organizationNames = ["Marketing", "HR", "Executives", "Legal"];
 
 for (organizationName in organizationNames) {
-	def organization = new Organization(organizationName);
+	def organization = new Organization(organizationName,
+										 parentOrganizationName);
 	organization.create(scriptingContext);
 }
 
