@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FileUtil;
@@ -72,7 +73,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -907,6 +907,79 @@ public class FileSystemImporter extends BaseImporter {
 		}
 	}
 
+	// TODO Move this into DLAppLocalServiceUtil?
+	protected long[] getDLResourcePathIds(String documentLibraryResourcePath)
+		throws Exception {
+
+		if (Validator.isNull(documentLibraryResourcePath)) {
+			return new long[] {};
+		}
+		String[] folderPaths =
+			documentLibraryResourcePath.substring(
+				documentLibraryResourcePath.indexOf(File.separator) + 1).split(
+				File.separator);
+		long[] folderPathIds = new long[] {};
+		long currentParentId = 0;
+		for (String folderName : folderPaths) {
+			try {
+				currentParentId =
+					(folderPathIds.length == 0)
+						? 0 : folderPathIds[folderPathIds.length - 1];
+				Folder dlFolder =
+					DLAppLocalServiceUtil.getFolder(
+						groupId, currentParentId, folderName);
+				long folderId = dlFolder.getFolderId();
+				folderPathIds = ArrayUtil.append(folderPathIds, folderId);
+			}
+			catch (Exception e) {
+				// TODO - Handle folder not Found?
+			}
+		}
+
+		return folderPathIds;
+	}
+
+	protected void addDLEntriesFromFile(String url)
+		throws Exception {
+
+		File resourceFile = new File(url);
+		String documentLibraryTargetPath =
+			url.substring(_localDocumentLibrarySourcePath.length());
+		long[] destinationIds = getDLResourcePathIds(documentLibraryTargetPath);
+		String name = resourceFile.getName();
+		String description = "";
+		long parentFolderId =
+			(destinationIds.length == 0)
+				? 0 : destinationIds[destinationIds.length - 1];
+		if (resourceFile.isDirectory()) {
+			if (Validator.isNotNull(documentLibraryTargetPath)) {
+				DLAppLocalServiceUtil.addFolder(
+					userId, groupId, parentFolderId, name, description,
+					serviceContext);
+			}
+			File[] children = resourceFile.listFiles();
+			for (File child : children) {
+				addDLEntriesFromFile(child.getAbsolutePath());
+			}
+		}
+		else {
+			String fileName = resourceFile.getName();
+			String mimeType = MimeTypesUtil.getContentType(fileName);
+			String title = FileUtil.stripExtension(fileName);
+			DLAppLocalServiceUtil.addFileEntry(
+				userId, groupId, parentFolderId, fileName, mimeType, title, "",
+				null, resourceFile, serviceContext);
+		}
+	}
+
+	protected void uploadLocalDocumentLibrary(
+		String localDocumentLibrarySourcePath)
+		throws Exception {
+
+		this._localDocumentLibrarySourcePath = localDocumentLibrarySourcePath;
+		addDLEntriesFromFile(this._localDocumentLibrarySourcePath);
+	}
+
 	protected ServiceContext serviceContext;
 
 	private static final String _DL_DOCUMENTS_DIR_NAME =
@@ -929,5 +1002,6 @@ public class FileSystemImporter extends BaseImporter {
 	private Pattern _fileEntryPattern = Pattern.compile(
 		"\\[\\$FILE=([^\\$]+)\\$\\]");
 	private File _resourcesDir;
+	private String _localDocumentLibrarySourcePath;
 
 }

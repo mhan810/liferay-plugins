@@ -17,11 +17,10 @@ package com.liferay.resourcesimporter.util;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StringPool;
 
+import java.io.File;
 import java.io.InputStream;
-
 import java.net.URL;
 import java.net.URLConnection;
-
 import java.util.Set;
 
 /**
@@ -91,31 +90,45 @@ public class ResourceImporter extends FileSystemImporter {
 		}
 	}
 
-	@Override
+@Override
 	protected void addDLFileEntries(String fileEntriesDirName)
 		throws Exception {
+		addDLFileEntries(fileEntriesDirName, false);
+	}
+	
+	protected void addDLFileEntries(
+		String fileEntriesDirName, boolean useResourcePath)
+		throws Exception {
 
-		Set<String> resourcePaths = servletContext.getResourcePaths(
-			resourcesDir.concat(fileEntriesDirName));
+		if (useResourcePath) {
+			Set<String> resourcePaths =
+				servletContext.getResourcePaths(resourcesDir.concat(fileEntriesDirName));
 
-		if (resourcePaths == null) {
-			return;
-		}
-
-		for (String resourcePath : resourcePaths) {
-			if (resourcePath.endsWith(StringPool.SLASH)) {
-				continue;
+			if (resourcePaths == null) {
+				return;
 			}
 
-			String name = FileUtil.getShortFileName(resourcePath);
+			for (String resourcePath : resourcePaths) {
+				if (resourcePath.endsWith(StringPool.SLASH)) {
+					continue;
+				}
 
-			URL url = servletContext.getResource(resourcePath);
+				String name = FileUtil.getShortFileName(resourcePath);
 
-			URLConnection urlConnection = url.openConnection();
+				URL url = servletContext.getResource(resourcePath);
 
-			doAddDLFileEntries(
-				name, urlConnection.getInputStream(),
-				urlConnection.getContentLength());
+				URLConnection urlConnection = url.openConnection();
+
+				doAddDLFileEntries(
+					name, urlConnection.getInputStream(),
+					urlConnection.getContentLength());
+			}
+		}
+		else {
+			String localDLSourcePath =
+				new File(servletContext.getRealPath("/") + resourcesDir +
+					fileEntriesDirName).getAbsolutePath();
+			uploadLocalDocumentLibrary(localDLSourcePath);
 		}
 	}
 
@@ -162,4 +175,12 @@ public class ResourceImporter extends FileSystemImporter {
 		return urlConnection.getInputStream();
 	}
 
+	protected void uploadDLFromResourcePath(String fileEntriesDirName)
+		throws Exception {
+
+		String applicationPath = servletContext.getRealPath("/");
+		String localDocumentLibrarySourcePath =
+			applicationPath + fileEntriesDirName;
+		super.uploadLocalDocumentLibrary(localDocumentLibrarySourcePath);
+	}
 }
