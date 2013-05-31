@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<static-content language-id="en_US"><![CDATA[<p>
+	&nbsp;</p>
+
+<p>
+	This portlet is simply calling the APIs published at developer.facebook.com.&nbsp;</p>
+
+<p>
+	This is an example of using Facebook's Like and Comment features/APIs.</p>
+
+<p>
+	&nbsp;</p>
+
+<p>
+	<u><strong>HELP</strong></u>: Try refreshing the browser (<strong>COMMAND-R</strong>&nbsp;on Mac) a few times to clear out the cache, until it shows the Facebook API graphics and style, along with either he user you are logged into Facebook with or the dialogue to start logging in,&nbsp;</p>]]></static-content>
+</root>

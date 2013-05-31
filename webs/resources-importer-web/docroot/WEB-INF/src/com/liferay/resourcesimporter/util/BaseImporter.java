@@ -15,6 +15,8 @@
 package com.liferay.resourcesimporter.util;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.Group;
@@ -29,6 +31,7 @@ import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetPrototypeLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.util.PortalUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +46,12 @@ import javax.servlet.ServletContext;
  */
 public abstract class BaseImporter implements Importer {
 
-	public void afterPropertiesSet() throws Exception {
+	public void afterPropertiesSet()
+		throws Exception {
+
+		if (companyId == 0) {
+			companyId = PortalUtil.getDefaultCompanyId();
+		}
 		User user = UserLocalServiceUtil.getDefaultUser(companyId);
 
 		userId = user.getUserId();
@@ -51,8 +59,8 @@ public abstract class BaseImporter implements Importer {
 		Group group = null;
 
 		if (targetClassName.equals(LayoutSetPrototype.class.getName())) {
-			LayoutSetPrototype layoutSetPrototype = getLayoutSetPrototype(
-				companyId, targetValue);
+			LayoutSetPrototype layoutSetPrototype =
+				getLayoutSetPrototype(companyId, targetValue);
 
 			if (layoutSetPrototype != null) {
 				existing = true;
@@ -71,18 +79,20 @@ public abstract class BaseImporter implements Importer {
 		}
 		else if (targetClassName.equals(Group.class.getName())) {
 			if (targetValue.equals(GroupConstants.GUEST)) {
-				group = GroupLocalServiceUtil.getGroup(
-					companyId, GroupConstants.GUEST);
+				group =
+					GroupLocalServiceUtil.getGroup(
+						companyId, GroupConstants.GUEST);
 
-				List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
-					group.getGroupId(), false,
-					LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, false, 0, 1);
+				List<Layout> layouts =
+					LayoutLocalServiceUtil.getLayouts(
+						group.getGroupId(), false,
+						LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, false, 0, 1);
 
 				if (!layouts.isEmpty()) {
 					Layout layout = layouts.get(0);
 
 					LayoutTypePortlet layoutTypePortlet =
-						(LayoutTypePortlet)layout.getLayoutType();
+						(LayoutTypePortlet) layout.getLayoutType();
 
 					List<String> portletIds = layoutTypePortlet.getPortletIds();
 
@@ -91,8 +101,7 @@ public abstract class BaseImporter implements Importer {
 					}
 
 					for (String portletId : portletIds) {
-						if (!portletId.equals("47") &&
-							!portletId.equals("58")) {
+						if (!portletId.equals("47") && !portletId.equals("58")) {
 
 							existing = true;
 						}
@@ -100,19 +109,30 @@ public abstract class BaseImporter implements Importer {
 				}
 			}
 			else {
-				group = GroupLocalServiceUtil.fetchGroup(
-					companyId, targetValue);
+				group =
+					GroupLocalServiceUtil.fetchGroup(companyId, targetValue);
+
+				if (group != null && deleteExistingGroupBeforeImport) {
+					long existingGroupId = group.getGroupId();
+					_log.trace("deleteExistingGroupBeforeImport=" +
+						deleteExistingGroupBeforeImport);
+					_log.trace("Deleting group :" + existingGroupId);
+					GroupLocalServiceUtil.deleteGroup(existingGroupId);
+					_log.trace("Deleted group :" + existingGroupId);
+					group = null;
+				}
 
 				if (group != null) {
 					existing = true;
 				}
 				else {
-					group = GroupLocalServiceUtil.addGroup(
-						userId, GroupConstants.DEFAULT_PARENT_GROUP_ID,
-						StringPool.BLANK, 0,
-						GroupConstants.DEFAULT_LIVE_GROUP_ID, targetValue,
-						StringPool.BLANK, GroupConstants.TYPE_SITE_OPEN, null,
-						true, true, new ServiceContext());
+					group =
+						GroupLocalServiceUtil.addGroup(
+							userId, GroupConstants.DEFAULT_PARENT_GROUP_ID,
+							StringPool.BLANK, 0,
+							GroupConstants.DEFAULT_LIVE_GROUP_ID, targetValue,
+							StringPool.BLANK, GroupConstants.TYPE_SITE_OPEN,
+							null, true, true, new ServiceContext());
 				}
 			}
 
@@ -122,18 +142,22 @@ public abstract class BaseImporter implements Importer {
 
 		if (group != null) {
 			groupId = group.getGroupId();
+			_log.trace("Importing to :" + groupId);
 		}
 	}
 
 	public long getGroupId() {
+
 		return groupId;
 	}
 
 	public long getTargetClassPK() {
+
 		return targetClassPK;
 	}
 
 	public Map<Locale, String> getTargetValueMap() {
+
 		Map<Locale, String> targetValueMap = new HashMap<Locale, String>();
 
 		Locale locale = LocaleUtil.getDefault();
@@ -144,35 +168,42 @@ public abstract class BaseImporter implements Importer {
 	}
 
 	public boolean isExisting() {
+
 		return existing;
 	}
 
 	public void setCompanyId(long companyId) {
+
 		this.companyId = companyId;
 	}
 
 	public void setResourcesDir(String resourcesDir) {
+
 		this.resourcesDir = resourcesDir;
 	}
 
 	public void setServletContext(ServletContext servletContext) {
+
 		this.servletContext = servletContext;
 	}
 
 	public void setServletContextName(String servletContextName) {
+
 		this.servletContextName = servletContextName;
 	}
 
 	public void setTargetClassName(String targetClassName) {
+
 		this.targetClassName = targetClassName;
 	}
 
 	public void setTargetValue(String targetValue) {
+
 		this.targetValue = targetValue;
 	}
 
 	protected LayoutSetPrototype getLayoutSetPrototype(
-			long companyId, String name)
+		long companyId, String name)
 		throws Exception {
 
 		Locale locale = LocaleUtil.getDefault();
@@ -201,5 +232,6 @@ public abstract class BaseImporter implements Importer {
 	protected long targetClassPK;
 	protected String targetValue;
 	protected long userId;
-
+	protected boolean deleteExistingGroupBeforeImport = true;
+	protected Log _log = LogFactoryUtil.getLog(getClass());
 }

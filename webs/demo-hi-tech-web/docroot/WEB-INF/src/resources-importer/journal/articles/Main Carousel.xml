@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element instance-id="Dq2bIXiJ" name="height" type="text" index-type="">
+		<dynamic-content><![CDATA[320]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="O4aO9a8O" name="duration" type="list" index-type="">
+		<dynamic-content><![CDATA[3]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="qYyn3lcL" name="carousel-item" type="text" index-type="">
+		<dynamic-element instance-id="SJwKZiO2" name="tagline" type="text" index-type="">
+			<dynamic-content><![CDATA[Lorem ipsum dolor sit amet consect]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element instance-id="1eszlZHw" name="icon" type="document_library" index-type="">
+			<dynamic-content><![CDATA[/documents/343308/0/icon_beaker.png/43fdecb7-223e-4b24-8a20-f10fd6819e63?t=1346347272000?version=1.0&t=1346347272448]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element instance-id="NKshI0fa" name="image" type="document_library" index-type="">
+			<dynamic-content><![CDATA[/documents/343308/0/carousel_item1.jpg/2f723bfe-7f8b-4ea2-98b7-86443b86fe51?t=1346347271000?version=1.0&t=1346347271647]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element instance-id="CaKRiz5o" name="url-location" type="link_to_layout" index-type="">
+			<dynamic-content><![CDATA[5@public]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-content><![CDATA[Services]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="grOgO2rI" name="carousel-item" type="text" index-type="">
+		<dynamic-element instance-id="UDRDxXc6" name="tagline" type="text" index-type="">
+			<dynamic-content><![CDATA[Lorem ipsum dolor sit amet consect]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element instance-id="l9YsagNO" name="icon" type="document_library" index-type="">
+			<dynamic-content><![CDATA[/documents/343308/0/icon_gears.png/31cb3c0f-bc53-411c-bc14-cce97f595340?t=1346347271000?version=1.0&t=1346347271819]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element instance-id="AB6XGWIW" name="image" type="document_library" index-type="">
+			<dynamic-content><![CDATA[/documents/343308/0/carousel_item2.jpg/14f404ab-34e5-4983-b6e9-f819fdae0ac3?t=1346347272000?version=1.0&t=1346347272073]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element instance-id="0BlzqsMw" name="url-location" type="link_to_layout" index-type="">
+			<dynamic-content><![CDATA[2@public]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-content><![CDATA[Programming]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="qOSRCIBp" name="carousel-item" type="text" index-type="">
+		<dynamic-element instance-id="GaBpYLlY" name="tagline" type="text" index-type="">
+			<dynamic-content><![CDATA[Lorem ipsum dolor sit amet consect]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element instance-id="FbpLAFwr" name="icon" type="document_library" index-type="">
+			<dynamic-content><![CDATA[/documents/343308/0/icon_phone.png/cc93987c-76a0-497d-9ab7-162f8a86e122?t=1346347271000?version=1.0&t=1346347271992]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element instance-id="cJiqbcTO" name="image" type="document_library" index-type="">
+			<dynamic-content><![CDATA[/documents/343308/0/carousel_item3.jpg/cf0ef96e-2756-44ff-a19a-cb030dc26421?t=1346347271000?version=1.0&t=1346347271504]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element instance-id="6A0R3Dey" name="url-location" type="link_to_layout" index-type="">
+			<dynamic-content><![CDATA[5@public]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-content><![CDATA[Applications]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="PS84bJen" name="carousel-item" type="text" index-type="">
+		<dynamic-element instance-id="GfO1ljb2" name="tagline" type="text" index-type="">
+			<dynamic-content><![CDATA[Lorem ipsum dolor sit amet consect]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element instance-id="MQboRS7t" name="icon" type="document_library" index-type="">
+			<dynamic-content><![CDATA[/documents/343308/0/icon_network.png/d45192a4-188c-46ba-8d2d-882060e28149?t=1346347272000?version=1.0&t=1346347272617]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element instance-id="old8s3oU" name="image" type="document_library" index-type="">
+			<dynamic-content><![CDATA[/documents/343308/0/carousel_item2.jpg/14f404ab-34e5-4983-b6e9-f819fdae0ac3?t=1346347272000?version=1.0&t=1346347272073]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element instance-id="MyFk6Nmv" name="url-location" type="link_to_layout" index-type="">
+			<dynamic-content><![CDATA[4@public]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-content><![CDATA[Resources]]></dynamic-content>
+	</dynamic-element>
+</root>

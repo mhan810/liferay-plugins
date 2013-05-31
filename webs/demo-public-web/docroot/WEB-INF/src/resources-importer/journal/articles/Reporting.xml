@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<static-content language-id="en_US">&lt;p sab="1809"&gt; &amp;nbsp;In the Control Panel, you can upload report definitions (designed in a report designer) into Reports Admin, and run them from the Definitions tab. They can be scheduled to be run as well, and exported to many formats, including HTML, CSV, XLS, PDF, and more. Reports can also be delivered via email address. The reports will be displayed within the portal with portlets in the Portal, including the Reports Portlet as shown on the right.&lt;/p&gt;</static-content>
+</root>

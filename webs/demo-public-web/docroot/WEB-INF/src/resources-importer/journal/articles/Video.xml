@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<static-content language-id="en_US">&lt;p sab="1808"&gt; &lt;span sab="1809" style="font-size: 18px;"&gt;Just a few examples of how to surface web video. You can use the YouTube portlet below, the Liferay WCM (embedded in editor) to the right, Vimeo portlet,&amp;nbsp;and several other ways (i.e. - custom portlet, iframe portlet, web proxy, flash portlet, etc.).&lt;/span&gt;&lt;/p&gt;</static-content>
+</root>

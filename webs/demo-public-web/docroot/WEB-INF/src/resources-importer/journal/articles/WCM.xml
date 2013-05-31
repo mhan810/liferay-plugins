@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<static-content language-id="en_US">&lt;p&gt; &amp;nbsp;&lt;/p&gt; &lt;p&gt; &lt;span style="font-size:18px;"&gt;The content on the right is Web Content that is using Liferay Structure and Templates. There is a template for wrapping text around the image left-aligned, right-aligned, and left-aligned with a bigger font size for the title. Click Edit Web Content in the portlet controls at teh bottom, to quickly switch templates.&amp;nbsp;&lt;/span&gt;&lt;/p&gt;</static-content>
+</root>

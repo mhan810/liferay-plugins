@@ -1,0 +1,259 @@
+{"sitePages": {"privatePages": [
+    {
+        "title": "",
+        "layoutTemplateId": "2_columns_ii",
+        "name": "Home",
+        "columns": [
+            [{
+                "portletPreferences": {},
+                "portletId": "8"
+            }],
+            [
+                {
+                    "portletPreferences": {
+                        "portletSetupUseCustomTitle": "true",
+                        "lfrWapInitialWindowState": "NORMAL",
+                        "portletSetupShowBorders": "true",
+                        "portletSetupCss": "{\"wapData\":{\"title\":\"\",\"initialWindowState\":\"NORMAL\"},\"spacingData\":{\"margin\":{\"sameForAll\":true,\"bottom\":{\"unit\":\"px\",\"value\":\"\"},\"left\":{\"unit\":\"px\",\"value\":\"\"},\"right\":{\"unit\":\"px\",\"value\":\"\"},\"top\":{\"unit\":\"px\",\"value\":\"\"}},\"padding\":{\"sameForAll\":true,\"bottom\":{\"unit\":\"px\",\"value\":\"\"},\"left\":{\"unit\":\"px\",\"value\":\"\"},\"right\":{\"unit\":\"px\",\"value\":\"\"},\"top\":{\"unit\":\"px\",\"value\":\"\"}}},\"borderData\":{\"borderStyle\":{\"sameForAll\":true,\"bottom\":\"\",\"left\":\"\",\"right\":\"\",\"top\":\"\"},\"borderColor\":{\"sameForAll\":true,\"bottom\":\"\",\"left\":\"\",\"right\":\"\",\"top\":\"\"},\"borderWidth\":{\"sameForAll\":true,\"bottom\":{\"unit\":\"px\",\"value\":\"\"},\"left\":{\"unit\":\"px\",\"value\":\"\"},\"right\":{\"unit\":\"px\",\"value\":\"\"},\"top\":{\"unit\":\"px\",\"value\":\"\"}}},\"textData\":{\"fontWeight\":\"\",\"lineHeight\":\"\",\"textDecoration\":\"\",\"letterSpacing\":\"\",\"color\":\"\",\"textAlign\":\"\",\"fontStyle\":\"\",\"fontFamily\":\"\",\"wordSpacing\":\"\",\"fontSize\":\"\"},\"bgData\":{\"backgroundPosition\":{\"left\":{\"unit\":\"px\",\"value\":\"\"},\"top\":{\"unit\":\"px\",\"value\":\"\"}},\"backgroundColor\":\"#ffffff\",\"backgroundRepeat\":\"\",\"backgroundImage\":\"\",\"useBgImage\":false},\"advancedData\":{\"customCSS\":\"\",\"customCSSClassName\":\"\"}}",
+                        "lfrWapTitle": "",
+                        "lfrWidgetShowAddAppLink": "true",
+                        "portletSetupTitle_en_US": "Important News"
+                    },
+                    "portletId": "84"
+                },
+                {
+                    "portletPreferences": {
+                        "portletSetupUseCustomTitle": "true",
+                        "questionId": "95912",
+                        "lfrWapInitialWindowState": "NORMAL",
+                        "portletSetupShowBorders": "true",
+                        "portletSetupCss": "{\"wapData\":{\"title\":\"\",\"initialWindowState\":\"NORMAL\"},\"hasCssValue\":true,\"spacingData\":{\"margin\":{\"sameForAll\":true,\"bottom\":{\"unit\":\"px\",\"value\":\"\"},\"left\":{\"unit\":\"px\",\"value\":\"\"},\"right\":{\"unit\":\"px\",\"value\":\"\"},\"top\":{\"unit\":\"px\",\"value\":\"\"}},\"padding\":{\"sameForAll\":true,\"bottom\":{\"unit\":\"px\",\"value\":0},\"left\":{\"unit\":\"px\",\"value\":120},\"right\":{\"unit\":\"px\",\"value\":0},\"top\":{\"unit\":\"px\",\"value\":0}}},\"borderData\":{\"borderStyle\":{\"sameForAll\":true,\"bottom\":\"\",\"left\":\"\",\"right\":\"\",\"top\":\"\"},\"borderColor\":{\"sameForAll\":true,\"bottom\":\"\",\"left\":\"\",\"right\":\"\",\"top\":\"\"},\"borderWidth\":{\"sameForAll\":true,\"bottom\":{\"unit\":\"px\",\"value\":\"\"},\"left\":{\"unit\":\"px\",\"value\":\"\"},\"right\":{\"unit\":\"px\",\"value\":\"\"},\"top\":{\"unit\":\"px\",\"value\":\"\"}}},\"textData\":{\"fontWeight\":\"bold\",\"lineHeight\":\"\",\"textDecoration\":\"\",\"letterSpacing\":\"\",\"color\":\"\",\"textAlign\":\"\",\"fontStyle\":\"\",\"fontFamily\":\"\",\"wordSpacing\":\"\",\"fontSize\":\"\"},\"bgData\":{\"backgroundPosition\":{\"left\":{\"unit\":\"px\",\"value\":\"\"},\"top\":{\"unit\":\"px\",\"value\":\"\"}},\"backgroundColor\":\"\",\"backgroundRepeat\":\"\",\"backgroundImage\":\"\",\"useBgImage\":false},\"advancedData\":{\"customCSS\":\"\",\"customCSSClassName\":\"\"}}",
+                        "lfrWapTitle": "",
+                        "portletSetupTitle_en_US": "Tells Us What You Think!"
+                    },
+                    "portletId": "59"
+                }
+            ]
+        ],
+        "friendlyURL": "/home"
+    },
+    {
+        "title": "",
+        "layoutTemplateId": "1_column",
+        "name": "Forums",
+        "columns": [[{
+            "portletPreferences": {
+                "ranks": "Youngling=0",
+                "priorities": "Urgent,/message_boards/priority_urgent.png,3.0"
+            },
+            "portletId": "19"
+        }]],
+        "friendlyURL": "/forums"
+    },
+    {
+        "title": "",
+        "layoutTemplateId": "2_columns_iii",
+        "name": "Blog",
+        "columns": [
+            [
+                {
+                    "portletPreferences": {},
+                    "portletId": "114"
+                },
+                {
+                    "portletPreferences": {
+                        "displayStyle": "cloud",
+                        "classNameId": "10007",
+                        "maxAssetTags": "10",
+                        "showAssetCount": "true",
+                        "showZeroAssetCount": "false"
+                    },
+                    "portletId": "148"
+                }
+            ],
+            [{
+                "portletPreferences": {},
+                "portletId": "33"
+            }]
+        ],
+        "friendlyURL": "/blog"
+    },
+    {
+        "title": "",
+        "layoutTemplateId": "2_columns_ii",
+        "name": "Add/Search Content",
+        "columns": [
+            [
+                {
+                    "portletPreferences": {},
+                    "portletId": "3"
+                },
+                {
+                    "portletPreferences": {
+                        "queryName0": "assetTags",
+                        "classTypeIdsDLFileEntryAssetRendererFactory": "28755,10306,10304,27854,10300,10302",
+                        "showAvailableLocales": "false",
+                        "rssDelta": "20",
+                        "rssDisplayStyle": "abstract",
+                        "excludeZeroViewCount": "false",
+                        "enableRelatedAssets": "true",
+                        "showQueryLogic": "false",
+                        "enableRatings": "false",
+                        "showAssetTitle": "true",
+                        "enableFlags": "false",
+                        "socialBookmarksDisplayPosition": "bottom",
+                        "enableComments": "false",
+                        "delta": "20",
+                        "showOnlyLayoutAssets": "false",
+                        "enableRss": "false",
+                        "displayStyle": "title-list",
+                        "assetTitle": "",
+                        "customUserAttributes": "",
+                        "metadataFields": "",
+                        "enablePermissions": "false",
+                        "enableSocialBookmarks": "true",
+                        "orderByColumn2": "title",
+                        "orderByColumn1": "modifiedDate",
+                        "showMetadataDescriptions": "true",
+                        "enableCommentRatings": "false",
+                        "selectionStyle": "dynamic",
+                        "orderByType1": "DESC",
+                        "queryAndOperator0": "false",
+                        "orderByType2": "ASC",
+                        "rssName": "Asset Publisher",
+                        "abstractLength": "200",
+                        "socialBookmarksDisplayStyle": "horizontal",
+                        "mergeUrlTags": "true",
+                        "assetLinkBehavior": "showFullContent",
+                        "mergeLayoutTags": "false",
+                        "queryContains0": "true",
+                        "showContextLink": "true",
+                        "anyClassTypeDLFileEntryAssetRendererFactory": "true",
+                        "rssFormat": "atom10",
+                        "classNameIds": "10007",
+                        "anyAssetType": "true",
+                        "enablePrint": "false",
+                        "defaultScope": "Group_default",
+                        "scopeIds": "Group_default",
+                        "assetVocabularyId": "",
+                        "anyClassTypeJournalArticleAssetRendererFactory": "true",
+                        "classTypeIdsJournalArticleAssetRendererFactory": "10566,10567,10568",
+                        "paginationType": "none"
+                    },
+                    "portletId": "101"
+                }
+            ],
+            [
+                {
+                    "portletPreferences": {},
+                    "portletId": "141"
+                },
+                {
+                    "portletPreferences": {
+                        "assetVocabularyIds": "27984,10316",
+                        "allAssetVocabularies": "true"
+                    },
+                    "portletId": "122"
+                }
+            ]
+        ],
+        "friendlyURL": "/web-content"
+    },
+    {
+        "title": "",
+        "layoutTemplateId": "2_columns_ii",
+        "name": "Activities",
+        "columns": [],
+        "friendlyURL": "/activities",
+        "layouts": [{
+            "title": "",
+            "layoutTemplateId": "2_columns_iii",
+            "name": "Recipe Club",
+            "columns": [
+                [{
+                    "portletPreferences": {
+                        "portletSetupUseCustomTitle": "true",
+                        "listDDMTemplateId": "",
+                        "lfrWapInitialWindowState": "NORMAL",
+                        "portletSetupShowBorders": "true",
+                        "recordSetId": "94716",
+                        "detailDDMTemplateId": "",
+                        "portletSetupCss": "{\"wapData\":{\"title\":\"\",\"initialWindowState\":\"NORMAL\"},\"spacingData\":{\"margin\":{\"sameForAll\":true,\"bottom\":{\"unit\":\"px\",\"value\":\"\"},\"left\":{\"unit\":\"px\",\"value\":\"\"},\"right\":{\"unit\":\"px\",\"value\":\"\"},\"top\":{\"unit\":\"px\",\"value\":\"\"}},\"padding\":{\"sameForAll\":true,\"bottom\":{\"unit\":\"px\",\"value\":\"\"},\"left\":{\"unit\":\"px\",\"value\":\"\"},\"right\":{\"unit\":\"px\",\"value\":\"\"},\"top\":{\"unit\":\"px\",\"value\":\"\"}}},\"borderData\":{\"borderStyle\":{\"sameForAll\":true,\"bottom\":\"\",\"left\":\"\",\"right\":\"\",\"top\":\"\"},\"borderColor\":{\"sameForAll\":true,\"bottom\":\"\",\"left\":\"\",\"right\":\"\",\"top\":\"\"},\"borderWidth\":{\"sameForAll\":true,\"bottom\":{\"unit\":\"px\",\"value\":\"\"},\"left\":{\"unit\":\"px\",\"value\":\"\"},\"right\":{\"unit\":\"px\",\"value\":\"\"},\"top\":{\"unit\":\"px\",\"value\":\"\"}}},\"textData\":{\"fontWeight\":\"\",\"lineHeight\":\"\",\"textDecoration\":\"\",\"letterSpacing\":\"\",\"color\":\"\",\"textAlign\":\"\",\"fontStyle\":\"\",\"fontFamily\":\"\",\"wordSpacing\":\"\",\"fontSize\":\"\"},\"bgData\":{\"backgroundPosition\":{\"left\":{\"unit\":\"px\",\"value\":\"\"},\"top\":{\"unit\":\"px\",\"value\":\"\"}},\"backgroundColor\":\"\",\"backgroundRepeat\":\"\",\"backgroundImage\":\"\",\"useBgImage\":false},\"advancedData\":{\"customCSS\":\"\",\"customCSSClassName\":\"\"}}",
+                        "lfrWapTitle": "",
+                        "portletSetupTitle_en_US": "Dynamic Data List Display of Recipes",
+                        "spreadsheet": "true",
+                        "editable": "true"
+                    },
+                    "portletId": "169"
+                }],
+                [
+                    {
+                        "portletPreferences": {
+                            "portletSetupUseCustomTitle": "true",
+                            "groupId": "24526",
+                            "portletSetupTitle_en_US": "Web Content Display of Instructions",
+                            "articleId": "Everyone Welcome"
+                        },
+                        "portletId": "56"
+                    },
+                    {
+                        "portletPreferences": {
+                            "portletSetupUseCustomTitle": "true",
+                            "recordSetId": "94716",
+                            "detailDDMTemplateId": "",
+                            "multipleSubmissions": "true",
+                            "portletSetupTitle_en_US": "Dynamic Data List Entry Form"
+                        },
+                        "portletId": "1"
+                    }
+                ]
+            ],
+            "friendlyURL": "/recipe-club"
+        }]
+    },
+    {
+        "title": "",
+        "layoutTemplateId": "2_columns_iii",
+        "name": "Recipe Club",
+        "columns": [
+            [{
+                "portletPreferences": {
+                    "portletSetupUseCustomTitle": "true",
+                    "listDDMTemplateId": "",
+                    "lfrWapInitialWindowState": "NORMAL",
+                    "portletSetupShowBorders": "true",
+                    "recordSetId": "94716",
+                    "detailDDMTemplateId": "",
+                    "portletSetupCss": "{\"wapData\":{\"title\":\"\",\"initialWindowState\":\"NORMAL\"},\"spacingData\":{\"margin\":{\"sameForAll\":true,\"bottom\":{\"unit\":\"px\",\"value\":\"\"},\"left\":{\"unit\":\"px\",\"value\":\"\"},\"right\":{\"unit\":\"px\",\"value\":\"\"},\"top\":{\"unit\":\"px\",\"value\":\"\"}},\"padding\":{\"sameForAll\":true,\"bottom\":{\"unit\":\"px\",\"value\":\"\"},\"left\":{\"unit\":\"px\",\"value\":\"\"},\"right\":{\"unit\":\"px\",\"value\":\"\"},\"top\":{\"unit\":\"px\",\"value\":\"\"}}},\"borderData\":{\"borderStyle\":{\"sameForAll\":true,\"bottom\":\"\",\"left\":\"\",\"right\":\"\",\"top\":\"\"},\"borderColor\":{\"sameForAll\":true,\"bottom\":\"\",\"left\":\"\",\"right\":\"\",\"top\":\"\"},\"borderWidth\":{\"sameForAll\":true,\"bottom\":{\"unit\":\"px\",\"value\":\"\"},\"left\":{\"unit\":\"px\",\"value\":\"\"},\"right\":{\"unit\":\"px\",\"value\":\"\"},\"top\":{\"unit\":\"px\",\"value\":\"\"}}},\"textData\":{\"fontWeight\":\"\",\"lineHeight\":\"\",\"textDecoration\":\"\",\"letterSpacing\":\"\",\"color\":\"\",\"textAlign\":\"\",\"fontStyle\":\"\",\"fontFamily\":\"\",\"wordSpacing\":\"\",\"fontSize\":\"\"},\"bgData\":{\"backgroundPosition\":{\"left\":{\"unit\":\"px\",\"value\":\"\"},\"top\":{\"unit\":\"px\",\"value\":\"\"}},\"backgroundColor\":\"\",\"backgroundRepeat\":\"\",\"backgroundImage\":\"\",\"useBgImage\":false},\"advancedData\":{\"customCSS\":\"\",\"customCSSClassName\":\"\"}}",
+                    "lfrWapTitle": "",
+                    "portletSetupTitle_en_US": "Dynamic Data List Display of Recipes",
+                    "spreadsheet": "true",
+                    "editable": "true"
+                },
+                "portletId": "169"
+            }],
+            [
+                {
+                    "portletPreferences": {
+                        "portletSetupUseCustomTitle": "true",
+                        "groupId": "24526",
+                        "portletSetupTitle_en_US": "Web Content Display of Instructions",
+                        "articleId": "Everyone Welcome"
+                    },
+                    "portletId": "56"
+                },
+                {
+                    "portletPreferences": {
+                        "portletSetupUseCustomTitle": "true",
+                        "recordSetId": "94716",
+                        "detailDDMTemplateId": "",
+                        "multipleSubmissions": "true",
+                        "portletSetupTitle_en_US": "Dynamic Data List Entry Form"
+                    },
+                    "portletId": "1"
+                }
+            ]
+        ],
+        "friendlyURL": "/recipe-club"
+    }
+]}}

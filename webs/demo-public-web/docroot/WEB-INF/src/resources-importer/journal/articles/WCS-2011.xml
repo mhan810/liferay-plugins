@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<static-content language-id="en_US">&lt;p&gt; &lt;iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/PVRsCOxG3AY" width="560"&gt;&lt;/iframe&gt;&lt;/p&gt;</static-content>
+</root>

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element instance-id="5ByhMfQG" name="title" type="text" index-type="">
+		<dynamic-content><![CDATA[Stay Updated]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="ClMr3Ooh" name="tagline" type="text" index-type="">
+		<dynamic-content><![CDATA[Subscribe and follow us]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="tsRcWebO" name="social-links" type="text" index-type="">
+		<dynamic-element instance-id="pR2CBoAV" name="icon" type="document_library" index-type="">
+			<dynamic-content><![CDATA[/documents/343308/0/linkedin.png/c7a3089f-54bd-4708-bfd8-b9f815467335?t=1346347272000?version=1.0&t=1346347272524]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element instance-id="IW9cyHuX" name="url-location" type="text" index-type="">
+			<dynamic-content><![CDATA[//www.linkedin.com/company/liferay-inc.]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-content><![CDATA[LinkedIn]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="15PiwExp" name="social-links" type="text" index-type="">
+		<dynamic-element instance-id="mPf8qYG8" name="icon" type="document_library" index-type="">
+			<dynamic-content><![CDATA[/documents/343308/0/facebook.png/d10afac9-cda4-4624-bcb7-614f286f98ec?t=1346347271000?version=1.0&t=1346347271725]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element instance-id="gBaaWyD7" name="url-location" type="text" index-type="">
+			<dynamic-content><![CDATA[//facebook.com/liferay]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-content><![CDATA[Facebook]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="1N9ja4Ro" name="social-links" type="text" index-type="">
+		<dynamic-element instance-id="ZMyL8K8V" name="icon" type="document_library" index-type="">
+			<dynamic-content><![CDATA[/documents/343308/0/twitter.png/ac93404a-0999-4545-a41e-65a2106b67e2?t=1346347272000?version=1.0&t=1346347272140]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element instance-id="XknqciB1" name="url-location" type="text" index-type="">
+			<dynamic-content><![CDATA[//twitter.com/liferay]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-content><![CDATA[Twitter]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="yjRtC4YQ" name="social-links" type="text" index-type="">
+		<dynamic-element instance-id="6qbJy5AA" name="icon" type="document_library" index-type="">
+			<dynamic-content><![CDATA[/documents/343308/0/rss.png/bcf14012-77e0-4ddb-8040-82039439917d?t=1346347272000?version=1.0&t=1346347272373]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element instance-id="Jaw7trL5" name="url-location" type="text" index-type="">
+			<dynamic-content><![CDATA[#]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-content><![CDATA[RSS]]></dynamic-content>
+	</dynamic-element>
+</root>

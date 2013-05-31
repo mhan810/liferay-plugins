@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element dataType="string" name="name" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Name]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="bringing" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[What Are You Bringing?]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="text7767" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Email]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="text10335" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Phone #]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="select20709" type="select">
+		<dynamic-element name="yes" type="option" value="1">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Yes]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="no" type="option" value="2">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[No]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="i_ll_try" type="option" value="3">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[I'll Try]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Help Setup?]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[[""]]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="multiple"><![CDATA[false]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="select21736" type="select">
+		<dynamic-element name="yes" type="option" value="1">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Yes]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="no" type="option" value="2">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[No]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="remind_me" type="option" value="3">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Remind Me]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Can You Help Cleanup]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[[""]]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="multiple"><![CDATA[false]]></entry>
+		</meta-data>
+	</dynamic-element>
+</root>

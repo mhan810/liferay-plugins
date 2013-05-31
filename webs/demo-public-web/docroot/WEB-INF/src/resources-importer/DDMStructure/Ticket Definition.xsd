@@ -1,0 +1,194 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element dataType="string" name="priority" type="select">
+		<dynamic-element name="trivial" type="option" value="1">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Trivial]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="minor" type="option" value="2">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Minor]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="major" type="option" value="3">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Major]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="critical" type="option" value="4">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Critical]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Priority]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[[""]]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="multiple"><![CDATA[false]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="component_name" type="select">
+		<dynamic-element name="blog" type="option" value="Blog">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Blog]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="bookmarks" type="option" value="Bookmarks">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Bookmarks]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="documents___media" type="option" value="Documents &amp; Media">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Documents & Media]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="kaleo" type="option" value="Kaleo">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Kaleo]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="ddl" type="option" value="DDL">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[DDL]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="javascript" type="option" value="Javascript">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Javascript]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Component]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[[""]]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="multiple"><![CDATA[false]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="summary" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Summary]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="affect_version" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Affects Version/s]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[100]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w100]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="description" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Description]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[100]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w100]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="file-upload" fieldNamespace="ddm" name="attachments" type="ddm-fileupload">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Attachments]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="readOnly"><![CDATA[false]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="acceptFiles"><![CDATA[*]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="tested_revision" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Tested Revision]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[100]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w100]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="tested_status" type="select">
+		<dynamic-element name="failed" type="option" value="failed">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Failed]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="passed" type="option" value="passed">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Passed]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Tested Status]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[[""]]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="multiple"><![CDATA[false]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="PullRequestURL" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Pull Request URL]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[100]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w100]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="status" type="select">
+		<dynamic-element name="open" type="option" value="open">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Open]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="in_progress" type="option" value="in_progress">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[In Progress]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="in_review" type="option" value="in_review">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[In Review]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="resolved" type="option" value="resolved">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Resolved]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="closed" type="option" value="closed">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Closed]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Status]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[[""]]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="multiple"><![CDATA[false]]></entry>
+		</meta-data>
+	</dynamic-element>
+</root>

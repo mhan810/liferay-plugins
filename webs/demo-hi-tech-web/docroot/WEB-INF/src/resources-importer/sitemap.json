@@ -1,0 +1,109 @@
+{"sitePages": {"publicPages": [
+    {
+        "title": "",
+        "layoutTemplateId": "1_3_1_columns",
+        "name": "Home",
+        "columns": [
+            [{
+                "portletPreferences": {
+                    "templateId": "",
+                    "groupId": "343308",
+                    "portletSetupShowBorders": "false",
+                    "articleId": "Exceptional Support"
+                },
+                "portletId": "56"
+            }],
+            [{
+                "portletPreferences": {
+                    "templateId": "",
+                    "groupId": "343308",
+                    "portletSetupShowBorders": "false",
+                    "articleId": "Our Goal"
+                },
+                "portletId": "56"
+            }],
+            [{
+                "portletPreferences": {
+                    "templateId": "",
+                    "groupId": "343308",
+                    "portletSetupShowBorders": "false",
+                    "articleId": "Main Carousel"
+                },
+                "portletId": "56"
+            }],
+            [{
+                "portletPreferences": {
+                    "templateId": "",
+                    "groupId": "343308",
+                    "portletSetupShowBorders": "false",
+                    "articleId": "What Our Clients Are Saying"
+                },
+                "portletId": "56"
+            }],
+            [{
+                "portletPreferences": {
+                    "templateId": "",
+                    "groupId": "343308",
+                    "portletSetupShowBorders": "false",
+                    "articleId": "The Experience"
+                },
+                "portletId": "56"
+            }]
+        ],
+        "friendlyURL": "/home"
+    },
+    {
+        "title": "",
+        "layoutTemplateId": "1_3_1_columns",
+        "name": "Clients",
+        "columns": [],
+        "friendlyURL": "/clients"
+    },
+    {
+        "title": "",
+        "layoutTemplateId": "1_3_1_columns",
+        "name": "Partners",
+        "columns": [],
+        "friendlyURL": "/partners"
+    },
+    {
+        "title": "",
+        "layoutTemplateId": "1_3_1_columns",
+        "name": "Careers",
+        "columns": [],
+        "friendlyURL": "/careers"
+    },
+    {
+        "title": "",
+        "layoutTemplateId": "2_columns_iii",
+        "name": "About Us",
+        "columns": [
+            [{
+                "portletPreferences": {
+                    "templateId": "",
+                    "groupId": "343308",
+                    "portletSetupShowBorders": "false",
+                    "articleId": "Why Seven Cogs"
+                },
+                "portletId": "56"
+            }],
+            [{
+                "portletPreferences": {
+                    "templateId": "",
+                    "groupId": "343308",
+                    "portletSetupShowBorders": "false",
+                    "articleId": "Main Content"
+                },
+                "portletId": "56"
+            }]
+        ],
+        "friendlyURL": "/about-us"
+    },
+    {
+        "title": "",
+        "layoutTemplateId": "1_3_1_columns",
+        "name": "Contact Us",
+        "columns": [],
+        "friendlyURL": "/contact-us"
+    }
+]}}

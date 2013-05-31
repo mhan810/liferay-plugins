@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<static-content language-id="en_US">&lt;p&gt; &amp;nbsp;&lt;/p&gt; &lt;h2&gt; This blog is designed to highlight &lt;strong&gt;some&lt;/strong&gt; of the new features found in Liferay 6.1 and by no means should it be considered exhaustive! &amp;nbsp;The goal is to show you some of the major new features, encourage you to explore, and get you up to speed more quickly.&lt;/h2&gt;</static-content>
+</root>

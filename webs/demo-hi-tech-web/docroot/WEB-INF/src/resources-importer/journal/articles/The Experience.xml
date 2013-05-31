@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element instance-id="LS0CetC2" name="title" type="text" index-type="">
+		<dynamic-content><![CDATA[The Experience]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="Z2MEq7BR" name="link" type="text" index-type="">
+		<dynamic-content><![CDATA[]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="Nr5mHc3G" name="image" type="document_library" index-type="">
+		<dynamic-content><![CDATA[]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="A6jmlX90" name="description" type="text_box" index-type="">
+		<dynamic-content><![CDATA[Experience you can count on]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="SnOZrhD5" name="content" type="text_area" index-type="">
+		<dynamic-content><![CDATA[<img src="/documents/343308/0/network.png/9b9f2639-0c5a-4de3-8d54-27f1077f2573?t=1346347272000?version=1.0&amp;t=1346347272288" />
+
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce malesuada enim ut lorem accumsan lacinia. Cras in orci purus, vitae ultricies dui. Morbi magna neque, laoreet vitae semper non, faucibus vitae lacus. Quisque pretium molestie sapien.</p>
+
+<p><a class="more left" href="#"><span>More Information</span></a></p>]]></dynamic-content>
+	</dynamic-element>
+</root>

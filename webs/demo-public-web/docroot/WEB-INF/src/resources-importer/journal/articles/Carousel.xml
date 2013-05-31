@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element instance-id="JeSb8PaO" name="image" type="document_library" index-type="">
+		<dynamic-content><![CDATA[/documents/10180/110616/61ee.png/47a4e370-9547-4240-8866-73adb69de2bc?t=1346055538646]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="iucBcs0t" name="image" type="document_library" index-type="">
+		<dynamic-content><![CDATA[/documents/10180/110616/build.png/4b27c685-6683-496b-a8a2-a4f7de70f0d3?t=1346055539428]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="JObOUWTL" name="image" type="document_library" index-type="">
+		<dynamic-content><![CDATA[/documents/10180/110616/hiring.png/cc066ab6-0c09-4fea-b49e-e7d8d6693743?t=1346055539723]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="lvQEdnyh" name="image" type="document_library" index-type="">
+		<dynamic-content><![CDATA[/documents/10180/110616/marketplace.png/8029d71b-ad88-4e15-bef9-f1be281a6910?t=1346055539980]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="7AYBXxfi" name="image" type="document_library" index-type="">
+		<dynamic-content><![CDATA[/documents/10180/110616/symp2012.png/614b9da3-189f-4ef2-974f-ccfa4c68d184?t=1346055540188]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="Zf6mD8H3" name="image" type="document_library" index-type="">
+		<dynamic-content><![CDATA[/documents/10180/110616/sync.png/bf1f3fc3-00d3-4e86-9d6f-1eb2c7841863?t=1346055540389]]></dynamic-content>
+	</dynamic-element>
+</root>

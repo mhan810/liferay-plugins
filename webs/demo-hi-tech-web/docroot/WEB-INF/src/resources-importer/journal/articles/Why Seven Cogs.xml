@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<static-content language-id="en_US"><![CDATA[<div class="list-block">
+	<h3
+    class="title">
+		Why Seven Cogs?
+	</h3>
+
+	<h5>
+		You deserve us
+	</h5>
+
+	<ul class="arrow">
+		<li>Lorem ipsum dolor sit amet, consect</li>
+		<li>Lorem ipsum dolor sit amet, consect</li>
+		<li>Lorem ipsum dolor sit amet, consect</li>
+		<li>Lorem ipsum dolor sit amet, consect</li>
+		<li>Lorem ipsum dolor sit amet, consect</li>
+		<li>Lorem ipsum dolor sit amet, consect</li>
+	</ul>
+</div>]]></static-content>
+</root>

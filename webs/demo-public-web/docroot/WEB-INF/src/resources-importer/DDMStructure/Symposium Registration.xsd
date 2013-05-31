@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element dataType="string" name="text2157" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[First Name]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[true]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="text10636" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Last Name]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[true]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="text12881" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Email]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[true]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="text17557" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Title]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[true]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="text15156" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Company]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[true]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="select22137" type="select">
+		<dynamic-element name="business" type="option" value="1">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Business]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="technical" type="option" value="2">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Technical]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="both" type="option" value="3">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Both]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Track]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[[""]]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="multiple"><![CDATA[false]]></entry>
+		</meta-data>
+	</dynamic-element>
+</root>

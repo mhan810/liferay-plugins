@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element dataType="string" name="text1959" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Order Number]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="text2764" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Order Date]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="text3592" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Taken By]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="radio4404" type="radio">
+		<dynamic-element name="standard" type="option" value="standard">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Standard]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="custom" type="option" value="custom">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Custom]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Order Type]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[[""]]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+		</meta-data>
+	</dynamic-element>
+</root>

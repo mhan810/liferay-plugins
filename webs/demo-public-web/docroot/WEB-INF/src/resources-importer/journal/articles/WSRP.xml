@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<static-content language-id="en_US">&lt;p&gt; &amp;nbsp;&lt;/p&gt; &lt;p&gt; These WSRP portlets are using NetUnity's public WSRP Producer, and Liferay Portal as a WSRP consumer. NetUnity's public WSRP producer URIs are here:&amp;nbsp;&lt;a href="http://www.netunitysoftware.com/wsrp2interop/wsrpproducer.asmx"&gt;http://www.netunitysoftware.com/wsrp2interop/wsrpproducer.asmx&lt;/a&gt;&lt;/p&gt; &lt;p&gt; This suite of NetUnity WSRP portlets are using this particular URI in the Control Panel under the WSRP section:&amp;nbsp;&lt;a href="http://www.netunitysoftware.com/wsrp2interop/wsrpproducer.asmx?Operation=SD&amp;amp;WsrpVersion=Two"&gt;http://www.netunitysoftware.com/wsrp2interop/wsrpproducer.asmx?Operation=SD&amp;amp;WsrpVersion=Two&lt;/a&gt;&lt;/p&gt; &lt;p&gt; This WSRP functionality is available as a Liferay plugin from Liferay, Inc.&amp;nbsp;&lt;/p&gt;</static-content>
+</root>

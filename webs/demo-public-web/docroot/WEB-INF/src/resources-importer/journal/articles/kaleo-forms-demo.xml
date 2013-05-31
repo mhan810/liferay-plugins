@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<static-content language-id="en_US"><![CDATA[<p>
+	In the Kaleo Forms portlet:</p>
+
+<ol>
+	<li>
+		Click on &quot;Processes&quot; tab</li>
+	<li>
+		Click &quot;Add&quot;</li>
+	<li>
+		Put &quot;Test&quot; in the Name field</li>
+	<li>
+		For Entry Definition select any (i.e. - &quot;Ticket Definition&quot;)</li>
+	<li>
+		For Workflow select any (i.e. - &quot;Ticket Process&quot;)</li>
+	<li>
+		Select (click) the Workflow that you just selected and the Kaleo Designer UI will pop up.</li>
+</ol>
+
+<p>
+	&nbsp;</p>]]></static-content>
+</root>

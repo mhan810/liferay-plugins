@@ -1,0 +1,95 @@
+<script src="../../build/aui/aui.js" type="text/javascript"></script> 
+
+     <link rel="stylesheet" href="../../build/aui-skin-classic/css/aui-skin-classic-all-min.css" type="text/css" media="screen" />
+
+ 
+
+     <style type="text/css" media="screen">
+
+          body {
+
+               font-size: 12px;
+
+          }
+
+ 
+
+          #wrapper {
+
+               padding: 1px;
+
+          }
+
+ 
+
+          .aui-carousel-item {
+
+               -moz-border-radius: 1px;
+
+               -webkit-border-radius: 1px;
+
+               border-radius: 1px;
+
+               text-indent: -9999em;
+
+          }
+
+     </style>
+
+
+
+<div id="wrapper">
+
+   <div id="carousel">
+
+
+
+     #foreach ($field in $image.getSiblings())
+
+       <img width="600" alt="" src="$field.getData()" />
+
+    #end
+
+
+
+   </div>
+
+</div>
+
+
+
+<script type="text/javascript" charset="utf-8">
+
+ 
+
+AUI().ready('aui-carousel', function(A) {
+
+ 
+
+     var component = new A.Carousel(
+
+          {
+
+               intervalTime: 5,
+
+               contentBox: '#carousel',
+
+               activeIndex: 'rand',
+
+               height: 175,
+
+               width: 600
+
+          }
+
+     )
+
+     .render();
+
+ 
+
+});
+
+ 
+
+</script>

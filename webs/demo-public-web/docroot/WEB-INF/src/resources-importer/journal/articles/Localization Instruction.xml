@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<static-content language-id="en_US">&lt;p&gt; Simply click on the flag to switch languages. The flags in the Web Content Display portlet show the locales where localized (i.e. - translated) content has been provided. The Languages portlet shows all locales that are configured to be active. Please forgive the translation, they are from translate.google.com .&lt;/p&gt; &lt;p&gt; After choosing a locale, anything keyed to have a translation (or other localized content) will automatically be translated on the page. For example, if you look at the portal admin controls in the dock bar, or the portlet title bar of the Language portlet below, you will see that a translation will occur, because it has been keyed for localization and a translation has been provided.&lt;/p&gt; &lt;p&gt; Also go to &lt;a href="http://www.liferay.com"&gt;www.liferay.com&lt;/a&gt; to see it in action for Chinese, German, Spanish, and Portugese.&lt;/p&gt;</static-content>
+</root>

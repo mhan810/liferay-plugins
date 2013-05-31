@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element dataType="string" name="RecipeName" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Recipe]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[true]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[50]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w50]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="number" fieldNamespace="ddm" name="Servings" type="ddm-number">
+		<dynamic-element dataType="number" fieldNamespace="ddm" name="Calories" type="ddm-number">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Calories per Serving]]></entry>
+				<entry name="showLabel"><![CDATA[true]]></entry>
+				<entry name="required"><![CDATA[false]]></entry>
+				<entry name="predefinedValue"><![CDATA[]]></entry>
+				<entry name="tip"><![CDATA[]]></entry>
+				<entry name="width"><![CDATA[25]]></entry>
+				<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Servings]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="Time" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Time]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[true]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="Directions" type="textarea">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Directions]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[true]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[100]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w100]]></entry>
+		</meta-data>
+	</dynamic-element>
+</root>

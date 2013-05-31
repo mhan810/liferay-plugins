@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element dataType="string" name="text3984" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Product Name]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[true]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="date" fieldNamespace="ddm" name="ddm-date1958" type="ddm-date">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Effective Date]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[true]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="select2896" type="select">
+		<dynamic-element name="north_america" type="option" value="north-america">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[North America]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="south_america" type="option" value="south-america">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[South America]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="europe" type="option" value="europe">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Europe]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="apac" type="option" value="apac">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[APAC]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Region]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[[""]]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="multiple"><![CDATA[false]]></entry>
+		</meta-data>
+	</dynamic-element>
+</root>

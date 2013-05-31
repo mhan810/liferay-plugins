@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<static-content language-id="en_US"><![CDATA[<p>
+	The Audit Plugin is a framework for recording user actions. OOTB, this demo records things like login/logout, role creation and assignment, and the portlet below demonstrates how to record a user's link click.</p>
+
+<p>
+	After completing auditable actions c<span
+    style="line-height: 1.5em;">heck the Audit Reports </span><span style="line-height: 1.5em;">in the Control Panel to see the latest user activity.</span></p>]]></static-content>
+</root>

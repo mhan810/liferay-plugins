@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element dataType="string" name="text2004" type="text">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Customer Name]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[true]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[Enter the customer's name.]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="select2799" type="select">
+		<dynamic-element name="liferay_6_1" type="option" value="liferay61">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Liferay 6.1]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="liferay_6_0" type="option" value="liferay60">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Liferay 6.0]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="liferay_5_x" type="option" value="liferay5x">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Liferay 5.x]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Liferay Version]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[true]]></entry>
+			<entry name="predefinedValue"><![CDATA[[""]]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="multiple"><![CDATA[false]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" name="select17361" type="select">
+		<dynamic-element name="extranet" type="option" value="extranet">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Extranet]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="intranet" type="option" value="intranet">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Intranet]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="content_management" type="option" value="contentmanagement">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Content Management]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="public_facing" type="option" value="public">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Public-Facing]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="collaboration" type="option" value="collaboration">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Collaboration]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="social" type="option" value="social">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Social]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Use Case]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[true]]></entry>
+			<entry name="predefinedValue"><![CDATA[[""]]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="multiple"><![CDATA[true]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="date" fieldNamespace="ddm" name="ddm-date4535" type="ddm-date">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Production Date]]></entry>
+			<entry name="showLabel"><![CDATA[true]]></entry>
+			<entry name="required"><![CDATA[false]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+			<entry name="width"><![CDATA[25]]></entry>
+			<entry name="fieldCssClass"><![CDATA[aui-w25]]></entry>
+		</meta-data>
+	</dynamic-element>
+</root>
