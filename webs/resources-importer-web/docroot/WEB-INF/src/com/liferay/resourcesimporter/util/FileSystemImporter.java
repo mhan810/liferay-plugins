@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FileUtil;
@@ -165,6 +166,45 @@ public class FileSystemImporter extends BaseImporter {
 		}
 	}
 
+	protected void addDLEntriesFromFile(String url) throws Exception {
+		File resourceFile = new File(url);
+		String documentLibraryTargetPath = url.substring(
+			_localDocumentLibrarySourcePath.length());
+		long[] destinationIds = getDLResourcePathIds(documentLibraryTargetPath);
+		String name = resourceFile.getName();
+		String description = "";
+		long parentFolderId =
+			(destinationIds.length == 0)
+				? 0 : destinationIds[destinationIds.length - 1];
+
+		if (resourceFile.isDirectory()) {
+			if (Validator.isNotNull(documentLibraryTargetPath)) {
+				DLAppLocalServiceUtil.addFolder(
+					userId, groupId, parentFolderId, name, description,
+					serviceContext);
+			}
+
+			File[] children = resourceFile.listFiles();
+
+			for (File child : children) {
+				addDLEntriesFromFile(child.getAbsolutePath());
+			}
+		}
+		else {
+			String fileName = resourceFile.getName();
+			String mimeType = MimeTypesUtil.getContentType(fileName);
+			String title = FileUtil.stripExtension(fileName);
+			try {
+				DLAppLocalServiceUtil.addFileEntry(
+					userId, groupId, parentFolderId, fileName, mimeType, title,
+					"", null, resourceFile, serviceContext);
+			}
+			catch (Exception e) {
+				handleException(e);
+			}
+		}
+	}
+
 	protected void addDLFileEntries(String fileEntriesDirName)
 		throws Exception {
 
@@ -227,7 +267,8 @@ public class FileSystemImporter extends BaseImporter {
 		}
 	}
 
-	protected void addLayout(long parentLayoutId, JSONObject layoutJSONObject)
+	protected void addLayout(
+		long parentLayoutId, JSONObject layoutJSONObject, boolean privateLayout)
 		throws Exception {
 
 		Map<Locale, String> nameMap = new HashMap<Locale, String>();
@@ -305,7 +346,7 @@ public class FileSystemImporter extends BaseImporter {
 
 		JSONArray layoutsJSONArray = layoutJSONObject.getJSONArray("layouts");
 
-		addLayouts(layout.getLayoutId(), layoutsJSONArray);
+		addLayouts(layout.getLayoutId(), layoutsJSONArray, privateLayout);
 	}
 
 	protected void addLayoutColumn(
@@ -411,6 +452,13 @@ public class FileSystemImporter extends BaseImporter {
 	protected void addLayouts(long parentLayoutId, JSONArray layoutsJSONArray)
 		throws Exception {
 
+		addLayouts(parentLayoutId, layoutsJSONArray, false);
+	}
+
+	protected void addLayouts(
+		long parentLayoutId, JSONArray layoutsJSONArray, boolean privateLayout)
+		throws Exception {
+
 		if (layoutsJSONArray == null) {
 			return;
 		}
@@ -418,7 +466,7 @@ public class FileSystemImporter extends BaseImporter {
 		for (int i = 0; i < layoutsJSONArray.length(); i++) {
 			JSONObject layoutJSONObject = layoutsJSONArray.getJSONObject(i);
 
-			addLayout(parentLayoutId, layoutJSONObject);
+			addLayout(parentLayoutId, layoutJSONObject, privateLayout);
 		}
 	}
 
@@ -621,6 +669,41 @@ public class FileSystemImporter extends BaseImporter {
 		return portletJSONObject;
 	}
 
+	protected long[] getDLResourcePathIds(String documentLibraryResourcePath)
+		throws Exception {
+
+		if (Validator.isNull(documentLibraryResourcePath)) {
+			return new long[] {};
+		}
+
+		String[] folderPaths =
+			documentLibraryResourcePath.substring(
+				documentLibraryResourcePath.indexOf(File.separator) + 1).split(
+				File.separator);
+		long[] folderPathIds = new long[] {};
+		long currentParentId = 0;
+
+		for (String folderName : folderPaths) {
+			try {
+				currentParentId =
+					(folderPathIds.length == 0)
+						? 0 : folderPathIds[folderPathIds.length - 1];
+				Folder dlFolder =
+					DLAppLocalServiceUtil.getFolder(
+						groupId, currentParentId, folderName);
+				long folderId = dlFolder.getFolderId();
+				folderPathIds = ArrayUtil.append(folderPathIds, folderId);
+			}
+			catch (Exception e) {
+				if (_log.isTraceEnabled()) {
+					_log.trace(e);
+				}
+			}
+		}
+
+		return folderPathIds;
+	}
+
 	protected InputStream getInputStream(String fileName) throws Exception {
 		File file = new File(_resourcesDir, fileName);
 
@@ -683,6 +766,22 @@ public class FileSystemImporter extends BaseImporter {
 		map.put(LocaleUtil.getDefault(), value);
 
 		return map;
+	}
+
+	protected void handleException(Exception e) throws Exception {
+		if (continueOnFailure) {
+			if (_log.isErrorEnabled()) {
+				if (verbose) {
+					_log.error(e);
+				}
+				else {
+					_log.error(e.toString() + "@" + e.getStackTrace()[0]);
+				}
+			}
+		}
+		else {
+			throw e;
+		}
 	}
 
 	protected boolean isJournalStructureXSD(String xsd) throws Exception {
@@ -871,7 +970,44 @@ public class FileSystemImporter extends BaseImporter {
 
 		JSONArray layoutsJSONArray = jsonObject.getJSONArray("layouts");
 
-		addLayouts(LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, layoutsJSONArray);
+		if (layoutsJSONArray != null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn("WARNING : Your sitemap.json file in " +
+					servletContextName + "should " + "be upgraded to use : " +
+					"{sitePages:{publicPages:[],privatePages:[]}");
+			}
+
+			addLayouts(
+				LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, layoutsJSONArray);
+		}
+		else {
+			JSONObject sitePages = jsonObject.getJSONObject("sitePages");
+			JSONArray publicPages = sitePages.getJSONArray("publicPages");
+
+			if (publicPages != null) {
+				if (_log.isTraceEnabled()) {
+					_log.trace("Importing :" + publicPages.length() +
+						" Public Pages for :" + groupId);
+				}
+
+				addLayouts(
+					LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, publicPages,
+					false);
+			}
+
+			JSONArray privatePages = sitePages.getJSONArray("privatePages");
+
+			if (privatePages != null) {
+				if (_log.isTraceEnabled()) {
+					_log.trace("Importing :" + privatePages.length() +
+						" Private Pages for :" + groupId);
+				}
+
+				addLayouts(
+					LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, privatePages,
+					true);
+			}
+		}
 	}
 
 	protected void updateLayoutSetThemeId(JSONObject sitemapJSONObject)
@@ -912,6 +1048,14 @@ public class FileSystemImporter extends BaseImporter {
 		}
 	}
 
+	protected void uploadLocalDocumentLibrary(
+		String localDocumentLibrarySourcePath)
+		throws Exception {
+
+		this._localDocumentLibrarySourcePath = localDocumentLibrarySourcePath;
+		addDLEntriesFromFile(this._localDocumentLibrarySourcePath);
+	}
+
 	protected ServiceContext serviceContext;
 
 	private static final String _DL_DOCUMENTS_DIR_NAME =
@@ -933,6 +1077,8 @@ public class FileSystemImporter extends BaseImporter {
 		new HashMap<String, FileEntry>();
 	private Pattern _fileEntryPattern = Pattern.compile(
 		"\\[\\$FILE=([^\\$]+)\\$\\]");
+	private String _localDocumentLibrarySourcePath;
 	private File _resourcesDir;
-
+	private boolean continueOnFailure = true;
+	private boolean verbose = false;
 }
