@@ -106,6 +106,24 @@ public abstract class BaseImporter implements Importer {
 				group = GroupLocalServiceUtil.fetchGroup(
 					companyId, targetValue);
 
+				if (group != null && deleteExistingGroupBeforeImport) {
+					long existingGroupId = group.getGroupId();
+
+					if (_log.isTraceEnabled()) {
+						_log.trace("deleteExistingGroupBeforeImport=" +
+							deleteExistingGroupBeforeImport);
+						_log.trace("Deleting group :" + existingGroupId);
+					}
+
+					GroupLocalServiceUtil.deleteGroup(existingGroupId);
+
+					if (_log.isTraceEnabled()) {
+						_log.trace("Deleted group :" + existingGroupId);
+					}
+
+					group = null;
+				}
+
 				if (group != null) {
 					existing = true;
 				}
@@ -202,8 +220,20 @@ public abstract class BaseImporter implements Importer {
 		return null;
 	}
 
+	protected boolean isDeleteExistingGroupBeforeImport() {
+
+		return deleteExistingGroupBeforeImport;
+	}
+
+	protected void setDeleteExistingGroupBeforeImport(
+		boolean deleteExistingGroupBeforeImport) {
+
+		this.deleteExistingGroupBeforeImport = deleteExistingGroupBeforeImport;
+	}
+
 	protected Log _log = LogFactoryUtil.getLog(getClass());
 	protected long companyId;
+	protected boolean deleteExistingGroupBeforeImport = false;
 	protected boolean existing;
 	protected long groupId;
 	protected boolean privateLayout;
