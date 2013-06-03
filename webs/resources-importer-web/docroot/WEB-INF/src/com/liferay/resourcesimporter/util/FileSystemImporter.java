@@ -346,7 +346,7 @@ public class FileSystemImporter extends BaseImporter {
 
 		JSONArray layoutsJSONArray = layoutJSONObject.getJSONArray("layouts");
 
-		addLayouts(layout.getLayoutId(), layoutsJSONArray);
+		addLayouts(layout.getLayoutId(), layoutsJSONArray, privateLayout);
 	}
 
 	protected void addLayoutColumn(
