@@ -454,11 +454,11 @@ public class FileSystemImporter extends BaseImporter {
 
 		addLayouts(parentLayoutId, layoutsJSONArray, false);
 	}
-	
+
 	protected void addLayouts(
 		long parentLayoutId, JSONArray layoutsJSONArray, boolean privateLayout)
 		throws Exception {
-	
+
 		if (layoutsJSONArray == null) {
 			return;
 		}
