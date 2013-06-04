@@ -426,6 +426,7 @@ public class FileSystemImporter extends BaseImporter {
 				portletSetup.setValue(key, value);
 			}
 
+			portletSetup.setValue("groupId", String.valueOf(groupId));
 			portletSetup.store();
 
 			if (rootPortletId.equals(PortletKeys.NESTED_PORTLETS)) {
