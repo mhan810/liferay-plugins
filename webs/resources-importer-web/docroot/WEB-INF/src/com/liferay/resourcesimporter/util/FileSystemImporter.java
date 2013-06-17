@@ -14,6 +14,8 @@
 
 package com.liferay.resourcesimporter.util;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -54,7 +56,9 @@ import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLFolderLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructureConstants;
@@ -191,6 +195,23 @@ public class FileSystemImporter extends BaseImporter {
 				}
 			}
 		}
+	}
+
+	protected long addDLFolder(String folderName, long parentFolderId)
+		throws PortalException, SystemException {
+
+		DLFolder dlFolder =
+			DLFolderLocalServiceUtil.fetchFolder(
+				groupId, parentFolderId, folderName);
+
+		if (dlFolder == null) {
+			dlFolder =
+				DLFolderLocalServiceUtil.addFolder(
+					userId, groupId, groupId, false, parentFolderId, folderName,
+					null, false, serviceContext);
+		}
+
+		return dlFolder.getFolderId();
 	}
 
 	protected void addJournalArticles(
@@ -511,6 +532,25 @@ public class FileSystemImporter extends BaseImporter {
 		FileEntry fileEntry = DLAppLocalServiceUtil.addFileEntry(
 			userId, groupId, 0, fileName, mimeType, title, StringPool.BLANK,
 			StringPool.BLANK, inputStream, length, serviceContext);
+
+		_fileEntries.put(fileName, fileEntry);
+	}
+
+	protected void doAddDLFileEntry(
+		long parentFolderId, String fileName, InputStream inputStream)
+		throws Exception {
+
+		String mimeType = MimeTypesUtil.getContentType(fileName);
+
+		String title = FileUtil.stripExtension(fileName);
+
+		setServiceContext(fileName);
+
+		FileEntry fileEntry =
+			DLAppLocalServiceUtil.addFileEntry(
+				userId, groupId, parentFolderId, fileName, mimeType, title,
+				StringPool.BLANK, StringPool.BLANK, inputStream, 0,
+				serviceContext);
 
 		_fileEntries.put(fileName, fileEntry);
 	}

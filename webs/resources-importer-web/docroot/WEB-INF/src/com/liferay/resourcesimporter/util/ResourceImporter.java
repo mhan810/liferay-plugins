@@ -14,19 +14,30 @@
 
 package com.liferay.resourcesimporter.util;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.servlet.util.ServletContextUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 
 import java.io.InputStream;
 
 import java.net.URL;
 import java.net.URLConnection;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
  * @author Raymond Augé
  * @author Ryan Park
+ * @author Paul Shemansky
  */
 public class ResourceImporter extends FileSystemImporter {
 
@@ -95,27 +106,56 @@ public class ResourceImporter extends FileSystemImporter {
 	protected void addDLFileEntries(String fileEntriesDirName)
 		throws Exception {
 
-		Set<String> resourcePaths = servletContext.getResourcePaths(
-			resourcesDir.concat(fileEntriesDirName));
+		String documentLibraryResourcePath =
+			resourcesDir.substring(0, resourcesDir.lastIndexOf("/")).concat(
+				fileEntriesDirName);
 
-		if (resourcePaths == null) {
-			return;
+		List<String> directoryPaths = new ArrayList<String>();
+		List<String> resourcePaths = new ArrayList<String>();
+		ServletContextUtil.listDirectoryAndResourcePaths(
+			servletContext, directoryPaths, resourcePaths,
+			documentLibraryResourcePath, true);
+
+		Collections.sort(directoryPaths);
+
+		for (String directory : directoryPaths) {
+			createDirectory(directory);
 		}
 
+		Collections.sort(resourcePaths);
+
 		for (String resourcePath : resourcePaths) {
-			if (resourcePath.endsWith(StringPool.SLASH)) {
-				continue;
+			String path = FileUtil.getPath(resourcePath);
+
+			Long parentFolderId = null;
+
+			if (Validator.isNull(path)) {
+				parentFolderId = DLFolderConstants.DEFAULT_PARENT_FOLDER_ID;
+			}
+			else {
+				parentFolderId = _folderIds.get(path + "/");
+
+				if (parentFolderId == null) {
+					throw new Exception(
+						"No Folder Created For Resource Path :" + path);
+				}
 			}
 
-			String name = FileUtil.getShortFileName(resourcePath);
+			String fileName = resourcePath.substring(
+				resourcePath.lastIndexOf("/") + 1);
 
-			URL url = servletContext.getResource(resourcePath);
+			String fullResourcePath =
+				documentLibraryResourcePath + "/" + resourcePath;
 
-			URLConnection urlConnection = url.openConnection();
+			InputStream fileInputStream = servletContext.getResourceAsStream(
+				fullResourcePath);
 
-			doAddDLFileEntries(
-				name, urlConnection.getInputStream(),
-				urlConnection.getContentLength());
+			if (fileInputStream == null) {
+				throw new Exception("ResourceNotFoundException:" +
+					fullResourcePath);
+			}
+
+			doAddDLFileEntry(parentFolderId, fileName, fileInputStream);
 		}
 	}
 
@@ -149,6 +189,33 @@ public class ResourceImporter extends FileSystemImporter {
 		}
 	}
 
+	protected void createDirectory(String fullPath)
+		throws PortalException, SystemException {
+
+		String actualPath = fullPath.substring(0, fullPath.lastIndexOf("/"));
+
+		int parentFolderEndIndex = actualPath.lastIndexOf("/");
+
+		String parentDirectory = actualPath.substring(
+			0, parentFolderEndIndex + 1);
+
+		Long parentFolderId = DLFolderConstants.DEFAULT_PARENT_FOLDER_ID;
+
+		if (parentDirectory != null) {
+			parentFolderId = _folderIds.get(parentDirectory);
+
+			if (parentFolderId == null) {
+				parentFolderId = DLFolderConstants.DEFAULT_PARENT_FOLDER_ID;
+			}
+		}
+
+		String directory = actualPath.substring(parentFolderEndIndex + 1);
+
+		long dlFolderId = addDLFolder(directory, parentFolderId);
+
+		_folderIds.put(fullPath, dlFolderId);
+	}
+
 	@Override
 	protected InputStream getInputStream(String fileName) throws Exception {
 		URL url = servletContext.getResource(resourcesDir.concat(fileName));
@@ -161,5 +228,7 @@ public class ResourceImporter extends FileSystemImporter {
 
 		return urlConnection.getInputStream();
 	}
+
+	private Map<String, Long> _folderIds = new HashMap<String, Long>();
 
 }
