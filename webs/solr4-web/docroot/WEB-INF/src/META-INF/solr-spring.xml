@@ -42,6 +42,7 @@
 	<bean id="com.liferay.portal.search.solr.SolrIndexWriter" class="com.liferay.portal.search.solr.SolrIndexWriter">
 		<property name="commit" value="true" />
 		<property name="solrServer" ref="com.liferay.portal.search.solr.server.BasicAuthSolrServer" />
+		<property name="spellCheckIndexWriter" ref="com.liferay.portal.search.solr.SolrSpellCheckIndexWriter" />
 	</bean>
 	<bean id="com.liferay.portal.search.solr.SolrSearchEngineImpl" class="com.liferay.portal.kernel.search.BaseSearchEngine">
 		<property name="clusteredWrite" value="false" />
@@ -50,6 +51,16 @@
 		<property name="luceneBased" value="true" />
 		<property name="vendor" value="SOLR" />
 	</bean>
+	<bean id="com.liferay.portal.search.solr.SolrSpellCheckIndexWriter" class="com.liferay.portal.search.solr.suggest.SolrSpellCheckIndexWriter">
+		<property name="commit" value="true" />
+		<property name="dictionaryIndexer" ref="com.liferay.portal.search.solr.suggest.DictionaryIndexer" />
+		<property name="solrServer" ref="com.liferay.portal.search.solr.server.BasicAuthSolrServer" />
+	</bean>
+	<bean id="com.liferay.portal.search.solr.suggest.DictionaryIndexer" class="com.liferay.portal.search.solr.suggest.DictionaryIndexer">
+		<property name="document" ref="com.liferay.portal.kernel.search.DocumentImpl" />
+		<property name="solrIndexWriter" ref="com.liferay.portal.search.solr.SolrIndexWriter" />
+	</bean>
+	<bean id="com.liferay.portal.kernel.search.DocumentImpl" class="com.liferay.portal.kernel.search.DocumentImpl"/>
 
 	<!-- Configurator -->
 
