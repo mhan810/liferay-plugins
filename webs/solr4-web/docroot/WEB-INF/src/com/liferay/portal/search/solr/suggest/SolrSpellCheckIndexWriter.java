@@ -46,7 +46,7 @@ import org.apache.solr.client.solrj.SolrServer;
  */
 public class SolrSpellCheckIndexWriter implements SpellCheckIndexWriter {
 
-	public static final long _GLOBAL_GROUP_ID = 0L;
+	public static final long GLOBAL_GROUP_ID = 0L;
 
 	@Override
 	public void clearDictionaryIndexes(SearchContext searchContext)
@@ -94,8 +94,8 @@ public class SolrSpellCheckIndexWriter implements SpellCheckIndexWriter {
 				indexCustomDictionary(languageId, searchContext);
 
 				if (_log.isInfoEnabled()) {
-					_log.info("Finished indexing dictionaries for " +
-						languageId);
+					_log.info(
+						"Finished indexing dictionaries for " + languageId);
 				}
 			}
 			catch (Exception e) {
@@ -107,7 +107,56 @@ public class SolrSpellCheckIndexWriter implements SpellCheckIndexWriter {
 	@Override
 	public void indexDictionary(SearchContext searchContext)
 		throws SearchException {
-			indexDictionaries(searchContext);
+
+		String languageId = searchContext.getLanguageId();
+
+		try {
+			indexDefaultDictionary(languageId, searchContext);
+
+			indexCustomDictionary(languageId, searchContext);
+		}
+		catch (Exception e) {
+		}
+	}
+
+	// Should be declared in SpellCheckIndexWriter Interface
+
+	public void indexSuggestion(SearchContext searchContext)
+		throws SearchException {
+
+		try {
+			indexSuggestions(searchContext.getLanguageId(), searchContext);
+		}
+		catch (Exception e) {
+			throw new SearchException(e);
+		}
+	}
+
+	// Should be declared in SpellCheckIndexWriter Interface
+
+	public void indexSuggestions(SearchContext searchContext)
+		throws SearchException {
+
+		for (String languageId :
+
+			SuggestPropsValues.SOLR_SPELL_CHECKER_SUPPORTED_LOCALES) {
+
+			try {
+				if (_log.isInfoEnabled()) {
+					_log.info("Start indexing suggestions for " + languageId);
+				}
+
+				indexSuggestions(languageId, searchContext);
+
+				if (_log.isInfoEnabled()) {
+					_log.info(
+						"Finished indexing suggestions for " + languageId);
+				}
+			}
+			catch (Exception e) {
+				throw new SearchException(e);
+			}
+		}
 	}
 
 	public void setCommit(boolean commit) {
@@ -120,6 +169,10 @@ public class SolrSpellCheckIndexWriter implements SpellCheckIndexWriter {
 
 	public void setSolrServer(SolrServer solrServer) {
 		_solrServer = solrServer;
+	}
+
+	public void setSuggestionIndexer(SuggestionIndexer suggestionIndexer) {
+		_suggestionIndexer = suggestionIndexer;
 	}
 
 	protected URL getResource(String name) {
@@ -152,6 +205,16 @@ public class SolrSpellCheckIndexWriter implements SpellCheckIndexWriter {
 			long resolvedGroupId = _resolveGroupId(
 				supportedGroupId, searchContext.getCompanyId());
 
+			if (resolvedGroupId == _INVALID_GROUP_ID) {
+				_log.error(
+					"Cannot resolve groupId for: companyId= " +
+						searchContext.getCompanyId() + ", groupId: " +
+						supportedGroupId + "; skipping indexation of custom " +
+						"dictionary");
+
+				continue;
+			}
+
 			if (_log.isInfoEnabled()) {
 				_log.info("Indexing dictionary " + dictionaryFileName);
 			}
@@ -161,18 +224,20 @@ public class SolrSpellCheckIndexWriter implements SpellCheckIndexWriter {
 			try {
 				URL url = getResource(dictionaryFileName);
 
-				inputStream = url.openStream();
-
-				if (inputStream == null) {
+				if (url == null) {
 					if (_log.isWarnEnabled()) {
-						_log.warn("Unable to read " + dictionaryFileName);
+						_log.warn(
+							"Unable to open the resource: " +
+								dictionaryFileName);
 					}
 
 					continue;
 				}
 
+				inputStream = url.openStream();
+
 				_dictionaryIndexer.indexDictionary(
-					searchContext, new long[]{resolvedGroupId},
+					searchContext, new long[] {resolvedGroupId},
 					LocaleUtil.fromLanguageId(languageId), inputStream);
 			}
 			finally {
@@ -204,18 +269,90 @@ public class SolrSpellCheckIndexWriter implements SpellCheckIndexWriter {
 			try {
 				URL url = getResource(dictionaryFileName);
 
-				inputStream = url.openStream();
-
-				if (inputStream == null) {
+				if (url == null) {
 					if (_log.isWarnEnabled()) {
-						_log.warn("Unable to read " + dictionaryFileName);
+						_log.warn(
+							"Unable to open the resource: " +
+								dictionaryFileName);
 					}
 
 					continue;
 				}
 
+				inputStream = url.openStream();
+
 				_dictionaryIndexer.indexDictionary(
-					searchContext, new long[]{0},
+					searchContext, new long[] {0},
+					LocaleUtil.fromLanguageId(languageId), inputStream);
+			}
+			finally {
+				StreamUtil.cleanUp(inputStream);
+			}
+		}
+	}
+
+	protected void indexSuggestions(
+			String languageId, SearchContext searchContext)
+		throws Exception {
+
+		String[] supportedGroupIds =
+			SuggestPropsValues.SOLR_QUERY_SUGGESTION_GROUPS;
+
+		for (String supportedGroupId : supportedGroupIds) {
+			Filter languageGroupFilter = new Filter(
+				languageId, supportedGroupId);
+
+			String suggestionFileName = PortletProps.get(
+				SuggestPropsKeys.SOLR_QUERY_SUGGESTION, languageGroupFilter);
+
+			if (suggestionFileName == null) {
+				if (_log.isInfoEnabled()) {
+					_log.info(
+						"Unable to load suggestion file name for locale: " +
+					languageId + " group UUID: " + supportedGroupId +
+					" from portlet properties");
+
+				}
+
+				continue;
+			}
+
+			long resolvedGroupId = _resolveGroupId(
+				supportedGroupId, searchContext.getCompanyId());
+
+			if (resolvedGroupId == _INVALID_GROUP_ID) {
+				_log.error(
+					"Cannot resolve groupId for: companyId= " +
+						searchContext.getCompanyId() + ", groupId: " +
+						supportedGroupId + "; skipping indexation of " +
+						"suggestions");
+
+				continue;
+			}
+
+			if (_log.isInfoEnabled()) {
+				_log.info("Indexing suggestion " + suggestionFileName);
+			}
+
+			InputStream inputStream = null;
+
+			try {
+				URL url = getResource(suggestionFileName);
+
+				if (url == null) {
+					if (_log.isWarnEnabled()) {
+						_log.warn(
+							"Unable to open the resource: " +
+								suggestionFileName);
+					}
+
+					continue;
+				}
+
+				inputStream = url.openStream();
+
+				_suggestionIndexer.indexSuggestions(
+					searchContext, new long[]{resolvedGroupId},
 					LocaleUtil.fromLanguageId(languageId), inputStream);
 			}
 			finally {
@@ -228,12 +365,12 @@ public class SolrSpellCheckIndexWriter implements SpellCheckIndexWriter {
 
 		long resolvedGroupId = _INVALID_GROUP_ID;
 
-		if (uuid.equals(String.valueOf( _GLOBAL_GROUP_ID))) {
-			resolvedGroupId = _GLOBAL_GROUP_ID;
+		if (uuid.equals(String.valueOf(GLOBAL_GROUP_ID))) {
+			resolvedGroupId = GLOBAL_GROUP_ID;
 
 			if (_log.isInfoEnabled()) {
 				_log.info("Global group with groupId= "
-					+_GLOBAL_GROUP_ID + " will be used");
+					+GLOBAL_GROUP_ID + " will be used");
 			}
 		}
 
@@ -265,5 +402,6 @@ public class SolrSpellCheckIndexWriter implements SpellCheckIndexWriter {
 	private boolean _commit;
 	private DictionaryIndexer _dictionaryIndexer;
 	private SolrServer _solrServer;
+	private SuggestionIndexer _suggestionIndexer;
 
 }

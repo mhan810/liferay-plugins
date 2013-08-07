@@ -19,8 +19,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.nio.charset.CharsetEncoderUtil;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
-import com.liferay.portal.kernel.search.NGramHolder;
-import com.liferay.portal.kernel.search.NGramHolderBuilderUtil;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -29,32 +27,29 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.search.solr.SolrIndexWriter;
 import com.liferay.portal.util.PortletKeys;
 
+import java.nio.CharBuffer;
+import java.nio.charset.CharsetEncoder;
+import java.security.MessageDigest;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import java.nio.CharBuffer;
-import java.nio.charset.CharsetEncoder;
-
-import java.security.MessageDigest;
-
 import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
 /**
  * @author Daniela Zapata Riesco
  */
-public class DictionaryIndexer {
+public class SuggestionIndexer {
 
-	public static final String FILTER_TYPE_DICTIONARY = "dictionary";
+	public static final String FILTER_TYPE_SUGGESTION = "suggestion";
 
 	public static final int UNICODE_BYTE_ORDER_MARK = 65279;
 
-	public void indexDictionary(
+	public void indexSuggestions(
 			SearchContext searchContext, long[] groupIds, Locale locale,
 			InputStream inputStream)
 		throws SearchException {
@@ -84,44 +79,32 @@ public class DictionaryIndexer {
 			do {
 				lineCounter++;
 
-				String[] term = StringUtil.split(line, StringPool.SPACE);
+				line = StringUtil.trim(line);
 
-				if (term.length > 0) {
-					float weight = 0;
-
-					if (term.length > 1) {
-						try {
-							weight = Float.parseFloat(term[1]);
-						}
-						catch (NumberFormatException e) {
-							if (_log.isWarnEnabled()) {
-								_log.warn(
-									"Invalid weight for term: " + term[0]);
-							}
-						}
-					}
-
-					documents.add(
-						getDictionaryEntryDocument(
-							searchContext.getCompanyId(), groupIds, locale,
-							term[0], weight));
-
+				if (line != null & line.equals(StringPool.BLANK)) {
 					line = bufferedReader.readLine();
+					continue;
+				}
 
-					if ((lineCounter == _batchSize) || (line == null)) {
-						_solrIndexWriter.addDocuments(searchContext, documents);
+				documents.add(
+					getSuggestionDocument(
+						searchContext.getCompanyId(), groupIds, locale, line));
 
-						documents.clear();
+				line = bufferedReader.readLine();
 
-						lineCounter = 0;
-					}
+				if ((lineCounter == _batchSize) || (line == null)) {
+					_solrIndexWriter.addDocuments(searchContext, documents);
+
+					documents.clear();
+
+					lineCounter = 0;
 				}
 			}
 			while (line != null);
 		}
 		catch (Exception e) {
 			if (_log.isDebugEnabled()) {
-				_log.debug("Unable to index dictionaries", e);
+				_log.debug("Unable to index suggestions", e);
 			}
 
 			throw new SearchException(e.getMessage(), e);
@@ -133,7 +116,7 @@ public class DictionaryIndexer {
 				}
 				catch (IOException ioe) {
 					if (_log.isDebugEnabled()) {
-						_log.debug("Unable to close dictionary file", ioe);
+						_log.debug("Unable to close suggestions file", ioe);
 					}
 				}
 			}
@@ -148,64 +131,46 @@ public class DictionaryIndexer {
 		_document = document;
 	}
 
+	public void setMaxNGrams(int maxNGrams) {
+		_maxNGrams = maxNGrams;
+	}
+
 	public void setSolrIndexWriter(SolrIndexWriter solrIndexWriter) {
 		_solrIndexWriter = solrIndexWriter;
 	}
 
-	protected void addNGram(Document document, String text)
-		throws SearchException {
+	protected void addNGrams(Document document, String keywords) {
+		String lowerCaseKeywords = keywords.toLowerCase();
 
-		NGramHolder nGramHolder = NGramHolderBuilderUtil.buildNGramHolder(text);
+		int maxNGrams = Math.min(_maxNGrams, lowerCaseKeywords.length());
 
-		Map<String, List<String>> nGrams = nGramHolder.getNGrams();
-		Map<String, String> nGramEnds = nGramHolder.getNGramEnds();
-		Map<String, String> nGramStarts = nGramHolder.getNGramStarts();
+		StringBundler nGram = new StringBundler(maxNGrams);
+		String prefix = "start";
 
-		addNGramField(document, nGramEnds);
-		addNGramField(document, nGramStarts);
-		addNGramFields(document, nGrams);
-	}
-
-	protected void addNGramField(
-		Document document, Map<String, String> nGrams) {
-
-		for (Map.Entry<String, String> nGramEntry : nGrams.entrySet()) {
-			document.addKeyword(nGramEntry.getKey(), nGramEntry.getValue());
+		for (int i = 0; i < maxNGrams; i++) {
+			nGram.append(keywords.charAt(i));
+			String field = prefix + (i + 1);
+			document.addKeyword(field, nGram.toString());
 		}
 	}
 
-	protected void addNGramFields(
-		Document document, Map<String, List<String>> nGrams) {
-
-		for (Map.Entry<String, List<String>> nGramEntry : nGrams.entrySet()) {
-			String fieldName = nGramEntry.getKey();
-
-			for (String nGramValue : nGramEntry.getValue()) {
-				document.addKeyword(fieldName, nGramValue);
-			}
-		}
-	}
-
-	protected Document getDictionaryEntryDocument(
-			long companyId, long[] groupIds, Locale locale, String word,
-			float weight)
+	protected Document getSuggestionDocument(
+			long companyId, long[] groupIds, Locale locale, String keywords)
 		throws SearchException {
 
 		Document document = (Document)_document.clone();
 
 		document.addKeyword(
-			Field.UID, getUID(companyId, groupIds, locale, word));
+			Field.UID, getUID(companyId, groupIds, locale, keywords));
 
 		document.addKeyword(Field.COMPANY_ID, companyId);
 		document.addKeyword(Field.GROUP_ID, groupIds);
+		document.addKeyword(Field.KEYWORD_SEARCH, keywords);
 		document.addKeyword(Field.LANGUAGE_ID, locale.toString());
 		document.addKeyword(Field.PORTLET_ID, PortletKeys.SEARCH);
-		document.addKeyword(Field.TYPE, FILTER_TYPE_DICTIONARY);
+		document.addKeyword(Field.TYPE, FILTER_TYPE_SUGGESTION);
 
-		document.addKeyword(Field.SPELL_CHECK_WORD, word);
-		document.addKeyword("spellCheckWeight", String.valueOf(weight));
-
-		addNGram(document, word);
+		addNGrams(document, keywords);
 
 		return document;
 	}
@@ -215,7 +180,7 @@ public class DictionaryIndexer {
 
 		StringBundler sb = new StringBundler(groupIds.length + 4);
 
-		sb.append(FILTER_TYPE_DICTIONARY);
+		sb.append(FILTER_TYPE_SUGGESTION);
 
 		if (companyId > 0) {
 			sb.append(String.valueOf(companyId));
@@ -263,15 +228,18 @@ public class DictionaryIndexer {
 
 	private static final int _DEFAULT_BATCH_SIZE = 1000;
 
+	private static final int _DEFAULT_MAX_N_GRAMS = 50;
+
 	private static final char[] _HEX_CHARACTERS = {
 		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd',
 		'e', 'f'
 	};
 
-	private static Log _log = LogFactoryUtil.getLog(DictionaryIndexer.class);
+	private static Log _log = LogFactoryUtil.getLog(SuggestionIndexer.class);
 
 	private int _batchSize = _DEFAULT_BATCH_SIZE;
 	private Document _document;
+	private int _maxNGrams =_DEFAULT_MAX_N_GRAMS;
 	private SolrIndexWriter _solrIndexWriter;
 
 }
