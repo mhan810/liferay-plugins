@@ -19,6 +19,10 @@ package com.liferay.portal.search.solr.suggest.util;
  */
 public class SuggestPropsKeys {
 
+	public static final String SOLR_QUERY_SUGGESTION = "solr.query.suggestion";
+
+	public static final String SOLR_QUERY_SUGGESTION_GROUPS = "solr.query.suggestion.groups";
+
 	public static final String SOLR_SPELL_CHECKER_CUSTOM_DICTIONARY = "solr.spell.checker.custom.dictionary";
 
 	public static final String SOLR_SPELL_CHECKER_DICTIONARY = "solr.spell.checker.dictionary";
@@ -26,5 +30,4 @@ public class SuggestPropsKeys {
 	public static final String SOLR_SPELL_CHECKER_GROUPS = "solr.spell.checker.groups";
 
 	public static final String SOLR_SPELL_CHECKER_SUPPORTED_LOCALES = "solr.spell.checker.supported.locales";
-
 }

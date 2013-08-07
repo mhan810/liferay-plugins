@@ -22,6 +22,10 @@ import com.liferay.util.portlet.PortletProps;
  */
 public class SuggestPropsValues {
 
-	public static final String[] SOLR_SPELL_CHECKER_GROUPS = StringUtil.split(PortletProps.get(SuggestPropsKeys.SOLR_SPELL_CHECKER_GROUPS)); public static final String[] SOLR_SPELL_CHECKER_SUPPORTED_LOCALES = StringUtil.split(PortletProps.get(SuggestPropsKeys.SOLR_SPELL_CHECKER_SUPPORTED_LOCALES));
+	public static final String[] SOLR_QUERY_SUGGESTION_GROUPS = StringUtil.split(PortletProps.get(SuggestPropsKeys.SOLR_QUERY_SUGGESTION_GROUPS));
+
+	public static final String[] SOLR_SPELL_CHECKER_GROUPS = StringUtil.split(PortletProps.get(SuggestPropsKeys.SOLR_SPELL_CHECKER_GROUPS));
+
+	public static final String[] SOLR_SPELL_CHECKER_SUPPORTED_LOCALES = StringUtil.split(PortletProps.get(SuggestPropsKeys.SOLR_SPELL_CHECKER_SUPPORTED_LOCALES));
 
 }
