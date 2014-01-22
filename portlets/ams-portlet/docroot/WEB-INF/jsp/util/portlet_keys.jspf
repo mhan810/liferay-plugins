@@ -1,3 +1,4 @@
+<%--
 /**
  * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
@@ -11,27 +12,12 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+--%>
 
-package com.liferay.sync.engine.model;
+<%!
+public static class PortletKeys {
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-
-/**
- * @author Shinn Lok
- */
-@DatabaseTable(tableName = "Account")
-public class Account {
-
-	public long getAccountId() {
-		return this.accountId;
-	}
-
-	public void setAccountId(long accountId) {
-		this.accountId = accountId;
-	}
-
-	@DatabaseField(generatedId = true, useGetSet = true)
-	protected long accountId;
+	public static final String AMS = "1_WAR_amsportlet";
 
 }
+%>
