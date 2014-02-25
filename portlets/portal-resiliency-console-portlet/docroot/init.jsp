@@ -16,8 +16,14 @@
 
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 
+<%@ page import="com.liferay.portal.kernel.resiliency.mpi.MPIHelperUtil" %><%@
+page import="com.liferay.portal.kernel.resiliency.spi.SPI" %><%@
+page import="com.liferay.portal.kernel.resiliency.spi.agent.SPIAgentFactoryUtil" %><%@
+page import="com.liferay.portal.kernel.resiliency.spi.provider.SPIProvider" %><%@
+page import="com.liferay.portal.kernel.util.Validator" %><%@
+page import="com.liferay.portal.model.Portlet" %><%@
+page import="com.liferay.portal.resiliency.console.portlet.PortletUtil" %>
+
+<%@ page import="java.util.List" %>
+
 <portlet:defineObjects />
-
-##<% out.print("First"); %>    <% out.print("Last"); %>%%
-
-This is the <strong>Sample JSP Portlet</strong>. Use this as a quick way to include JSPs.
