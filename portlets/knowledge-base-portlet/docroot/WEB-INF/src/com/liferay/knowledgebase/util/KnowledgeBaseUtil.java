@@ -265,9 +265,9 @@ public class KnowledgeBaseUtil {
 
 	public static final int getNextStatus(int status) {
 		if (status == KBCommentConstants.STATUS_IN_PROGRESS) {
-			return KBCommentConstants.STATUS_RESOLVED;
+			return KBCommentConstants.STATUS_COMPLETED;
 		}
-		else if (status == KBCommentConstants.STATUS_PENDING) {
+		else if (status == KBCommentConstants.STATUS_NEW) {
 			return KBCommentConstants.STATUS_IN_PROGRESS;
 		}
 		else {
@@ -291,26 +291,42 @@ public class KnowledgeBaseUtil {
 	}
 
 	public static final int getPreviousStatus(int status) {
-		if (status == KBCommentConstants.STATUS_IN_PROGRESS) {
-			return KBCommentConstants.STATUS_PENDING;
-		}
-		else if (status == KBCommentConstants.STATUS_RESOLVED) {
+		if (status == KBCommentConstants.STATUS_COMPLETED) {
 			return KBCommentConstants.STATUS_IN_PROGRESS;
+		}
+		else if (status == KBCommentConstants.STATUS_IN_PROGRESS) {
+			return KBCommentConstants.STATUS_NEW;
 		}
 		else {
 			return KBCommentConstants.STATUS_NONE;
 		}
 	}
 
+	public static final String getStatusLabel(int status) {
+		if (status == KBCommentConstants.STATUS_COMPLETED) {
+			return "resolved";
+		}
+		else if (status == KBCommentConstants.STATUS_IN_PROGRESS) {
+			return "in-progress";
+		}
+		else if (status == KBCommentConstants.STATUS_NEW) {
+			return "new";
+		}
+		else {
+			throw new IllegalArgumentException(
+				String.format("Invalid feedback status %s", status));
+		}
+	}
+
 	public static final String getStatusTransitionLabel(int status) {
-		if (status == KBCommentConstants.STATUS_IN_PROGRESS) {
+		if (status == KBCommentConstants.STATUS_COMPLETED) {
+			return "resolve";
+		}
+		else if (status == KBCommentConstants.STATUS_IN_PROGRESS) {
 			return "move-to-in-progress";
 		}
-		else if (status == KBCommentConstants.STATUS_PENDING) {
-			return "move-to-pending";
-		}
-		else if (status == KBCommentConstants.STATUS_RESOLVED) {
-			return "resolve";
+		else if (status == KBCommentConstants.STATUS_NEW) {
+			return "move-to-new";
 		}
 		else {
 			throw new IllegalArgumentException(
@@ -339,6 +355,26 @@ public class KnowledgeBaseUtil {
 			KBArticle.class.getName(), "urlTitle", title);
 	}
 
+	public static List<KBArticle> sort(
+		long[] resourcePrimKeys, List<KBArticle> kbArticles) {
+
+		Map<Long, KBArticle> map = new HashMap<Long, KBArticle>();
+
+		for (KBArticle kbArticle : kbArticles) {
+			map.put(kbArticle.getResourcePrimKey(), kbArticle);
+		}
+
+		kbArticles.clear();
+
+		for (long resourcePrimKey : resourcePrimKeys) {
+			if (map.containsKey(resourcePrimKey)) {
+				kbArticles.add(map.get(resourcePrimKey));
+			}
+		}
+
+		return kbArticles;
+	}
+
 	public static String[] splitKeywords(String keywords) {
 		Set<String> keywordsSet = new LinkedHashSet<String>();
 
@@ -365,26 +401,6 @@ public class KnowledgeBaseUtil {
 		}
 
 		return StringUtil.split(StringUtil.merge(keywordsSet));
-	}
-
-	public static List<KBArticle> sort(
-		long[] resourcePrimKeys, List<KBArticle> kbArticles) {
-
-		Map<Long, KBArticle> map = new HashMap<Long, KBArticle>();
-
-		for (KBArticle kbArticle : kbArticles) {
-			map.put(kbArticle.getResourcePrimKey(), kbArticle);
-		}
-
-		kbArticles.clear();
-
-		for (long resourcePrimKey : resourcePrimKeys) {
-			if (map.containsKey(resourcePrimKey)) {
-				kbArticles.add(map.get(resourcePrimKey));
-			}
-		}
-
-		return kbArticles;
 	}
 
 	public static String trimLeadingSlash(String s) {

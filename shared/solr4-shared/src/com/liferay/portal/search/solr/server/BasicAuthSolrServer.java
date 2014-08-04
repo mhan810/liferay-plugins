@@ -16,6 +16,7 @@ package com.liferay.portal.search.solr.server;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StringPool;
 
 import java.io.IOException;
 
@@ -43,16 +44,23 @@ import org.apache.solr.common.util.NamedList;
  */
 public class BasicAuthSolrServer extends SolrServer {
 
-	public void afterPropertiesSet() {
+	public BasicAuthSolrServer() {
 		_poolingClientConnectionManager = new PoolingClientConnectionManager();
 
 		DefaultHttpClient defaultHttpClient = new DefaultHttpClient(
 			_poolingClientConnectionManager);
 
+		_server = new HttpSolrServer(StringPool.BLANK, defaultHttpClient);
+	}
+
+	public void afterPropertiesSet() {
 		if ((_username != null) && (_password != null)) {
 			if (_authScope == null) {
 				_authScope = AuthScope.ANY;
 			}
+
+			DefaultHttpClient defaultHttpClient =
+				(DefaultHttpClient) _server.getHttpClient();
 
 			CredentialsProvider credentialsProvider =
 				defaultHttpClient.getCredentialsProvider();
@@ -69,7 +77,7 @@ public class BasicAuthSolrServer extends SolrServer {
 			}
 		}
 
-		_server = new HttpSolrServer(_url, defaultHttpClient);
+		_server.setBaseURL(_url);
 	}
 
 	public String getBaseURL() {
@@ -127,7 +135,8 @@ public class BasicAuthSolrServer extends SolrServer {
 	}
 
 	public void setDefaultMaxConnectionsPerHost(int maxConnectionsPerHost) {
-		_server.setDefaultMaxConnectionsPerHost(maxConnectionsPerHost);
+		_poolingClientConnectionManager.setDefaultMaxPerRoute(
+			maxConnectionsPerHost);
 	}
 
 	public void setFollowRedirects(boolean followRedirects) {
@@ -145,7 +154,7 @@ public class BasicAuthSolrServer extends SolrServer {
 	}
 
 	public void setMaxTotalConnections(int maxTotalConnections) {
-		_server.setMaxTotalConnections(maxTotalConnections);
+		_poolingClientConnectionManager.setMaxTotal(maxTotalConnections);
 	}
 
 	public void setParser(ResponseParser responseParser) {
