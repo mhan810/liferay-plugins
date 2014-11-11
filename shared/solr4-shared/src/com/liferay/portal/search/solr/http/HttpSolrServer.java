@@ -20,14 +20,7 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.auth.AuthScope;
 import org.apache.http.client.HttpClient;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
-import org.apache.http.pool.PoolStats;
 import org.apache.solr.client.solrj.ResponseParser;
 import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServer;
@@ -44,32 +37,8 @@ public class HttpSolrServer extends SolrServer {
 		_server = new org.apache.solr.client.solrj.impl.HttpSolrServer(
 			_url, _httpClient);
 
-		if (_allowCompression != null) {
-			_server.setAllowCompression(_allowCompression);
-		}
-
 		if (Validator.isNotNull(_baseURL)) {
 			_server.setBaseURL(_baseURL);
-		}
-
-		if (_connectionTimeout != null) {
-			_server.setConnectionTimeout(_connectionTimeout);
-		}
-
-		if (_defaultMaxConnectionsPerRoute != null) {
-			_poolingClientConnectionManager.setDefaultMaxPerRoute(
-				_defaultMaxConnectionsPerRoute);
-			//_server.setDefaultMaxConnectionsPerHost(
-			//	_defaultMaxConnectionsPerRoute);
-		}
-
-		if (_followRedirects != null) {
-			_server.setFollowRedirects(_followRedirects);
-		}
-
-		if (_maxTotalConnections != null) {
-			_poolingClientConnectionManager.setMaxTotal(_maxTotalConnections);
-			//_server.setMaxTotalConnections(_maxTotalConnections);
 		}
 
 		if (_maxRetries != null) {
@@ -78,10 +47,6 @@ public class HttpSolrServer extends SolrServer {
 
 		if (_responseParser != null) {
 			_server.setParser(_responseParser);
-		}
-
-		if (_soTimeout != null) {
-			_server.setSoTimeout(_soTimeout);
 		}
 	}
 
@@ -123,18 +88,6 @@ public class HttpSolrServer extends SolrServer {
 		return _server.request(solrRequest, responseParser);
 	}
 
-	public void setAllowCompression(boolean allowCompression) {
-		_allowCompression = allowCompression;
-
-		if (_server != null) {
-			_server.setAllowCompression(_allowCompression);
-		}
-	}
-
-	public void setAuthScope(AuthScope authScope) {
-		_authScope = authScope;
-	}
-
 	public void setBaseURL(String baseURL) {
 		_baseURL = baseURL;
 
@@ -143,41 +96,8 @@ public class HttpSolrServer extends SolrServer {
 		}
 	}
 
-	public void setConnectionTimeout(int connectionTimeout) {
-		_connectionTimeout = connectionTimeout;
-
-		if (_server != null) {
-			_server.setConnectionTimeout(connectionTimeout);
-		}
-	}
-
-	public void setDefaultMaxConnectionsPerRoute(
-		int defaultMaxConnectionsPerRoute) {
-
-		_defaultMaxConnectionsPerRoute = defaultMaxConnectionsPerRoute;
-
-		if (_server != null) {
-			_server.setDefaultMaxConnectionsPerHost(
-				defaultMaxConnectionsPerRoute);
-		}
-	}
-
-	public void setFollowRedirects(boolean followRedirects) {
-		_followRedirects = followRedirects;
-
-		if (_server != null) {
-			_server.setFollowRedirects(followRedirects);
-		}
-	}
-
 	public void setHttpClient(HttpClient httpClient) {
 		_httpClient = httpClient;
-	}
-
-	public void setHttpRequestInterceptors(
-		List<HttpRequestInterceptor> httpRequestInterceptors) {
-
-		_httpRequestInterceptors = httpRequestInterceptors;
 	}
 
 	public void setMaxRetries(int maxRetries) {
@@ -185,14 +105,6 @@ public class HttpSolrServer extends SolrServer {
 
 		if (_server != null) {
 			_server.setMaxRetries(maxRetries);
-		}
-	}
-
-	public void setMaxTotalConnections(int maxTotalConnections) {
-		_maxTotalConnections = maxTotalConnections;
-
-		if (_server != null) {
-			_server.setMaxTotalConnections(maxTotalConnections);
 		}
 	}
 
@@ -204,24 +116,8 @@ public class HttpSolrServer extends SolrServer {
 		}
 	}
 
-	public void setPassword(String password) {
-		_password = password;
-	}
-
-	public void setSoTimeout(int soTimeout) {
-		_soTimeout = soTimeout;
-
-		if (_server != null) {
-			_server.setSoTimeout(soTimeout);
-		}
-	}
-
 	public void setUrl(String url) {
 		_url = url;
-	}
-
-	public void setUsername(String username) {
-		_username = username;
 	}
 
 	@Override
@@ -230,63 +126,19 @@ public class HttpSolrServer extends SolrServer {
 
 		_server.shutdown();
 
-		int retry = 0;
-
-		while (retry < 10) {
-			PoolStats poolStats =
-				_poolingClientConnectionManager.getTotalStats();
-
-			int availableConnections = poolStats.getAvailable();
-
-			if (availableConnections <= 0) {
-				break;
-			}
-
-			if (_log.isDebugEnabled()) {
-				_log.debug(
-					toString() + " waiting on " + availableConnections +
-						" connections");
-			}
-
-			_poolingClientConnectionManager.closeIdleConnections(
-				200, TimeUnit.MILLISECONDS);
-
-			try {
-				Thread.sleep(500);
-			}
-			catch (InterruptedException ie) {
-			}
-
-			retry++;
-		}
-
-		_poolingClientConnectionManager.shutdown();
-
-		if (_log.isDebugEnabled()) {
-			_log.debug(toString() + " is shutdown");
+		if (_log.isInfoEnabled()) {
+			_log.info(toString() + " has been shut down.");
 		}
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(HttpSolrServer.class);
 
-	private Boolean _allowCompression;
-	private AuthScope _authScope;
 	private String _baseURL;
-	private Integer _connectionTimeout;
-	private Integer _defaultMaxConnectionsPerRoute;
-	private Boolean _followRedirects;
 	private HttpClient _httpClient;
-	private List<HttpRequestInterceptor> _httpRequestInterceptors;
 	private Integer _maxRetries;
-	private Integer _maxTotalConnections;
-	private String _password;
-	private PoolingClientConnectionManager _poolingClientConnectionManager =
-		new PoolingClientConnectionManager();
 	private ResponseParser _responseParser;
 	private org.apache.solr.client.solrj.impl.HttpSolrServer _server;
-	private Integer _soTimeout;
 	private boolean _stopped;
 	private String _url;
-	private String _username;
 
 }
