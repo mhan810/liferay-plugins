@@ -26,6 +26,7 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
+import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.pool.PoolStats;
@@ -41,7 +42,16 @@ public abstract class BasePoolingHttpClientFactory {
 			_log.debug("afterPropertiesSet()");
 		}
 
-		_poolingClientConnectionManager = new PoolingClientConnectionManager();
+		SchemeRegistry schemeRegistry = getSchemeRegistry();
+
+		if (schemeRegistry != null) {
+			_poolingClientConnectionManager =
+				new PoolingClientConnectionManager(schemeRegistry);
+		}
+		else {
+			_poolingClientConnectionManager =
+				new PoolingClientConnectionManager();
+		}
 
 		if (_defaultMaxConnectionsPerRoute != null) {
 			_poolingClientConnectionManager.setDefaultMaxPerRoute(
@@ -186,6 +196,10 @@ public abstract class BasePoolingHttpClientFactory {
 	}
 
 	protected Credentials getCredentials() {
+		return null;
+	}
+
+	protected SchemeRegistry getSchemeRegistry() {
 		return null;
 	}
 
