@@ -35,14 +35,13 @@ import org.apache.solr.client.solrj.ResponseParser;
 import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.util.NamedList;
 
 /**
  * @author Bruno Farache
  */
-public class BasicAuthSolrServer extends SolrServer {
+public class HttpSolrServer extends SolrServer {
 
 	public void afterPropertiesSet() {
 		DefaultHttpClient defaultHttpClient = new DefaultHttpClient(
@@ -68,7 +67,8 @@ public class BasicAuthSolrServer extends SolrServer {
 			}
 		}
 
-		_server = new HttpSolrServer(_url, defaultHttpClient);
+		_server = new org.apache.solr.client.solrj.impl.HttpSolrServer(
+			_url, defaultHttpClient);
 
 		if (_allowCompression != null) {
 			_server.setAllowCompression(_allowCompression);
@@ -289,7 +289,7 @@ public class BasicAuthSolrServer extends SolrServer {
 		}
 	}
 
-	private static Log _log = LogFactoryUtil.getLog(BasicAuthSolrServer.class);
+	private static Log _log = LogFactoryUtil.getLog(HttpSolrServer.class);
 
 	private Boolean _allowCompression;
 	private AuthScope _authScope;
@@ -304,7 +304,7 @@ public class BasicAuthSolrServer extends SolrServer {
 	private PoolingClientConnectionManager _poolingClientConnectionManager =
 		new PoolingClientConnectionManager();
 	private ResponseParser _responseParser;
-	private HttpSolrServer _server;
+	private org.apache.solr.client.solrj.impl.HttpSolrServer _server;
 	private Integer _soTimeout;
 	private boolean _stopped;
 	private String _url;
