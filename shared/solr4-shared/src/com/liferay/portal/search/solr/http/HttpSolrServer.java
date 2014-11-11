@@ -25,10 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.pool.PoolStats;
 import org.apache.solr.client.solrj.ResponseParser;
@@ -44,31 +41,8 @@ import org.apache.solr.common.util.NamedList;
 public class HttpSolrServer extends SolrServer {
 
 	public void afterPropertiesSet() {
-		DefaultHttpClient defaultHttpClient = new DefaultHttpClient(
-			_poolingClientConnectionManager);
-
-		if ((_username != null) && (_password != null)) {
-			if (_authScope == null) {
-				_authScope = AuthScope.ANY;
-			}
-
-			CredentialsProvider credentialsProvider =
-				defaultHttpClient.getCredentialsProvider();
-
-			credentialsProvider.setCredentials(
-				_authScope,
-				new UsernamePasswordCredentials(_username, _password));
-
-			for (HttpRequestInterceptor httpRequestInterceptor :
-					_httpRequestInterceptors) {
-
-				defaultHttpClient.addRequestInterceptor(
-					httpRequestInterceptor, 0);
-			}
-		}
-
 		_server = new org.apache.solr.client.solrj.impl.HttpSolrServer(
-			_url, defaultHttpClient);
+			_url, _httpClient);
 
 		if (_allowCompression != null) {
 			_server.setAllowCompression(_allowCompression);
@@ -196,6 +170,10 @@ public class HttpSolrServer extends SolrServer {
 		}
 	}
 
+	public void setHttpClient(HttpClient httpClient) {
+		_httpClient = httpClient;
+	}
+
 	public void setHttpRequestInterceptors(
 		List<HttpRequestInterceptor> httpRequestInterceptors) {
 
@@ -297,6 +275,7 @@ public class HttpSolrServer extends SolrServer {
 	private Integer _connectionTimeout;
 	private Integer _defaultMaxConnectionsPerRoute;
 	private Boolean _followRedirects;
+	private HttpClient _httpClient;
 	private List<HttpRequestInterceptor> _httpRequestInterceptors;
 	private Integer _maxRetries;
 	private Integer _maxTotalConnections;

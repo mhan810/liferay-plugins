@@ -22,12 +22,18 @@
 
 	<!-- Solr search engine client -->
 
-	<bean class="com.liferay.portal.search.solr.http.HttpSolrServer" id="com.liferay.portal.search.solr.http.HttpSolrServer" init-method="afterPropertiesSet">
+	<bean id="httpClientFactory" class="com.liferay.portal.search.solr.http.BasicAuthPoolingHttpClientFactory" destroy-method="destroyInstance">
+		<property name="defaultMaxConnectionsPerRoute" value="20" />
 		<property name="httpRequestInterceptors">
 			<list>
 				<bean class="com.liferay.portal.search.solr.interceptor.PreemptiveAuthInterceptor" />
 			</list>
 		</property>
+		<property name="maxTotalConnections" value="20" />
+	</bean>
+	<bean id="httpClient" class="org.apache.commons.httpclient.HttpClient" factory-bean="httpClientFactory" factory-method="createInstance" />
+	<bean id="com.liferay.portal.search.solr.http.HttpSolrServer" class="com.liferay.portal.search.solr.http.HttpSolrServer">
+		<property name="httpClient" ref="httpClient" />
 		<property name="url" value="http://localhost:8080/solr" />
 	</bean>
 	<bean class="com.liferay.portal.search.solr.server.LiveServerChecker" destroy-method="shutdown" id="com.liferay.portal.search.solr.server.LiveServerChecker" init-method="afterPropertiesSet">
