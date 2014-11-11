@@ -30,7 +30,34 @@
 			</list>
 		</property>
 		<property name="maxTotalConnections" value="20" />
+
+		<!--
+		<property name="username" value="solr" />
+		<property name="password" value="solr" />
+		-->
+
 	</bean>
+
+	<!--
+	<bean id="httpClientFactory" class="com.liferay.portal.search.solr.http.CertAuthPoolingHttpClientFactory" destroy-method="destroyInstance">
+		<property name="defaultMaxConnectionsPerRoute" value="20" />
+		<property name="httpRequestInterceptors">
+			<list>
+				<bean class="com.liferay.portal.search.solr.interceptor.PreemptiveAuthInterceptor" />
+			</list>
+		</property>
+		<property name="keyStoreLocation" value="/etc/pki/cert/client/keystore.jks" />
+		<property name="keyStorePassword" value="secret" />
+		<property name="keyStoreType" value="JKS" />
+		<property name="maxTotalConnections" value="20" />
+		<property name="trustStoreLocation" value="/etc/pki/cert/ca/truststore.jks" />
+		<property name="trustStorePassword" value="secret" />
+		<property name="trustStoreType" value="JKS" />
+		<property name="verifyServerCertificate" value="true" />
+		<property name="verifyServerHostname" value="true" />
+	</bean>
+	-->
+
 	<bean id="httpClient" class="org.apache.commons.httpclient.HttpClient" factory-bean="httpClientFactory" factory-method="createInstance" />
 	<bean id="com.liferay.portal.search.solr.http.HttpSolrServer" class="com.liferay.portal.search.solr.http.HttpSolrServer">
 		<property name="httpClient" ref="httpClient" />
