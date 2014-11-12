@@ -20,6 +20,8 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.apache.http.client.HttpClient;
 import org.apache.solr.client.solrj.ResponseParser;
 import org.apache.solr.client.solrj.SolrRequest;
@@ -70,7 +72,7 @@ public class HttpSolrServer extends SolrServer {
 	public NamedList<Object> request(SolrRequest solrRequest)
 		throws IOException, SolrServerException {
 
-		if (_stopped) {
+		if (_stopped.get()) {
 			return null;
 		}
 
@@ -81,7 +83,7 @@ public class HttpSolrServer extends SolrServer {
 			SolrRequest solrRequest, ResponseParser responseParser)
 		throws IOException, SolrServerException {
 
-		if (_stopped) {
+		if (_stopped.get()) {
 			return null;
 		}
 
@@ -122,13 +124,17 @@ public class HttpSolrServer extends SolrServer {
 
 	@Override
 	public void shutdown() {
-		_stopped = true;
+		if (_stopped.compareAndSet(false, true)) {
+			doShutdown();
 
-		_server.shutdown();
-
-		if (_log.isInfoEnabled()) {
-			_log.info(toString() + " has been shut down.");
+			if (_log.isInfoEnabled()) {
+				_log.info(toString() + " has been shut down.");
+			}
 		}
+	}
+
+	protected void doShutdown() {
+		_server.shutdown();
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(HttpSolrServer.class);
@@ -138,7 +144,7 @@ public class HttpSolrServer extends SolrServer {
 	private Integer _maxRetries;
 	private ResponseParser _responseParser;
 	private org.apache.solr.client.solrj.impl.HttpSolrServer _server;
-	private boolean _stopped;
+	private AtomicBoolean _stopped = new AtomicBoolean(false);
 	private String _url;
 
 }

@@ -111,8 +111,8 @@ public class BasicAuthSolrServer extends HttpSolrServer {
 	}
 
 	@Override
-	public void shutdown() {
-		super.shutdown();
+	protected void doShutdown() {
+		super.doShutdown();
 
 		_httpClientFactory.destroyInstance();
 	}
