@@ -48,10 +48,10 @@ public class PushNotificationsEntryLocalServiceWrapper
 
 	@Override
 	public com.liferay.pushnotifications.model.PushNotificationsEntry addPushNotificationsEntry(
-		long userId, long parentPushNotificationsEntryId,
-		com.liferay.portal.kernel.json.JSONObject payloadJSONObject) {
+		long userId, com.liferay.portal.kernel.json.JSONObject payloadJSONObject)
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _pushNotificationsEntryLocalService.addPushNotificationsEntry(userId,
-			parentPushNotificationsEntryId, payloadJSONObject);
+			payloadJSONObject);
 	}
 
 	/**
@@ -100,6 +100,14 @@ public class PushNotificationsEntryLocalServiceWrapper
 		long pushNotificationsEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _pushNotificationsEntryLocalService.deletePushNotificationsEntry(pushNotificationsEntryId);
+	}
+
+	@Override
+	public com.liferay.pushnotifications.model.PushNotificationsEntry dislikePushNotificationsEntry(
+		long userId, long pushNotificationsEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _pushNotificationsEntryLocalService.dislikePushNotificationsEntry(userId,
+			pushNotificationsEntryId);
 	}
 
 	@Override
@@ -162,10 +170,10 @@ public class PushNotificationsEntryLocalServiceWrapper
 	}
 
 	/**
-	* Returns the number of rows that match the dynamic query.
+	* Returns the number of rows matching the dynamic query.
 	*
 	* @param dynamicQuery the dynamic query
-	* @return the number of rows that match the dynamic query
+	* @return the number of rows matching the dynamic query
 	*/
 	@Override
 	public long dynamicQueryCount(
@@ -174,11 +182,11 @@ public class PushNotificationsEntryLocalServiceWrapper
 	}
 
 	/**
-	* Returns the number of rows that match the dynamic query.
+	* Returns the number of rows matching the dynamic query.
 	*
 	* @param dynamicQuery the dynamic query
 	* @param projection the projection to apply to the query
-	* @return the number of rows that match the dynamic query
+	* @return the number of rows matching the dynamic query
 	*/
 	@Override
 	public long dynamicQueryCount(
@@ -275,19 +283,27 @@ public class PushNotificationsEntryLocalServiceWrapper
 	}
 
 	@Override
-	public void sendPushNotification(
-		com.liferay.portal.kernel.json.JSONObject jsonObject, int start, int end)
+	public com.liferay.pushnotifications.model.PushNotificationsEntry likePushNotificationsEntry(
+		long userId, long pushNotificationsEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		_pushNotificationsEntryLocalService.sendPushNotification(jsonObject,
-			start, end);
+		return _pushNotificationsEntryLocalService.likePushNotificationsEntry(userId,
+			pushNotificationsEntryId);
 	}
 
 	@Override
-	public void sendPushNotification(long toUserId,
-		com.liferay.portal.kernel.json.JSONObject jsonObject, int start, int end)
+	public void sendPushNotification(long fromUserId,
+		com.liferay.portal.kernel.json.JSONObject payloadJSONObject)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		_pushNotificationsEntryLocalService.sendPushNotification(toUserId,
-			jsonObject, start, end);
+		_pushNotificationsEntryLocalService.sendPushNotification(fromUserId,
+			payloadJSONObject);
+	}
+
+	@Override
+	public void sendPushNotification(long fromUserId, long toUserId,
+		com.liferay.portal.kernel.json.JSONObject payloadJSONObject)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_pushNotificationsEntryLocalService.sendPushNotification(fromUserId,
+			toUserId, payloadJSONObject);
 	}
 
 	/**
@@ -298,6 +314,13 @@ public class PushNotificationsEntryLocalServiceWrapper
 	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_pushNotificationsEntryLocalService.setBeanIdentifier(beanIdentifier);
+	}
+
+	@Override
+	public com.liferay.pushnotifications.model.PushNotificationsEntry updateChildrenPushNotificationsEntriesCount(
+		long parentPushNotificationsEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _pushNotificationsEntryLocalService.updateChildrenPushNotificationsEntriesCount(parentPushNotificationsEntryId);
 	}
 
 	/**

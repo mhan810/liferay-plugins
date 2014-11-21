@@ -82,9 +82,9 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 
 	@Override
 	public FileEntry addFileEntry(
-			long folderId, String sourceFileName, String mimeType, String title,
-			String description, String changeLog, InputStream inputStream,
-			long size, ServiceContext serviceContext)
+			long userId, long folderId, String sourceFileName, String mimeType,
+			String title, String description, String changeLog,
+			InputStream inputStream, long size, ServiceContext serviceContext)
 		throws PortalException {
 
 		String fileName = null;
@@ -145,7 +145,7 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 
 	@Override
 	public void checkInFileEntry(
-			long fileEntryId, boolean major, String changeLog,
+			long userId, long fileEntryId, boolean major, String changeLog,
 			ServiceContext serviceContext)
 		throws PortalException {
 
@@ -158,10 +158,12 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 
 	@Override
 	public void checkInFileEntry(
-			long fileEntryId, String lockUuid, ServiceContext serviceContext)
+			long userId, long fileEntryId, String lockUuid,
+			ServiceContext serviceContext)
 		throws PortalException {
 
-		checkInFileEntry(fileEntryId, false, StringPool.BLANK, serviceContext);
+		checkInFileEntry(
+			userId, fileEntryId, false, StringPool.BLANK, serviceContext);
 	}
 
 	@Override
@@ -194,7 +196,7 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 
 	@Override
 	public FileEntry copyFileEntry(
-			long groupId, long fileEntryId, long destFolderId,
+			long userId, long groupId, long fileEntryId, long destFolderId,
 			ServiceContext serviceContext)
 		throws PortalException {
 
@@ -496,8 +498,7 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List getFoldersAndFileEntries(
+	public List<Object> getFoldersAndFileEntries(
 		long folderId, int start, int end, OrderByComparator<?> obc) {
 
 		try {
@@ -627,10 +628,6 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 
 		return _toExtRepositoryObjectAdapter(
 			ExtRepositoryObjectAdapterType.FOLDER, parentFolder);
-	}
-
-	public String getRootFolderId() throws PortalException {
-		return _extRepository.getRootFolderKey();
 	}
 
 	@Override
@@ -795,7 +792,8 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 
 	@Override
 	public void revertFileEntry(
-			long fileEntryId, String version, ServiceContext serviceContext)
+			long userId, long fileEntryId, String version,
+			ServiceContext serviceContext)
 		throws PortalException {
 
 		String extRepositoryFileEntryKey = getExtRepositoryObjectKey(
@@ -971,8 +969,8 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 
 	@Override
 	public FileEntry updateFileEntry(
-			long fileEntryId, String sourceFileName, String mimeType,
-			String title, String description, String changeLog,
+			long userId, long fileEntryId, String sourceFileName,
+			String mimeType, String title, String description, String changeLog,
 			boolean majorVersion, InputStream inputStream, long size,
 			ServiceContext serviceContext)
 		throws PortalException {

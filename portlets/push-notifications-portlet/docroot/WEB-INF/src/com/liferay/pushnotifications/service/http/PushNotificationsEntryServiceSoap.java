@@ -65,6 +65,36 @@ import java.rmi.RemoteException;
  */
 @ProviderType
 public class PushNotificationsEntryServiceSoap {
+	public static com.liferay.pushnotifications.model.PushNotificationsEntrySoap addPushNotificationsEntry(
+		java.lang.String payload) throws RemoteException {
+		try {
+			com.liferay.pushnotifications.model.PushNotificationsEntry returnValue =
+				PushNotificationsEntryServiceUtil.addPushNotificationsEntry(payload);
+
+			return com.liferay.pushnotifications.model.PushNotificationsEntrySoap.toSoapModel(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static com.liferay.pushnotifications.model.PushNotificationsEntrySoap dislikePushNotificationsEntry(
+		long pushNotificationsEntryId) throws RemoteException {
+		try {
+			com.liferay.pushnotifications.model.PushNotificationsEntry returnValue =
+				PushNotificationsEntryServiceUtil.dislikePushNotificationsEntry(pushNotificationsEntryId);
+
+			return com.liferay.pushnotifications.model.PushNotificationsEntrySoap.toSoapModel(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	public static com.liferay.pushnotifications.model.PushNotificationsEntrySoap[] getPushNotificationsEntries(
 		long parentPushNotificationsEntryId, long lastAccessTime, int start,
 		int end) throws RemoteException {
@@ -82,23 +112,13 @@ public class PushNotificationsEntryServiceSoap {
 		}
 	}
 
-	public static void sendPushNotification(long toUserId,
-		java.lang.String payload) throws RemoteException {
+	public static com.liferay.pushnotifications.model.PushNotificationsEntrySoap likePushNotificationsEntry(
+		long pushNotificationsEntryId) throws RemoteException {
 		try {
-			PushNotificationsEntryServiceUtil.sendPushNotification(toUserId,
-				payload);
-		}
-		catch (Exception e) {
-			_log.error(e, e);
+			com.liferay.pushnotifications.model.PushNotificationsEntry returnValue =
+				PushNotificationsEntryServiceUtil.likePushNotificationsEntry(pushNotificationsEntryId);
 
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	public static void sendPushNotification(java.lang.String payload)
-		throws RemoteException {
-		try {
-			PushNotificationsEntryServiceUtil.sendPushNotification(payload);
+			return com.liferay.pushnotifications.model.PushNotificationsEntrySoap.toSoapModel(returnValue);
 		}
 		catch (Exception e) {
 			_log.error(e, e);

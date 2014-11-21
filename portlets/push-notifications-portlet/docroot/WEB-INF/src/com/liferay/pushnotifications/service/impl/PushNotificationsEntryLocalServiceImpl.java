@@ -17,9 +17,13 @@ package com.liferay.pushnotifications.service.impl;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.portal.kernel.bean.BeanReference;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portlet.ratings.model.RatingsStats;
 import com.liferay.pushnotifications.model.PushNotificationsDevice;
 import com.liferay.pushnotifications.model.PushNotificationsEntry;
 import com.liferay.pushnotifications.sender.PushNotificationsSender;
@@ -39,8 +43,8 @@ public class PushNotificationsEntryLocalServiceImpl
 
 	@Override
 	public PushNotificationsEntry addPushNotificationsEntry(
-		long userId, long parentPushNotificationsEntryId,
-		JSONObject payloadJSONObject) {
+			long userId, JSONObject payloadJSONObject)
+		throws PortalException {
 
 		long pushNotificationsEntryId = counterLocalService.increment();
 
@@ -49,13 +53,33 @@ public class PushNotificationsEntryLocalServiceImpl
 
 		pushNotificationsEntry.setUserId(userId);
 		pushNotificationsEntry.setCreateTime(System.currentTimeMillis());
+
+		long parentPushNotificationsEntryId = payloadJSONObject.getLong(
+			PushNotificationsConstants.KEY_PARENT_PUSH_NOTIFICATIONS_ENTRY_ID,
+			PushNotificationsConstants.
+				VALUE_PARENT_PUSH_NOTIFICATIONS_ENTRY_ID_DEFAULT);
+
 		pushNotificationsEntry.setParentPushNotificationsEntryId(
 			parentPushNotificationsEntryId);
+
 		pushNotificationsEntry.setPayload(payloadJSONObject.toString());
 
 		pushNotificationsEntryPersistence.update(pushNotificationsEntry);
 
+		updateChildrenPushNotificationsEntriesCount(
+			parentPushNotificationsEntryId);
+
+		sendPushNotification(userId, payloadJSONObject);
+
 		return pushNotificationsEntry;
+	}
+
+	@Override
+	public PushNotificationsEntry dislikePushNotificationsEntry(
+			long userId, long pushNotificationsEntryId)
+		throws PortalException {
+
+		return updateRatingsEntry(userId, pushNotificationsEntryId, 0);
 	}
 
 	@Override
@@ -68,29 +92,27 @@ public class PushNotificationsEntryLocalServiceImpl
 	}
 
 	@Override
-	public void sendPushNotification(JSONObject jsonObject, int start, int end)
+	public PushNotificationsEntry likePushNotificationsEntry(
+			long userId, long pushNotificationsEntryId)
 		throws PortalException {
 
-		sendPushNotification(0, jsonObject, start, end);
+		return updateRatingsEntry(userId, pushNotificationsEntryId, 1);
 	}
 
 	@Override
 	public void sendPushNotification(
-			long toUserId, JSONObject jsonObject, int start, int end)
+			long fromUserId, JSONObject payloadJSONObject)
 		throws PortalException {
 
-		long fromUserId = addFromUserDetails(jsonObject);
+		sendPushNotification(fromUserId, 0, payloadJSONObject);
+	}
 
-		JSONObject payloadJSONObject = jsonObject.getJSONObject(
-			PushNotificationsConstants.KEY_PAYLOAD);
+	@Override
+	public void sendPushNotification(
+			long fromUserId, long toUserId, JSONObject payloadJSONObject)
+		throws PortalException {
 
-		long parentPushNotificationsEntryId = jsonObject.getLong(
-			PushNotificationsConstants.KEY_PARENT_PUSH_NOTIFICATIONS_ENTRY_ID,
-			PushNotificationsConstants.
-				VALUE_PARENT_PUSH_NOTIFICATIONS_ENTRY_ID_DEFAULT);
-
-		addPushNotificationsEntry(
-			fromUserId, parentPushNotificationsEntryId, payloadJSONObject);
+		JSONObject jsonObject = createJSONObject(fromUserId, payloadJSONObject);
 
 		for (Map.Entry<String, PushNotificationsSender> entry :
 				_pushNotificationsSenders.entrySet()) {
@@ -99,7 +121,8 @@ public class PushNotificationsEntryLocalServiceImpl
 
 			List<PushNotificationsDevice> pushNotificationsDevices =
 				pushNotificationsDeviceLocalService.getPushNotificationsDevices(
-					toUserId, entry.getKey(), start, end);
+					toUserId, entry.getKey(), QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS);
 
 			for (PushNotificationsDevice pushNotificationsDevice :
 					pushNotificationsDevices) {
@@ -125,14 +148,42 @@ public class PushNotificationsEntryLocalServiceImpl
 		}
 	}
 
-	protected long addFromUserDetails(JSONObject jsonObject)
+	@Override
+	public PushNotificationsEntry updateChildrenPushNotificationsEntriesCount(
+			long parentPushNotificationsEntryId)
 		throws PortalException {
 
-		JSONObject fromUserJSONObject = jsonObject.getJSONObject(
-			PushNotificationsConstants.KEY_FROM_USER);
+		if (parentPushNotificationsEntryId ==
+				PushNotificationsConstants.
+					VALUE_PARENT_PUSH_NOTIFICATIONS_ENTRY_ID_DEFAULT) {
 
-		long fromUserId = fromUserJSONObject.getLong(
-			PushNotificationsConstants.KEY_USER_ID);
+			return null;
+		}
+
+		PushNotificationsEntry pushNotificationsEntry =
+			pushNotificationsEntryPersistence.findByPrimaryKey(
+				parentPushNotificationsEntryId);
+
+		int childrenPushNotificationsEntriesCount =
+			pushNotificationsEntryPersistence.
+				countByParentPushNotificationsEntryId(
+					parentPushNotificationsEntryId);
+
+		pushNotificationsEntry.setChildrenPushNotificationsEntriesCount(
+			childrenPushNotificationsEntriesCount);
+
+		pushNotificationsEntryPersistence.update(pushNotificationsEntry);
+
+		return pushNotificationsEntry;
+	}
+
+	protected JSONObject createJSONObject(
+			long fromUserId, JSONObject payloadJSONObject)
+		throws PortalException {
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		JSONObject fromUserJSONObject = JSONFactoryUtil.createJSONObject();
 
 		User user = userLocalService.getUser(fromUserId);
 
@@ -141,9 +192,42 @@ public class PushNotificationsEntryLocalServiceImpl
 		fromUserJSONObject.put(
 			PushNotificationsConstants.KEY_PORTRAIT_ID, user.getPortraitId());
 		fromUserJSONObject.put(
+			PushNotificationsConstants.KEY_USER_ID, fromUserId);
+		fromUserJSONObject.put(
 			PushNotificationsConstants.KEY_UUID, user.getUuid());
 
-		return fromUserId;
+		jsonObject.put(
+			PushNotificationsConstants.KEY_FROM_USER, fromUserJSONObject);
+
+		jsonObject.put(
+			PushNotificationsConstants.KEY_PAYLOAD, payloadJSONObject);
+
+		return jsonObject;
+	}
+
+	protected PushNotificationsEntry updateRatingsEntry(
+			long userId, long pushNotificationsEntryId, long score)
+		throws PortalException {
+
+		String className = PushNotificationsEntry.class.getName();
+
+		ratingsEntryLocalService.updateEntry(
+			userId, className, pushNotificationsEntryId, score,
+			new ServiceContext());
+
+		PushNotificationsEntry pushNotificationsEntry =
+			pushNotificationsEntryPersistence.findByPrimaryKey(
+				pushNotificationsEntryId);
+
+		RatingsStats ratingsStats = ratingsStatsLocalService.getStats(
+			className, pushNotificationsEntryId);
+
+		pushNotificationsEntry.setRatingsTotalScore(
+			(long)ratingsStats.getTotalScore());
+
+		pushNotificationsEntryPersistence.update(pushNotificationsEntry);
+
+		return pushNotificationsEntry;
 	}
 
 	@BeanReference(name = "pushNotificationsSenders")

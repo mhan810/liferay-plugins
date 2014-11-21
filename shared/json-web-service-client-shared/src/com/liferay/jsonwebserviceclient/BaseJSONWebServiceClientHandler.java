@@ -39,7 +39,6 @@ public abstract class BaseJSONWebServiceClientHandler {
 	}
 
 	protected String doGet(String url, String... parametersArray) {
-
 		Map<String, String> parameters = new HashMap<String, String>();
 
 		for (int i = 0; i < parametersArray.length; i += 2) {
@@ -85,7 +84,7 @@ public abstract class BaseJSONWebServiceClientHandler {
 
 		String json = doGet(url, parametersArray);
 
-		if ((json == null) || json.equals("")) {
+		if ((json == null) || json.equals("") || json.equals("{}")) {
 			return null;
 		}
 
@@ -102,25 +101,23 @@ public abstract class BaseJSONWebServiceClientHandler {
 		}
 	}
 
-	protected void doPost(String url, String... parametersArray)
-		throws JSONWebServiceInvocationException {
-
+	protected String doPost(String url, String... parametersArray) {
 		Map<String, String> parameters = new HashMap<String, String>();
 
 		for (int i = 0; i < parametersArray.length; i += 2) {
 			parameters.put(parametersArray[i], parametersArray[i + 1]);
 		}
 
-		getJSONWebServiceClient().doPost(url, parameters);
+		return getJSONWebServiceClient().doPost(url, parameters);
 	}
 
-	protected void doPostAsJSON(String url, Object object)
+	protected String doPostAsJSON(String url, Object object)
 		throws JSONWebServiceInvocationException {
 
 		try {
 			String json = _objectMapper.writeValueAsString(object);
 
-			getJSONWebServiceClient().doPostAsJSON(url, json);
+			return getJSONWebServiceClient().doPostAsJSON(url, json);
 		}
 		catch (IOException ie) {
 			throw new JSONWebServiceInvocationException(ie);
