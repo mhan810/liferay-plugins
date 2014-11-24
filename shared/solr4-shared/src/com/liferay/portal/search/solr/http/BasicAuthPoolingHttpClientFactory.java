@@ -58,13 +58,12 @@ public class BasicAuthPoolingHttpClientFactory implements HttpClientFactory {
 			credentialsProvider.setCredentials(
 				_authScope,
 				new UsernamePasswordCredentials(_username, _password));
+		}
 
-			for (HttpRequestInterceptor httpRequestInterceptor :
-					_httpRequestInterceptors) {
+		for (HttpRequestInterceptor httpRequestInterceptor :
+				_httpRequestInterceptors) {
 
-				defaultHttpClient.addRequestInterceptor(
-					httpRequestInterceptor, 0);
-			}
+			defaultHttpClient.addRequestInterceptor(httpRequestInterceptor, 0);
 		}
 
 		return defaultHttpClient;
