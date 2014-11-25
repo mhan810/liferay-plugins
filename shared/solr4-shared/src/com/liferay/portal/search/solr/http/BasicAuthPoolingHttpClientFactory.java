@@ -14,6 +14,8 @@
 
 package com.liferay.portal.search.solr.http;
 
+import com.liferay.portal.kernel.util.Validator;
+
 import java.util.List;
 
 import org.apache.http.HttpRequestInterceptor;
@@ -43,7 +45,7 @@ public class BasicAuthPoolingHttpClientFactory implements HttpClientFactory {
 		DefaultHttpClient defaultHttpClient =
 			_basePoolingHttpClientFactory.createInstance();
 
-		if ((_username != null) && (_password != null)) {
+		if (!Validator.isBlank(_username)) {
 			if (_authScope == null) {
 				_authScope = AuthScope.ANY;
 			}
