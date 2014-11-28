@@ -14,6 +14,7 @@
 
 package com.liferay.portal.search.solr.http;
 
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
@@ -52,6 +53,10 @@ public class BasicAuthPoolingHttpClientFactory implements HttpClientFactory {
 
 			CredentialsProvider credentialsProvider =
 				defaultHttpClient.getCredentialsProvider();
+
+			if (Validator.isNull(_password)) {
+				_password = StringPool.BLANK;
+			}
 
 			credentialsProvider.setCredentials(
 				_authScope,
