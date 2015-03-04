@@ -1910,6 +1910,7 @@ public class KaleoNotificationRecipientPersistenceImpl
 		kaleoNotificationRecipientImpl.setRecipientScriptLanguage(kaleoNotificationRecipient.getRecipientScriptLanguage());
 		kaleoNotificationRecipientImpl.setRecipientScriptRequiredContexts(kaleoNotificationRecipient.getRecipientScriptRequiredContexts());
 		kaleoNotificationRecipientImpl.setAddress(kaleoNotificationRecipient.getAddress());
+		kaleoNotificationRecipientImpl.setEmailRecipientType(kaleoNotificationRecipient.getEmailRecipientType());
 
 		return kaleoNotificationRecipientImpl;
 	}

@@ -66,7 +66,7 @@ public class KaleoNotificationRecipientCacheModel implements CacheModel<KaleoNot
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(33);
+		StringBundler sb = new StringBundler(35);
 
 		sb.append("{kaleoNotificationRecipientId=");
 		sb.append(kaleoNotificationRecipientId);
@@ -100,6 +100,8 @@ public class KaleoNotificationRecipientCacheModel implements CacheModel<KaleoNot
 		sb.append(recipientScriptRequiredContexts);
 		sb.append(", address=");
 		sb.append(address);
+		sb.append(", emailRecipientType=");
+		sb.append(emailRecipientType);
 		sb.append("}");
 
 		return sb.toString();
@@ -177,6 +179,8 @@ public class KaleoNotificationRecipientCacheModel implements CacheModel<KaleoNot
 			kaleoNotificationRecipientImpl.setAddress(address);
 		}
 
+		kaleoNotificationRecipientImpl.setEmailRecipientType(emailRecipientType);
+
 		kaleoNotificationRecipientImpl.resetOriginalValues();
 
 		return kaleoNotificationRecipientImpl;
@@ -200,6 +204,7 @@ public class KaleoNotificationRecipientCacheModel implements CacheModel<KaleoNot
 		recipientScriptLanguage = objectInput.readUTF();
 		recipientScriptRequiredContexts = objectInput.readUTF();
 		address = objectInput.readUTF();
+		emailRecipientType = objectInput.readInt();
 	}
 
 	@Override
@@ -259,6 +264,8 @@ public class KaleoNotificationRecipientCacheModel implements CacheModel<KaleoNot
 		else {
 			objectOutput.writeUTF(address);
 		}
+
+		objectOutput.writeInt(emailRecipientType);
 	}
 
 	public long kaleoNotificationRecipientId;
@@ -277,4 +284,5 @@ public class KaleoNotificationRecipientCacheModel implements CacheModel<KaleoNot
 	public String recipientScriptLanguage;
 	public String recipientScriptRequiredContexts;
 	public String address;
+	public int emailRecipientType;
 }

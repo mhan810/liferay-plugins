@@ -324,6 +324,20 @@ public interface KaleoNotificationRecipientModel extends BaseModel<KaleoNotifica
 	 */
 	public void setAddress(String address);
 
+	/**
+	 * Returns the email recipient type of this kaleo notification recipient.
+	 *
+	 * @return the email recipient type of this kaleo notification recipient
+	 */
+	public int getEmailRecipientType();
+
+	/**
+	 * Sets the email recipient type of this kaleo notification recipient.
+	 *
+	 * @param emailRecipientType the email recipient type of this kaleo notification recipient
+	 */
+	public void setEmailRecipientType(int emailRecipientType);
+
 	@Override
 	public boolean isNew();
 

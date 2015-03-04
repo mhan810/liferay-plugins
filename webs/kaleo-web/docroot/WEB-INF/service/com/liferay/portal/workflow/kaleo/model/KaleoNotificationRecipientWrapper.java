@@ -73,6 +73,7 @@ public class KaleoNotificationRecipientWrapper
 		attributes.put("recipientScriptRequiredContexts",
 			getRecipientScriptRequiredContexts());
 		attributes.put("address", getAddress());
+		attributes.put("emailRecipientType", getEmailRecipientType());
 
 		return attributes;
 	}
@@ -177,6 +178,13 @@ public class KaleoNotificationRecipientWrapper
 		if (address != null) {
 			setAddress(address);
 		}
+
+		Integer emailRecipientType = (Integer)attributes.get(
+				"emailRecipientType");
+
+		if (emailRecipientType != null) {
+			setEmailRecipientType(emailRecipientType);
+		}
 	}
 
 	@Override
@@ -218,6 +226,16 @@ public class KaleoNotificationRecipientWrapper
 	@Override
 	public java.util.Date getCreateDate() {
 		return _kaleoNotificationRecipient.getCreateDate();
+	}
+
+	/**
+	* Returns the email recipient type of this kaleo notification recipient.
+	*
+	* @return the email recipient type of this kaleo notification recipient
+	*/
+	@Override
+	public int getEmailRecipientType() {
+		return _kaleoNotificationRecipient.getEmailRecipientType();
 	}
 
 	@Override
@@ -438,6 +456,16 @@ public class KaleoNotificationRecipientWrapper
 	@Override
 	public void setCreateDate(java.util.Date createDate) {
 		_kaleoNotificationRecipient.setCreateDate(createDate);
+	}
+
+	/**
+	* Sets the email recipient type of this kaleo notification recipient.
+	*
+	* @param emailRecipientType the email recipient type of this kaleo notification recipient
+	*/
+	@Override
+	public void setEmailRecipientType(int emailRecipientType) {
+		_kaleoNotificationRecipient.setEmailRecipientType(emailRecipientType);
 	}
 
 	@Override

@@ -175,7 +175,8 @@ create table KaleoNotificationRecipient (
 	recipientScript TEXT null,
 	recipientScriptLanguage VARCHAR(75) null,
 	recipientScriptRequiredContexts STRING null,
-	address VARCHAR(255) null
+	address VARCHAR(255) null,
+	emailRecipientType INTEGER
 );
 
 create table KaleoTask (

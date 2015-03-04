@@ -215,6 +215,7 @@
 		<property name="recipientScriptLanguage" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="recipientScriptRequiredContexts" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="address" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="emailRecipientType" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
 	</class>
 	<class name="com.liferay.portal.workflow.kaleo.model.impl.KaleoTaskImpl" table="KaleoTask">
 		<cache usage="read-write" />
