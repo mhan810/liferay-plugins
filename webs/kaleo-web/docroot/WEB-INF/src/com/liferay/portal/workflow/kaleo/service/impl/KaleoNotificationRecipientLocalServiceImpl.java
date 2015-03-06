@@ -23,6 +23,8 @@ import com.liferay.portal.workflow.kaleo.definition.AddressRecipient;
 import com.liferay.portal.workflow.kaleo.definition.Recipient;
 import com.liferay.portal.workflow.kaleo.definition.RecipientType;
 import com.liferay.portal.workflow.kaleo.definition.RoleRecipient;
+import com.liferay.portal.workflow.kaleo.definition.ScriptLanguage;
+import com.liferay.portal.workflow.kaleo.definition.ScriptRecipient;
 import com.liferay.portal.workflow.kaleo.definition.UserRecipient;
 import com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient;
 import com.liferay.portal.workflow.kaleo.service.base.KaleoNotificationRecipientLocalServiceBaseImpl;
@@ -122,6 +124,23 @@ public class KaleoNotificationRecipientLocalServiceImpl
 
 			kaleoNotificationRecipient.setRecipientClassPK(role.getClassPK());
 			kaleoNotificationRecipient.setRecipientRoleType(roleType);
+		}
+		else if (recipientType.equals(RecipientType.SCRIPT)) {
+			kaleoNotificationRecipient.setRecipientClassName(
+				RecipientType.SCRIPT.name());
+
+			ScriptRecipient scriptRecipient = (ScriptRecipient)recipient;
+
+			kaleoNotificationRecipient.setRecipientScript(
+				scriptRecipient.getScript());
+
+			ScriptLanguage scriptLanguage = scriptRecipient.getScriptLanguage();
+
+			kaleoNotificationRecipient.setRecipientScriptLanguage(
+				scriptLanguage.getValue());
+
+			kaleoNotificationRecipient.setRecipientScriptRequiredContexts(
+				scriptRecipient.getScriptRequiredContexts());
 		}
 		else if (recipientType.equals(RecipientType.USER)) {
 			kaleoNotificationRecipient.setRecipientClassName(

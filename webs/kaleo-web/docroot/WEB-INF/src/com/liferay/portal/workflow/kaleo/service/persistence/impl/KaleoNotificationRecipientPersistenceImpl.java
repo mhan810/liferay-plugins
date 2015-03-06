@@ -59,7 +59,7 @@ import java.util.Set;
  *
  * @author Brian Wing Shun Chan
  * @see KaleoNotificationRecipientPersistence
- * @see KaleoNotificationRecipientUtil
+ * @see com.liferay.portal.workflow.kaleo.service.persistence.KaleoNotificationRecipientUtil
  * @generated
  */
 @ProviderType
@@ -1906,6 +1906,9 @@ public class KaleoNotificationRecipientPersistenceImpl
 		kaleoNotificationRecipientImpl.setRecipientClassName(kaleoNotificationRecipient.getRecipientClassName());
 		kaleoNotificationRecipientImpl.setRecipientClassPK(kaleoNotificationRecipient.getRecipientClassPK());
 		kaleoNotificationRecipientImpl.setRecipientRoleType(kaleoNotificationRecipient.getRecipientRoleType());
+		kaleoNotificationRecipientImpl.setRecipientScript(kaleoNotificationRecipient.getRecipientScript());
+		kaleoNotificationRecipientImpl.setRecipientScriptLanguage(kaleoNotificationRecipient.getRecipientScriptLanguage());
+		kaleoNotificationRecipientImpl.setRecipientScriptRequiredContexts(kaleoNotificationRecipient.getRecipientScriptRequiredContexts());
 		kaleoNotificationRecipientImpl.setAddress(kaleoNotificationRecipient.getAddress());
 
 		return kaleoNotificationRecipientImpl;

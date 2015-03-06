@@ -93,6 +93,10 @@ public class KaleoNotificationRecipientClp extends BaseModelImpl<KaleoNotificati
 		attributes.put("recipientClassName", getRecipientClassName());
 		attributes.put("recipientClassPK", getRecipientClassPK());
 		attributes.put("recipientRoleType", getRecipientRoleType());
+		attributes.put("recipientScript", getRecipientScript());
+		attributes.put("recipientScriptLanguage", getRecipientScriptLanguage());
+		attributes.put("recipientScriptRequiredContexts",
+			getRecipientScriptRequiredContexts());
 		attributes.put("address", getAddress());
 
 		attributes.put("entityCacheEnabled", isEntityCacheEnabled());
@@ -174,6 +178,26 @@ public class KaleoNotificationRecipientClp extends BaseModelImpl<KaleoNotificati
 
 		if (recipientRoleType != null) {
 			setRecipientRoleType(recipientRoleType);
+		}
+
+		String recipientScript = (String)attributes.get("recipientScript");
+
+		if (recipientScript != null) {
+			setRecipientScript(recipientScript);
+		}
+
+		String recipientScriptLanguage = (String)attributes.get(
+				"recipientScriptLanguage");
+
+		if (recipientScriptLanguage != null) {
+			setRecipientScriptLanguage(recipientScriptLanguage);
+		}
+
+		String recipientScriptRequiredContexts = (String)attributes.get(
+				"recipientScriptRequiredContexts");
+
+		if (recipientScriptRequiredContexts != null) {
+			setRecipientScriptRequiredContexts(recipientScriptRequiredContexts);
 		}
 
 		String address = (String)attributes.get("address");
@@ -493,6 +517,82 @@ public class KaleoNotificationRecipientClp extends BaseModelImpl<KaleoNotificati
 	}
 
 	@Override
+	public String getRecipientScript() {
+		return _recipientScript;
+	}
+
+	@Override
+	public void setRecipientScript(String recipientScript) {
+		_recipientScript = recipientScript;
+
+		if (_kaleoNotificationRecipientRemoteModel != null) {
+			try {
+				Class<?> clazz = _kaleoNotificationRecipientRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setRecipientScript",
+						String.class);
+
+				method.invoke(_kaleoNotificationRecipientRemoteModel,
+					recipientScript);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
+	public String getRecipientScriptLanguage() {
+		return _recipientScriptLanguage;
+	}
+
+	@Override
+	public void setRecipientScriptLanguage(String recipientScriptLanguage) {
+		_recipientScriptLanguage = recipientScriptLanguage;
+
+		if (_kaleoNotificationRecipientRemoteModel != null) {
+			try {
+				Class<?> clazz = _kaleoNotificationRecipientRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setRecipientScriptLanguage",
+						String.class);
+
+				method.invoke(_kaleoNotificationRecipientRemoteModel,
+					recipientScriptLanguage);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
+	public String getRecipientScriptRequiredContexts() {
+		return _recipientScriptRequiredContexts;
+	}
+
+	@Override
+	public void setRecipientScriptRequiredContexts(
+		String recipientScriptRequiredContexts) {
+		_recipientScriptRequiredContexts = recipientScriptRequiredContexts;
+
+		if (_kaleoNotificationRecipientRemoteModel != null) {
+			try {
+				Class<?> clazz = _kaleoNotificationRecipientRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setRecipientScriptRequiredContexts",
+						String.class);
+
+				method.invoke(_kaleoNotificationRecipientRemoteModel,
+					recipientScriptRequiredContexts);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
 	public String getAddress() {
 		return _address;
 	}
@@ -598,6 +698,9 @@ public class KaleoNotificationRecipientClp extends BaseModelImpl<KaleoNotificati
 		clone.setRecipientClassName(getRecipientClassName());
 		clone.setRecipientClassPK(getRecipientClassPK());
 		clone.setRecipientRoleType(getRecipientRoleType());
+		clone.setRecipientScript(getRecipientScript());
+		clone.setRecipientScriptLanguage(getRecipientScriptLanguage());
+		clone.setRecipientScriptRequiredContexts(getRecipientScriptRequiredContexts());
 		clone.setAddress(getAddress());
 
 		return clone;
@@ -667,7 +770,7 @@ public class KaleoNotificationRecipientClp extends BaseModelImpl<KaleoNotificati
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(33);
 
 		sb.append("{kaleoNotificationRecipientId=");
 		sb.append(getKaleoNotificationRecipientId());
@@ -693,6 +796,12 @@ public class KaleoNotificationRecipientClp extends BaseModelImpl<KaleoNotificati
 		sb.append(getRecipientClassPK());
 		sb.append(", recipientRoleType=");
 		sb.append(getRecipientRoleType());
+		sb.append(", recipientScript=");
+		sb.append(getRecipientScript());
+		sb.append(", recipientScriptLanguage=");
+		sb.append(getRecipientScriptLanguage());
+		sb.append(", recipientScriptRequiredContexts=");
+		sb.append(getRecipientScriptRequiredContexts());
 		sb.append(", address=");
 		sb.append(getAddress());
 		sb.append("}");
@@ -702,7 +811,7 @@ public class KaleoNotificationRecipientClp extends BaseModelImpl<KaleoNotificati
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(43);
+		StringBundler sb = new StringBundler(52);
 
 		sb.append("<model><model-name>");
 		sb.append(
@@ -758,6 +867,18 @@ public class KaleoNotificationRecipientClp extends BaseModelImpl<KaleoNotificati
 		sb.append(getRecipientRoleType());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>recipientScript</column-name><column-value><![CDATA[");
+		sb.append(getRecipientScript());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>recipientScriptLanguage</column-name><column-value><![CDATA[");
+		sb.append(getRecipientScriptLanguage());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>recipientScriptRequiredContexts</column-name><column-value><![CDATA[");
+		sb.append(getRecipientScriptRequiredContexts());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>address</column-name><column-value><![CDATA[");
 		sb.append(getAddress());
 		sb.append("]]></column-value></column>");
@@ -779,6 +900,9 @@ public class KaleoNotificationRecipientClp extends BaseModelImpl<KaleoNotificati
 	private String _recipientClassName;
 	private long _recipientClassPK;
 	private int _recipientRoleType;
+	private String _recipientScript;
+	private String _recipientScriptLanguage;
+	private String _recipientScriptRequiredContexts;
 	private String _address;
 	private BaseModel<?> _kaleoNotificationRecipientRemoteModel;
 	private Class<?> _clpSerializerClass = com.liferay.portal.workflow.kaleo.service.ClpSerializer.class;
