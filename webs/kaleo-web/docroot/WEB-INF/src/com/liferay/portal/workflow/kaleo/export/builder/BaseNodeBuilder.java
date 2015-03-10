@@ -40,6 +40,7 @@ import com.liferay.portal.workflow.kaleo.definition.ResourceActionAssignment;
 import com.liferay.portal.workflow.kaleo.definition.RoleAssignment;
 import com.liferay.portal.workflow.kaleo.definition.RoleRecipient;
 import com.liferay.portal.workflow.kaleo.definition.ScriptAssignment;
+import com.liferay.portal.workflow.kaleo.definition.ScriptRecipient;
 import com.liferay.portal.workflow.kaleo.definition.Timer;
 import com.liferay.portal.workflow.kaleo.definition.UserAssignment;
 import com.liferay.portal.workflow.kaleo.definition.UserRecipient;
@@ -119,6 +120,13 @@ public abstract class BaseNodeBuilder
 				recipient = new RoleRecipient(
 					role.getName(), role.getTypeLabel());
 			}
+			else if (recipientClassName.equals(RecipientType.SCRIPT.name())) {
+				recipient = new ScriptRecipient(
+					kaleoNotificationRecipient.getRecipientScript(),
+					kaleoNotificationRecipient.getRecipientScriptLanguage(),
+					kaleoNotificationRecipient.
+						getRecipientScriptRequiredContexts());
+			}
 			else if (recipientClassName.equals(User.class.getName())) {
 				if (recipientClassPK > 0) {
 					User user = _userLocalService.getUser(recipientClassPK);
@@ -131,6 +139,9 @@ public abstract class BaseNodeBuilder
 					recipient = new UserRecipient();
 				}
 			}
+
+			recipient.setEmailRecipientType(
+				kaleoNotificationRecipient.getEmailRecipientType());
 
 			notification.addRecipients(recipient);
 		}

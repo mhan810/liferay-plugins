@@ -30,12 +30,16 @@ import com.liferay.portal.workflow.kaleo.definition.ResourceActionAssignment;
 import com.liferay.portal.workflow.kaleo.definition.RoleAssignment;
 import com.liferay.portal.workflow.kaleo.definition.RoleRecipient;
 import com.liferay.portal.workflow.kaleo.definition.ScriptAssignment;
+import com.liferay.portal.workflow.kaleo.definition.ScriptLanguage;
+import com.liferay.portal.workflow.kaleo.definition.ScriptRecipient;
 import com.liferay.portal.workflow.kaleo.definition.Timer;
 import com.liferay.portal.workflow.kaleo.definition.Transition;
 import com.liferay.portal.workflow.kaleo.definition.UserAssignment;
 import com.liferay.portal.workflow.kaleo.definition.UserRecipient;
+import com.liferay.portal.workflow.kaleo.runtime.notification.NotificationConstants;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -248,9 +252,18 @@ public abstract class BaseNodeExporter implements NodeExporter {
 				notificationType.getValue());
 		}
 
-		Set<Recipient> recipients = notification.getRecipients();
+		Map<Integer, Set<Recipient>> recipientsMap =
+			notification.getRecipientsMap();
 
-		exportRecipientsElement(notificationElement, recipients);
+		for (Map.Entry<Integer, Set<Recipient>> recipientsEntry :
+				recipientsMap.entrySet()) {
+
+			Set<Recipient> recipients = recipientsEntry.getValue();
+			int emailRecipientType = recipientsEntry.getKey();
+
+			exportRecipientsElement(
+				notificationElement, recipients, emailRecipientType);
+		}
 
 		addTextElement(
 			notificationElement, "execution-type",
@@ -258,14 +271,29 @@ public abstract class BaseNodeExporter implements NodeExporter {
 	}
 
 	protected void exportRecipientsElement(
-		Element notificationElement, Set<Recipient> recipients) {
+		Element notificationElement, Set<Recipient> recipients,
+		int emailRecipientType) {
 
 		if (recipients.isEmpty()) {
 			return;
 		}
 
-		Element recipientsElement = notificationElement.addElement(
-			"recipients");
+		Element recipientsElement = null;
+
+		if (emailRecipientType ==
+				NotificationConstants.EMAIL_RECIPIENT_TYPE.BCC.type) {
+
+			recipientsElement = notificationElement.addElement(
+				"bcc-recipients");
+		}
+		else if (emailRecipientType ==
+					NotificationConstants.EMAIL_RECIPIENT_TYPE.CC.type) {
+
+			recipientsElement = notificationElement.addElement("cc-recipients");
+		}
+		else {
+			recipientsElement = notificationElement.addElement("recipients");
+		}
 
 		Element rolesElement = null;
 
@@ -295,6 +323,20 @@ public abstract class BaseNodeExporter implements NodeExporter {
 					roleElement, roleRecipient.getRoleId(),
 					roleRecipient.getRoleType(), roleRecipient.getRoleName(),
 					roleRecipient.isAutoCreate());
+			}
+			else if (recipientType.equals(RecipientType.SCRIPT)) {
+				Element scriptedRecipientElement = recipientsElement.addElement(
+					"scripted-recipient");
+
+				ScriptRecipient scriptRecipient = (ScriptRecipient)recipient;
+
+				ScriptLanguage scriptLanguage =
+					scriptRecipient.getScriptLanguage();
+
+				populateScriptingElement(
+					scriptedRecipientElement, scriptRecipient.getScript(),
+					scriptLanguage.getValue(),
+					scriptRecipient.getScriptRequiredContexts());
 			}
 			else if (recipientType.equals(RecipientType.USER)) {
 				Element userElement = recipientsElement.addElement("user");

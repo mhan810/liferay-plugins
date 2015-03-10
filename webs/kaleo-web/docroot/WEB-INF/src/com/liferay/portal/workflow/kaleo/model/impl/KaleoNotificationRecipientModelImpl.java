@@ -76,9 +76,13 @@ public class KaleoNotificationRecipientModelImpl extends BaseModelImpl<KaleoNoti
 			{ "recipientClassName", Types.VARCHAR },
 			{ "recipientClassPK", Types.BIGINT },
 			{ "recipientRoleType", Types.INTEGER },
-			{ "address", Types.VARCHAR }
+			{ "recipientScript", Types.CLOB },
+			{ "recipientScriptLanguage", Types.VARCHAR },
+			{ "recipientScriptRequiredContexts", Types.VARCHAR },
+			{ "address", Types.VARCHAR },
+			{ "emailRecipientType", Types.INTEGER }
 		};
-	public static final String TABLE_SQL_CREATE = "create table KaleoNotificationRecipient (kaleoNotificationRecipientId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(200) null,createDate DATE null,modifiedDate DATE null,kaleoDefinitionId LONG,kaleoNotificationId LONG,recipientClassName VARCHAR(200) null,recipientClassPK LONG,recipientRoleType INTEGER,address VARCHAR(255) null)";
+	public static final String TABLE_SQL_CREATE = "create table KaleoNotificationRecipient (kaleoNotificationRecipientId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(200) null,createDate DATE null,modifiedDate DATE null,kaleoDefinitionId LONG,kaleoNotificationId LONG,recipientClassName VARCHAR(200) null,recipientClassPK LONG,recipientRoleType INTEGER,recipientScript TEXT null,recipientScriptLanguage VARCHAR(75) null,recipientScriptRequiredContexts STRING null,address VARCHAR(255) null,emailRecipientType INTEGER)";
 	public static final String TABLE_SQL_DROP = "drop table KaleoNotificationRecipient";
 	public static final String ORDER_BY_JPQL = " ORDER BY kaleoNotificationRecipient.kaleoNotificationRecipientId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY KaleoNotificationRecipient.kaleoNotificationRecipientId ASC";
@@ -151,7 +155,12 @@ public class KaleoNotificationRecipientModelImpl extends BaseModelImpl<KaleoNoti
 		attributes.put("recipientClassName", getRecipientClassName());
 		attributes.put("recipientClassPK", getRecipientClassPK());
 		attributes.put("recipientRoleType", getRecipientRoleType());
+		attributes.put("recipientScript", getRecipientScript());
+		attributes.put("recipientScriptLanguage", getRecipientScriptLanguage());
+		attributes.put("recipientScriptRequiredContexts",
+			getRecipientScriptRequiredContexts());
 		attributes.put("address", getAddress());
+		attributes.put("emailRecipientType", getEmailRecipientType());
 
 		attributes.put("entityCacheEnabled", isEntityCacheEnabled());
 		attributes.put("finderCacheEnabled", isFinderCacheEnabled());
@@ -234,10 +243,37 @@ public class KaleoNotificationRecipientModelImpl extends BaseModelImpl<KaleoNoti
 			setRecipientRoleType(recipientRoleType);
 		}
 
+		String recipientScript = (String)attributes.get("recipientScript");
+
+		if (recipientScript != null) {
+			setRecipientScript(recipientScript);
+		}
+
+		String recipientScriptLanguage = (String)attributes.get(
+				"recipientScriptLanguage");
+
+		if (recipientScriptLanguage != null) {
+			setRecipientScriptLanguage(recipientScriptLanguage);
+		}
+
+		String recipientScriptRequiredContexts = (String)attributes.get(
+				"recipientScriptRequiredContexts");
+
+		if (recipientScriptRequiredContexts != null) {
+			setRecipientScriptRequiredContexts(recipientScriptRequiredContexts);
+		}
+
 		String address = (String)attributes.get("address");
 
 		if (address != null) {
 			setAddress(address);
+		}
+
+		Integer emailRecipientType = (Integer)attributes.get(
+				"emailRecipientType");
+
+		if (emailRecipientType != null) {
+			setEmailRecipientType(emailRecipientType);
 		}
 	}
 
@@ -427,6 +463,52 @@ public class KaleoNotificationRecipientModelImpl extends BaseModelImpl<KaleoNoti
 	}
 
 	@Override
+	public String getRecipientScript() {
+		if (_recipientScript == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _recipientScript;
+		}
+	}
+
+	@Override
+	public void setRecipientScript(String recipientScript) {
+		_recipientScript = recipientScript;
+	}
+
+	@Override
+	public String getRecipientScriptLanguage() {
+		if (_recipientScriptLanguage == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _recipientScriptLanguage;
+		}
+	}
+
+	@Override
+	public void setRecipientScriptLanguage(String recipientScriptLanguage) {
+		_recipientScriptLanguage = recipientScriptLanguage;
+	}
+
+	@Override
+	public String getRecipientScriptRequiredContexts() {
+		if (_recipientScriptRequiredContexts == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _recipientScriptRequiredContexts;
+		}
+	}
+
+	@Override
+	public void setRecipientScriptRequiredContexts(
+		String recipientScriptRequiredContexts) {
+		_recipientScriptRequiredContexts = recipientScriptRequiredContexts;
+	}
+
+	@Override
 	public String getAddress() {
 		if (_address == null) {
 			return StringPool.BLANK;
@@ -439,6 +521,16 @@ public class KaleoNotificationRecipientModelImpl extends BaseModelImpl<KaleoNoti
 	@Override
 	public void setAddress(String address) {
 		_address = address;
+	}
+
+	@Override
+	public int getEmailRecipientType() {
+		return _emailRecipientType;
+	}
+
+	@Override
+	public void setEmailRecipientType(int emailRecipientType) {
+		_emailRecipientType = emailRecipientType;
 	}
 
 	public long getColumnBitmask() {
@@ -484,7 +576,11 @@ public class KaleoNotificationRecipientModelImpl extends BaseModelImpl<KaleoNoti
 		kaleoNotificationRecipientImpl.setRecipientClassName(getRecipientClassName());
 		kaleoNotificationRecipientImpl.setRecipientClassPK(getRecipientClassPK());
 		kaleoNotificationRecipientImpl.setRecipientRoleType(getRecipientRoleType());
+		kaleoNotificationRecipientImpl.setRecipientScript(getRecipientScript());
+		kaleoNotificationRecipientImpl.setRecipientScriptLanguage(getRecipientScriptLanguage());
+		kaleoNotificationRecipientImpl.setRecipientScriptRequiredContexts(getRecipientScriptRequiredContexts());
 		kaleoNotificationRecipientImpl.setAddress(getAddress());
+		kaleoNotificationRecipientImpl.setEmailRecipientType(getEmailRecipientType());
 
 		kaleoNotificationRecipientImpl.resetOriginalValues();
 
@@ -623,6 +719,32 @@ public class KaleoNotificationRecipientModelImpl extends BaseModelImpl<KaleoNoti
 
 		kaleoNotificationRecipientCacheModel.recipientRoleType = getRecipientRoleType();
 
+		kaleoNotificationRecipientCacheModel.recipientScript = getRecipientScript();
+
+		String recipientScript = kaleoNotificationRecipientCacheModel.recipientScript;
+
+		if ((recipientScript != null) && (recipientScript.length() == 0)) {
+			kaleoNotificationRecipientCacheModel.recipientScript = null;
+		}
+
+		kaleoNotificationRecipientCacheModel.recipientScriptLanguage = getRecipientScriptLanguage();
+
+		String recipientScriptLanguage = kaleoNotificationRecipientCacheModel.recipientScriptLanguage;
+
+		if ((recipientScriptLanguage != null) &&
+				(recipientScriptLanguage.length() == 0)) {
+			kaleoNotificationRecipientCacheModel.recipientScriptLanguage = null;
+		}
+
+		kaleoNotificationRecipientCacheModel.recipientScriptRequiredContexts = getRecipientScriptRequiredContexts();
+
+		String recipientScriptRequiredContexts = kaleoNotificationRecipientCacheModel.recipientScriptRequiredContexts;
+
+		if ((recipientScriptRequiredContexts != null) &&
+				(recipientScriptRequiredContexts.length() == 0)) {
+			kaleoNotificationRecipientCacheModel.recipientScriptRequiredContexts = null;
+		}
+
 		kaleoNotificationRecipientCacheModel.address = getAddress();
 
 		String address = kaleoNotificationRecipientCacheModel.address;
@@ -631,12 +753,14 @@ public class KaleoNotificationRecipientModelImpl extends BaseModelImpl<KaleoNoti
 			kaleoNotificationRecipientCacheModel.address = null;
 		}
 
+		kaleoNotificationRecipientCacheModel.emailRecipientType = getEmailRecipientType();
+
 		return kaleoNotificationRecipientCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(35);
 
 		sb.append("{kaleoNotificationRecipientId=");
 		sb.append(getKaleoNotificationRecipientId());
@@ -662,8 +786,16 @@ public class KaleoNotificationRecipientModelImpl extends BaseModelImpl<KaleoNoti
 		sb.append(getRecipientClassPK());
 		sb.append(", recipientRoleType=");
 		sb.append(getRecipientRoleType());
+		sb.append(", recipientScript=");
+		sb.append(getRecipientScript());
+		sb.append(", recipientScriptLanguage=");
+		sb.append(getRecipientScriptLanguage());
+		sb.append(", recipientScriptRequiredContexts=");
+		sb.append(getRecipientScriptRequiredContexts());
 		sb.append(", address=");
 		sb.append(getAddress());
+		sb.append(", emailRecipientType=");
+		sb.append(getEmailRecipientType());
 		sb.append("}");
 
 		return sb.toString();
@@ -671,7 +803,7 @@ public class KaleoNotificationRecipientModelImpl extends BaseModelImpl<KaleoNoti
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(43);
+		StringBundler sb = new StringBundler(55);
 
 		sb.append("<model><model-name>");
 		sb.append(
@@ -727,8 +859,24 @@ public class KaleoNotificationRecipientModelImpl extends BaseModelImpl<KaleoNoti
 		sb.append(getRecipientRoleType());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>recipientScript</column-name><column-value><![CDATA[");
+		sb.append(getRecipientScript());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>recipientScriptLanguage</column-name><column-value><![CDATA[");
+		sb.append(getRecipientScriptLanguage());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>recipientScriptRequiredContexts</column-name><column-value><![CDATA[");
+		sb.append(getRecipientScriptRequiredContexts());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>address</column-name><column-value><![CDATA[");
 		sb.append(getAddress());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>emailRecipientType</column-name><column-value><![CDATA[");
+		sb.append(getEmailRecipientType());
 		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
@@ -758,7 +906,11 @@ public class KaleoNotificationRecipientModelImpl extends BaseModelImpl<KaleoNoti
 	private String _recipientClassName;
 	private long _recipientClassPK;
 	private int _recipientRoleType;
+	private String _recipientScript;
+	private String _recipientScriptLanguage;
+	private String _recipientScriptRequiredContexts;
 	private String _address;
+	private int _emailRecipientType;
 	private long _columnBitmask;
 	private KaleoNotificationRecipient _escapedModel;
 }
