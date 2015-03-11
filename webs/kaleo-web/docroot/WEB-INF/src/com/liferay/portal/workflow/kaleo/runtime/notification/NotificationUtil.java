@@ -16,6 +16,7 @@ package com.liferay.portal.workflow.kaleo.runtime.notification;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.workflow.kaleo.definition.ExecutionType;
 import com.liferay.portal.workflow.kaleo.model.KaleoNotification;
 import com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient;
@@ -61,13 +62,18 @@ public class NotificationUtil {
 				kaleoNotification.getTemplateLanguage(),
 				kaleoNotification.getTemplate(), executionContext);
 
-		String notificationSubject =
-			notificationMessageGenerator.generateMessage(
-				kaleoNotification.getKaleoClassName(),
-				kaleoNotification.getKaleoClassPK(),
-				kaleoNotification.getName(),
-				kaleoNotification.getTemplateLanguage(),
-				kaleoNotification.getDescription(), executionContext);
+		String notificationSubject = kaleoNotification.getDescription();
+
+		if (Validator.isNotNull(notificationSubject)) {
+
+			notificationSubject =
+				notificationMessageGenerator.generateMessage(
+					kaleoNotification.getKaleoClassName(),
+					kaleoNotification.getKaleoClassPK(),
+					kaleoNotification.getName(),
+					kaleoNotification.getTemplateLanguage(),
+					kaleoNotification.getDescription(), executionContext);
+		}
 
 		String[] notificationTypes = StringUtil.split(
 			kaleoNotification.getNotificationTypes());
