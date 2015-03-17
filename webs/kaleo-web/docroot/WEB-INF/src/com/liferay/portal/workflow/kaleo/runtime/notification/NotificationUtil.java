@@ -65,7 +65,6 @@ public class NotificationUtil {
 		String notificationSubject = kaleoNotification.getDescription();
 
 		if (Validator.isNotNull(notificationSubject)) {
-
 			notificationSubject =
 				notificationMessageGenerator.generateMessage(
 					kaleoNotification.getKaleoClassName(),
