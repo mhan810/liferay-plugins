@@ -129,12 +129,10 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 			return new HitsImpl();
 		}
 		finally {
-			if (_log.isInfoEnabled()) {
+			if (_log.isDebugEnabled()) {
 				stopWatch.stop();
 
-				_log.info(
-					"Searching " + query.toString() + " took " +
-						stopWatch.getTime() + " ms");
+				_log.debug("Search took " + stopWatch.getTime() + " ms");
 			}
 		}
 	}
@@ -167,12 +165,10 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 			return 0;
 		}
 		finally {
-			if (_log.isInfoEnabled()) {
+			if (_log.isDebugEnabled()) {
 				stopWatch.stop();
 
-				_log.info(
-					"Searching " + query.toString() + " took " +
-						stopWatch.getTime() + " ms");
+				_log.debug("Search took " + stopWatch.getTime() + " ms");
 			}
 		}
 	}
@@ -453,6 +449,10 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		String queryString = translateQuery(searchContext, query);
 
 		solrQuery.setQuery(queryString);
+
+		if (_log.isDebugEnabled()) {
+			_log.debug("Search query " + queryString);
+		}
 
 		return _solrServer.query(solrQuery, METHOD.POST);
 	}
