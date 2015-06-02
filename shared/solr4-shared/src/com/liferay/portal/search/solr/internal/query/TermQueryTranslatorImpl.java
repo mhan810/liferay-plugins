@@ -51,6 +51,8 @@ public class TermQueryTranslatorImpl implements TermQueryTranslator {
 		String field = queryTerm.getField();
 		String value = queryTerm.getValue();
 
+		org.apache.lucene.search.Query luceneQuery = null;
+
 		if ((_queryPreProcessConfiguration != null) &&
 			_queryPreProcessConfiguration.isSubstringSearchAlways(field)) {
 
