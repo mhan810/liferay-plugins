@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.lock.LockManagerUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.NaturalOrderStringComparator;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.workflow.WorkflowException;
 import com.liferay.portal.kernel.workflow.WorkflowTask;
@@ -36,6 +37,7 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserGroupGroupRoleLocalServiceUtil;
 import com.liferay.portal.service.UserGroupRoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.workflow.kaleo.model.KaleoInstance;
 import com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken;
 import com.liferay.portal.workflow.kaleo.model.KaleoNode;
 import com.liferay.portal.workflow.kaleo.model.KaleoTask;
@@ -45,6 +47,8 @@ import com.liferay.portal.workflow.kaleo.model.KaleoTransition;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 import com.liferay.portal.workflow.kaleo.runtime.KaleoSignaler;
 import com.liferay.portal.workflow.kaleo.runtime.TaskManager;
+import com.liferay.portal.workflow.kaleo.runtime.assignment.TaskAssignmentSelector;
+import com.liferay.portal.workflow.kaleo.runtime.util.ClassLoaderUtil;
 import com.liferay.portal.workflow.kaleo.service.KaleoTaskAssignmentLocalServiceUtil;
 import com.liferay.portal.workflow.kaleo.service.KaleoTaskInstanceTokenLocalServiceUtil;
 import com.liferay.portal.workflow.kaleo.util.WorkflowContextUtil;
@@ -54,10 +58,13 @@ import com.liferay.portal.workflow.kaleo.util.comparators.KaleoTaskInstanceToken
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -236,17 +243,34 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 			KaleoTaskInstanceToken kaleoTaskInstanceToken =
 				KaleoTaskInstanceTokenLocalServiceUtil.
 					getKaleoTaskInstanceToken(workflowTaskInstanceId);
-			KaleoTask kaleoTask = kaleoTaskInstanceToken.getKaleoTask();
 
-			List<KaleoTaskAssignment> kaleoTaskAssignments =
+			Set<KaleoTaskAssignment> kaleoTaskAssignments = new HashSet<>();
+
+			List<KaleoTaskAssignment> roleKaleoTaskAssignments =
 				KaleoTaskAssignmentLocalServiceUtil.getKaleoTaskAssignments(
-					kaleoTask.getKaleoTaskId(), Role.class.getName());
+					kaleoTaskInstanceToken.getKaleoTaskId(),
+					Role.class.getName());
+
+			kaleoTaskAssignments.addAll(roleKaleoTaskAssignments);
+
+			List<KaleoTaskAssignment> calculatedKaleoTaskAssignments =
+				getCalculatedKaleoTaskAssignments(
+					companyId, kaleoTaskInstanceToken);
+
+			kaleoTaskAssignments.addAll(calculatedKaleoTaskAssignments);
 
 			Map<String, Long> pooledActors = new TreeMap<>(
 				new NaturalOrderStringComparator());
 
 			for (KaleoTaskAssignment kaleoTaskAssignment :
 					kaleoTaskAssignments) {
+
+				String assigneeClassName =
+					kaleoTaskAssignment.getAssigneeClassName();
+
+				if (!assigneeClassName.equals(Role.class.getName())) {
+					continue;
+				}
 
 				Role role = RoleLocalServiceUtil.getRole(
 					kaleoTaskAssignment.getAssigneeClassPK());
@@ -755,6 +779,12 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		_kaleoSignaler = kaleoSignaler;
 	}
 
+	public void setTaskAssignmentSelector(
+		TaskAssignmentSelector taskAssignmentSelector) {
+
+		_taskAssignmentSelector = taskAssignmentSelector;
+	}
+
 	public void setTaskManager(TaskManager taskManager) {
 		_taskManager = taskManager;
 	}
@@ -772,6 +802,58 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 
 		return _taskManager.updateDueDate(
 			workflowTaskInstanceId, comment, dueDate, serviceContext);
+	}
+
+	protected Collection<KaleoTaskAssignment> calculateKaleoTaskAssignments(
+			long companyId, KaleoInstanceToken kaleoInstanceToken,
+			KaleoTaskAssignment kaleoTaskAssignment)
+		throws PortalException {
+
+		KaleoInstance kaleoInstance = kaleoInstanceToken.getKaleoInstance();
+
+		Map<String, Serializable> workflowContext = WorkflowContextUtil.convert(
+			kaleoInstance.getWorkflowContext());
+
+		ServiceContext serviceContext = new ServiceContext();
+
+		serviceContext.setCompanyId(companyId);
+
+		String[] assigneeScriptRequiredContexts = StringUtil.split(
+			kaleoTaskAssignment.getAssigneeScriptRequiredContexts());
+
+		ClassLoader[] classLoaders = ClassLoaderUtil.getClassLoaders(
+			assigneeScriptRequiredContexts);
+
+		ExecutionContext executionContext = new ExecutionContext(
+			kaleoInstanceToken, workflowContext, serviceContext);
+
+		return _taskAssignmentSelector.calculateTaskAssignments(
+			kaleoTaskAssignment, executionContext, classLoaders);
+	}
+
+	protected List<KaleoTaskAssignment> getCalculatedKaleoTaskAssignments(
+			long companyId, KaleoTaskInstanceToken kaleoTaskInstanceToken)
+		throws PortalException {
+
+		List<KaleoTaskAssignment> calculatedKaleoTaskAssignments =
+			new ArrayList<>();
+
+		List<KaleoTaskAssignment> scriptKaleoTaskAssignments =
+			KaleoTaskAssignmentLocalServiceUtil.getKaleoTaskAssignments(
+				kaleoTaskInstanceToken.getKaleoTaskId(), "SCRIPT");
+
+		for (KaleoTaskAssignment scriptKaleoTaskAssignment :
+				scriptKaleoTaskAssignments) {
+
+			Collection<KaleoTaskAssignment> kaleoTaskAssignments =
+				calculateKaleoTaskAssignments(
+					companyId, kaleoTaskInstanceToken.getKaleoInstanceToken(),
+					scriptKaleoTaskAssignment);
+
+			calculatedKaleoTaskAssignments.addAll(kaleoTaskAssignments);
+		}
+
+		return calculatedKaleoTaskAssignments;
 	}
 
 	protected List<WorkflowTask> toWorkflowTasks(
@@ -795,6 +877,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 	}
 
 	private KaleoSignaler _kaleoSignaler;
+	private TaskAssignmentSelector _taskAssignmentSelector;
 	private TaskManager _taskManager;
 
 }
